@@ -9,3 +9,6 @@
 main
 
 .DS_Store
+
+images/*
+temp/*

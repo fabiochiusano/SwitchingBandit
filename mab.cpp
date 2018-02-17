@@ -3,11 +3,14 @@
 #include <stdlib.h>
 #include <numeric>
 
-MAB::MAB(MABType& mabtype) {
-	this->mabtype = &mabtype;
+int MAB::next_id = 1;
+
+MAB::MAB(MABType* mabtype) {
+	//this->mabtype = &mabtype;
+	this->mabtype = mabtype;
+	this->id = MAB::next_id;
+	MAB::next_id++;
 }
-
-
 
 
 void MAB::addArm(Distribution* arm){
@@ -88,30 +91,26 @@ void MAB::reset(vector<MABAlgorithm*>& algs) {
 
 
 
-void MAB::plot_distributions() {
-	ofstream outputFile("temp/distributions.txt");
+void MAB::write_distributions() {
+	ofstream outputFile("temp/distributions_" + to_string(this->id) + ".txt");
 
 	for (auto d : this->arms) {
 		outputFile << d->toFile() << endl;
 	}
-
-	system("python plot_distributions.py &");
 }
 
-void MAB::plot_means_in_time(int timesteps) {
-	ofstream outputFile("temp/means_in_time.txt");
+void MAB::write_means_in_time(int timesteps) {
+	ofstream outputFile("temp/means_in_time_" + to_string(this->id) + ".txt");
 
 	outputFile << timesteps << endl;
 
 	for (auto d : this->arms) {
 		outputFile << d->toFile() << endl;
 	}
-
-	system("python plot_means_in_time.py &");
 }
 
 void MAB::write_regrets(vector<MABAlgorithm*>& algs, bool should_append) {
-	ofstream outputFile("temp/regrets.txt", should_append ? ofstream::app : ofstream::out);
+	ofstream outputFile("temp/regrets_" + to_string(this->id) + ".txt", should_append ? ofstream::app : ofstream::out);
 
 	for (auto alg : algs) {
 		outputFile << alg->name << " ";
@@ -120,8 +119,4 @@ void MAB::write_regrets(vector<MABAlgorithm*>& algs, bool should_append) {
 		}
 		outputFile << endl;
 	}
-}
-
-void MAB::plot_regrets() {
-	system("python plot_regrets.py &");
 }

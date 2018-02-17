@@ -26,7 +26,7 @@ for line in file:
 		p = plt.plot(x, [0]*len(x))
 		plt.plot([mean, mean], [0, 0.5], color=p[0].get_color())
 
-	
+
 	patches.append(mpatches.Patch(color=p[0].get_color(), label=distribution_name))
 
 plt.legend(handles=patches)
