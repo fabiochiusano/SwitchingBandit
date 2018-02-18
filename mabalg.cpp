@@ -16,6 +16,7 @@ MABAlgorithm::MABAlgorithm(string name, MAB& mab) {
 	this->name = name;
 	this->mab = &mab;
 	this->collectedRewards.resize(mab.arms.size());
+	this->totalReward.assign(mab.arms.size(), 0);
 }
 
 UCB::UCB(string name, MAB& mab) : MABAlgorithm(name, mab) {}
@@ -52,7 +53,8 @@ void MABAlgorithm::reset(MAB& mab) {
 	this->lastArmPulled = -1;
 	this->collectedRewards.clear();
 	this->collectedRewards.resize(mab.arms.size());
-	this->totalReward = 0;
+	this->totalReward.clear();
+	this->totalReward.assign(mab.arms.size(), 0);
 	this->regrets.clear();
 }
 
@@ -66,7 +68,7 @@ void MABAlgorithm::process_chosen_arm(vector<double> pulls, int timestep, double
 	double reward = pulls[arm_index];
 
 	this->collectedRewards[arm_index].push_back(reward);
-	this->totalReward += reward;
+	this->totalReward[arm_index] += reward;
 
 	double mean_of_pulled_arm = this->mab->arms[arm_index]->get_mean(timestep);
 	this->regrets.push_back(highest_mean - mean_of_pulled_arm);
@@ -95,7 +97,7 @@ void E_Greedy::run(vector<double> pulls, int timestep, double highest_mean) {
 			double bestQ = -100000;
 			int bestArm = -1;
 			for (int i = 0; i < this->mab->arms.size(); i++) {
-				double sum_of_elems = accumulate(this->collectedRewards[i].begin(), this->collectedRewards[i].end(), 0);
+				double sum_of_elems = this->totalReward[i];
 				int num_of_pulls = this->collectedRewards[i].size();
 				double Q = sum_of_elems / num_of_pulls;
 				if (Q > bestQ) {
@@ -136,7 +138,7 @@ void GLIE::run(vector<double> pulls, int timestep, double highest_mean) {
 			double bestQ = -100000;
 			int bestArm = -1;
 			for (int i = 0; i < this->mab->arms.size(); i++) {
-				double sum_of_elems = accumulate(this->collectedRewards[i].begin(), this->collectedRewards[i].end(), 0);
+				double sum_of_elems = this->totalReward[i];
 				int num_of_pulls = this->collectedRewards[i].size();
 				double Q = sum_of_elems / num_of_pulls;
 				if (Q > bestQ) {
@@ -172,7 +174,7 @@ void UCB1::run(vector<double> pulls, int timestep, double highest_mean) {
 		double bestQB = -100000;
 		int bestArm = -1;
 		for (int i = 0; i < this->mab->arms.size(); i++) {
-			double sum_of_elems = accumulate(this->collectedRewards[i].begin(), this->collectedRewards[i].end(), 0);
+			double sum_of_elems = this->totalReward[i];
 			int num_of_pulls = this->collectedRewards[i].size();
 			double Q = sum_of_elems / num_of_pulls;
 			double B = sqrt((2*log(timestep))/(num_of_pulls));
@@ -205,7 +207,7 @@ void UCBT::run(vector<double> pulls, int timestep, double highest_mean) {
 		double bestQB = -100000;
 		int bestArm = -1;
 		for (int i = 0; i < this->mab->arms.size(); i++) {
-			double sum_of_elems = accumulate(this->collectedRewards[i].begin(), this->collectedRewards[i].end(), 0);
+			double sum_of_elems = this->totalReward[i];
 			int num_of_pulls = this->collectedRewards[i].size();
 			double Q = sum_of_elems / num_of_pulls;
 			double variance = 0;
@@ -281,7 +283,7 @@ void ThompsonSamplingGaussian::run(vector<double> pulls, int timestep, double hi
 		double max_sample = -10000;
 		for (int i = 0; i < this->mab->arms.size(); i++) {
 
-			double sum_of_elems = accumulate(this->collectedRewards[i].begin(), this->collectedRewards[i].end(), 0);
+			double sum_of_elems = this->totalReward[i];
 			int num_of_pulls = this->collectedRewards[i].size();
 			double Q = 0;
 			if (num_of_pulls > 0) {

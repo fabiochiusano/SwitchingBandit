@@ -66,6 +66,11 @@ void ExperimentLoader::parse_arm_line(MAB* mab, string line, boost::mt19937* rng
 		ss >> v;
 
 		mab->addArm(new UniformDistribution("U", v, *rng));
+	} else if (distr == 'b') { // Bernoulli
+		double v, p;
+		ss >> v >> p;
+
+		mab->addArm(new BernoulliDistribution("B", p, v, *rng));
 	}
 }
 
@@ -83,7 +88,9 @@ void ExperimentLoader::parse_alg_line(Experiment* experiment, MAB* mab, string l
 		double epsilon;
 		ss >> epsilon;
 		experiment->add_alg(new GLIE("GLIE", *mab, epsilon));
-	} else if (alg_name == "ts_g") { // Uniform
+	} else if (alg_name == "ts_g") { // Thompson Sampling for gaussians
 		experiment->add_alg(new ThompsonSamplingGaussian("TS_G", *mab, *rng));
+	} else if (alg_name == "ts_b") { // Thompson Sampling for bernoullis
+		experiment->add_alg(new ThompsonSamplingBernoulli("TS_B", *mab, *rng));
 	}
 }

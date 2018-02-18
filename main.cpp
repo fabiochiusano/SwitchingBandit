@@ -16,8 +16,10 @@ using namespace std;
 int main(int argc, char *argv[]){
 	vector<Experiment*>* experiments = ExperimentLoader::load_experiments();
 
-	for (auto experiment : (*experiments)) {
-		experiment->run();
+	#pragma omp parallel for num_threads(4)
+	for (int i = 0; i < experiments->size(); i++) {
+		cout << "experiment " << i << " started" << endl;
+		(*experiments)[i]->run();
 	}
 
 	Plotter::plot_experiments(experiments->size());

@@ -13,13 +13,13 @@ class MAB;
 class MABAlgorithm {
 protected:
 	vector<vector<double>> collectedRewards;
+	vector<double> totalReward;
 	bool allArmsPulled = false;
 	int lastArmPulled = -1;
 
 	void process_chosen_arm(vector<double> pulls, int timestep, double highest_mean, int arm_index);
 public:
 	MAB* mab;
-	double totalReward = 0;
 	vector<double> regrets;
 	string name;
 
