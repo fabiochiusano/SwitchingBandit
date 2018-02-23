@@ -41,7 +41,7 @@ void MAB::initialize(vector<MABAlgorithm*>& algs, int total_timesteps) {
 		int best_arm = -1;
 		double max_sum = -10000;
 		for (int a = 0; a < this->arms.size(); a++) {
-			double sum_of_elems = accumulate(this->pulls[a].begin(), this->pulls[a].end(), 0);
+			double sum_of_elems = accumulate(this->pulls[a].begin(), this->pulls[a].end(), 0.);
 			if (sum_of_elems > max_sum) {
 				max_sum = sum_of_elems;
 				best_arm = a;

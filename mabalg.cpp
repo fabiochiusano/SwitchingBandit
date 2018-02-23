@@ -7,6 +7,7 @@
 #include <boost/math/distributions.hpp>
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
+#include <algorithm>
 
 using namespace std;
 using namespace boost::math;
@@ -16,7 +17,7 @@ MABAlgorithm::MABAlgorithm(string name, MAB& mab) {
 	this->name = name;
 	this->mab = &mab;
 	this->collectedRewards.resize(mab.arms.size());
-	this->totalReward.assign(mab.arms.size(), 0);
+	this->totalReward.assign(mab.arms.size(), 0.);
 }
 
 UCB::UCB(string name, MAB& mab) : MABAlgorithm(name, mab) {}
@@ -46,6 +47,19 @@ ThompsonSamplingBernoulli::ThompsonSamplingBernoulli(string name, MAB& mab, boos
 
 ThompsonSamplingGaussian::ThompsonSamplingGaussian(string name, MAB& mab, boost::mt19937& rng) : ThompsonSampling(name, mab, rng) {}
 
+EXP3::EXP3(string name, MAB& mab, double beta, double nu): MABAlgorithm(name, mab) {
+	this->beta = beta;
+	this->nu = nu;
+	this->ws.assign(mab.arms.size(), 1.);
+}
+
+D_UCB::D_UCB(string name, MAB& mab, double gamma, double B, double epsilon) : UCB(name, mab) {
+	this->gamma = gamma;
+	this->B = B;
+	this->epsilon = epsilon;
+	this->means.assign(mab.arms.size(), 0.);
+	this->ns.assign(mab.arms.size(), 0.);
+}
 
 
 void MABAlgorithm::reset(MAB& mab) {
@@ -54,27 +68,47 @@ void MABAlgorithm::reset(MAB& mab) {
 	this->collectedRewards.clear();
 	this->collectedRewards.resize(mab.arms.size());
 	this->totalReward.clear();
-	this->totalReward.assign(mab.arms.size(), 0);
+	this->totalReward.assign(mab.arms.size(), 0.);
 	this->regrets.clear();
 }
 
 void ThompsonSamplingBernoulli::reset(MAB& mab) {
+	MABAlgorithm::reset(mab);
 	this->alphas.assign(mab.arms.size(), 1);
 	this->betas.assign(mab.arms.size(), 1);
 }
 
+void EXP3::reset(MAB& mab) {
+	MABAlgorithm::reset(mab);
+	this->ws.assign(mab.arms.size(), 1.);
+}
 
-void MABAlgorithm::process_chosen_arm(vector<double> pulls, int timestep, double highest_mean, int arm_index) {
+void D_UCB::reset(MAB& mab) {
+	this->means.assign(mab.arms.size(), 0.);
+	this->ns.assign(mab.arms.size(), 0.);
+}
+
+// TODO: add the .reset in the constructors (remove duplicate code)
+
+
+double MABAlgorithm::process_chosen_arm(vector<double> pulls, int timestep, double highest_mean, int arm_index) {
 	double reward = pulls[arm_index];
 
 	this->collectedRewards[arm_index].push_back(reward);
 	this->totalReward[arm_index] += reward;
 
-	double mean_of_pulled_arm = this->mab->arms[arm_index]->get_mean(timestep);
-	this->regrets.push_back(highest_mean - mean_of_pulled_arm);
+	if (*(this->mab->mabtype) == MABType::Stochastic) { // If stochastic MAB
+		double mean_of_pulled_arm = this->mab->arms[arm_index]->get_mean(timestep);
+		this->regrets.push_back(highest_mean - mean_of_pulled_arm);
+	} else { // If adversarial MAB
+		this->regrets.push_back(highest_mean - reward);
+	}
 
+	return reward;
 	//cout << this->name << " selected arm " << arm_index << " with reward " << reward << " and regret " << (highest_mean - mean_of_pulled_arm) << endl;
 }
+
+
 
 void E_Greedy::run(vector<double> pulls, int timestep, double highest_mean) {
 	int armToPull = -1;
@@ -304,3 +338,101 @@ void ThompsonSamplingGaussian::run(vector<double> pulls, int timestep, double hi
 	// Pull best arm
 	this->process_chosen_arm(pulls, timestep, highest_mean, armToPull);
 }
+
+
+void EXP3::run(vector<double> pulls, int timestep, double highest_mean) {
+	// Find the arms probabilities
+	double ws_sum = accumulate(this->ws.begin(), this->ws.end(), 0.);
+	//cout << ws_sum << endl;
+	vector<double> arm_probabilities;
+	for (int i = 0; i < this->mab->arms.size(); i++) {
+		double arm_prob = (1 - this->beta) * (this->ws[i] / ws_sum) + (this->beta / this->mab->arms.size());
+		if (arm_prob < 0) {
+			cout << "negative arm prob" << endl;
+		}
+		arm_probabilities.push_back(arm_prob);
+	}
+
+	// Sample an arm according to the probabilities
+	double r = random_unit();
+	double cur_sum = 0;
+	int chosen_arm = -1;
+	for (int i = 0; i < arm_probabilities.size(); i++) {
+		cur_sum += arm_probabilities[i];
+		if (r < cur_sum) {
+			chosen_arm = i;
+			break;
+		}
+	}
+
+	// Pull best arm
+	double reward = this->process_chosen_arm(pulls, timestep, highest_mean, chosen_arm);
+
+	// Update ws
+	this->ws[chosen_arm] *= exp(this->nu * (reward / arm_probabilities[chosen_arm]));
+	this->ws[chosen_arm] = max(0.0001, min(100000.0, this->ws[chosen_arm]));
+}
+
+void D_UCB::run(vector<double> pulls, int timestep, double highest_mean) {
+	int armToPull = -1;
+
+	if (!this->allArmsPulled) {
+		// First phase: pull each arm once
+		armToPull = this->lastArmPulled + 1;
+		this->lastArmPulled++;
+		if (this->lastArmPulled == this->mab->arms.size() - 1) {
+			this->allArmsPulled = true;
+		}
+	}
+	else {
+		// Second phase: pull arm that maximizes Q+B
+		double bestQB = -100000;
+		int bestArm = -1;
+		double ns_sum = accumulate(this->ns.begin(), this->ns.end(), 0.);
+		for (int i = 0; i < this->mab->arms.size(); i++) {
+			double Q = this->means[i];
+			double B = (2 * this->B) * sqrt((this->epsilon * log(ns_sum)) / (this->ns[i]));
+			double QB = Q + B;
+
+			if (QB > bestQB) {
+				bestQB = QB;
+				bestArm = i;
+			}
+		}
+		armToPull = bestArm;
+	}
+	double reward = this->process_chosen_arm(pulls, timestep, highest_mean, armToPull);
+
+	// update this->ns
+	vector<double> old_ns;
+	old_ns.assign(this->mab->arms.size(), 0.);;
+	copy(this->ns.begin(), this->ns.end(), old_ns.begin());
+
+	for (int i = 0; i < this->mab->arms.size(); i++) {
+		this->ns[i] *= this->gamma;
+	}
+	this->ns[armToPull] += 1.0;
+
+	// update this->means
+	for (int i = 0; i < this->mab->arms.size(); i++) {
+		this->means[i] *= old_ns[i];
+	}
+	this->means[armToPull] += reward;
+	for (int i = 0; i < this->mab->arms.size(); i++) {
+		if (this->ns[i] > 0) {
+			this->means[i] *= this->gamma / this->ns[i];
+		}
+	}
+}
+
+// TODO: SW-UCB
+
+// TODO: EXP3.S
+
+// TODO: REXP3
+
+// TODO: Adapt-EvE
+
+// TODO: CTS
+
+// TODO: EXP3.R

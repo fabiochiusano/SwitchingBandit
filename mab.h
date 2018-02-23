@@ -14,7 +14,6 @@ enum class MABType { Stochastic, Adversarial};
 
 class MAB {
 private:
-	MABType* mabtype;
 	bool first_run = true;
 	vector<vector<double>> pulls;
 	vector<double> highest_means;
@@ -25,6 +24,7 @@ private:
 	void initialize(vector<MABAlgorithm*>& algs, int total_timesteps);
 
 public:
+	MABType* mabtype;
 	vector<Distribution*> arms;
 
 	MAB(MABType* mabtype);

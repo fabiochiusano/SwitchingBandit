@@ -50,12 +50,12 @@ double UniformDistribution::get_mean(int timestep) {
 
 
 
-StepDistribution::StepDistribution(string name, vector<double>& means, vector<int> ends, boost::mt19937& rng) : Distribution(name, rng) {
+UniformNonStationaryDistribution::UniformNonStationaryDistribution(string name, vector<double>& means, vector<int> ends, boost::mt19937& rng) : Distribution(name, rng) {
 	this->means = means;
 	this->ends = ends;
 }
 
-double StepDistribution::draw(int timestep) {
+double UniformNonStationaryDistribution::draw(int timestep) {
 	int correct_i = this->ends.size() - 1;
 	for (int i = 0; i < this->ends.size(); i++) {
 		if (this->ends[i] > timestep) {
@@ -66,38 +66,105 @@ double StepDistribution::draw(int timestep) {
 	return this->means[correct_i];
 }
 
-string StepDistribution::toFile() {
-	string result = this->name + " Step ";
+string UniformNonStationaryDistribution::toFile() {
+	string result = this->name + " UniformNonStationary ";
 	for (int i = 0; i < this->means.size(); i++) {
 		result += to_string(this->means[i]) + " " + to_string(this->ends[i]) + " ";
 	}
 	return result;
 }
 
-double StepDistribution::get_mean(int timestep) {
+double UniformNonStationaryDistribution::get_mean(int timestep) {
 	return this->draw(timestep);
 }
 
 
 
 
-BernoulliDistribution::BernoulliDistribution(string name, double p, double v, boost::mt19937& rng) : Distribution(name, rng) {
+BernoulliDistribution::BernoulliDistribution(string name, double p, boost::mt19937& rng) : Distribution(name, rng) {
 	this->p = p;
-	this->v = v;
 }
 
 double BernoulliDistribution::draw(int timestep) {
 	double r = random_unit();
-	if (r < p) {
-		return this->v;
+	if (r < this->p) {
+		return 1;
 	}
 	return 0;
 }
 
 string BernoulliDistribution::toFile() {
-	return this->name + " Bernoulli " + to_string(this->p) + " " + to_string(this->v);
+	return this->name + " Bernoulli " + to_string(this->p);
 }
 
 double BernoulliDistribution::get_mean(int timestep) {
-	return this->p * this->v;
+	return this->p;
+}
+
+
+
+BernoulliNonStationaryDistribution::BernoulliNonStationaryDistribution(string name, vector<double>& ps, vector<int>& ends, boost::mt19937& rng) : Distribution(name, rng) {
+	this->ps = ps;
+	this->ends = ends;
+}
+
+double BernoulliNonStationaryDistribution::draw(int timestep) {
+	int correct_i = this->ends.size() - 1;
+	for (int i = 0; i < this->ends.size(); i++) {
+		if (this->ends[i] >= timestep) {
+			correct_i = i;
+			break;
+		}
+	}
+	double p = this->ps[correct_i];
+	double r = random_unit();
+	if (r < p) {
+		return 1.0;
+	}
+	return 0.0;
+}
+
+string BernoulliNonStationaryDistribution::toFile() {
+	string result = this->name + " BernoulliNonStationary ";
+	for (int i = 0; i < this->ps.size(); i++) {
+		result += to_string(this->ps[i]) + " " + to_string(this->ends[i]) + " ";
+	}
+	return result;
+}
+
+double BernoulliNonStationaryDistribution::get_mean(int timestep) {
+	int correct_i = this->ends.size() - 1;
+	for (int i = 0; i < this->ends.size(); i++) {
+		if (this->ends[i] >= timestep) {
+			correct_i = i;
+			break;
+		}
+	}
+	double p = this->ps[correct_i];
+	return p;
+}
+
+
+
+
+SquareWaveDistribution::SquareWaveDistribution(string name, double v, double cur_v, boost::mt19937& rng) : Distribution(name, rng) {
+	this->v = v;
+	this->cur_v = cur_v;
+}
+
+double SquareWaveDistribution::draw(int timestep) {
+	if (this->cur_v > 0) {
+		this->cur_v = 0;
+	} else {
+		this->cur_v = this->v;
+	}
+	return this->cur_v;
+}
+
+string SquareWaveDistribution::toFile() {
+	return this->name + " SquareWave " + to_string(this->v) + " " + to_string(this->cur_v);
+}
+
+double SquareWaveDistribution::get_mean(int timestep) {
+	return this->v / 2;
 }

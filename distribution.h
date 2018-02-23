@@ -45,33 +45,56 @@ public:
 	double get_mean(int timestep) override;
 };
 
-
-
-
-
-class StepDistribution: public Distribution {
+class UniformNonStationaryDistribution: public Distribution {
 private:
 	vector<double> means;
 	vector<int> ends;
 public:
-	StepDistribution(string name, vector<double>& means, vector<int> ends, boost::mt19937& rng);
+	UniformNonStationaryDistribution(string name, vector<double>& means, vector<int> ends, boost::mt19937& rng);
 	double draw(int timestep) override;
 	string toFile() override;
 	double get_mean(int timestep) override;
 };
-
 
 
 class BernoulliDistribution: public Distribution {
 private:
-	double p, v;
+	double p;
 public:
-	BernoulliDistribution(string name, double p, double v, boost::mt19937& rng);
+	BernoulliDistribution(string name, double p, boost::mt19937& rng);
 	double draw(int timestep) override;
 	string toFile() override;
 	double get_mean(int timestep) override;
 };
 
+class BernoulliNonStationaryDistribution: public Distribution {
+private:
+	vector<double> ps;
+	vector<int> ends;
+public:
+	BernoulliNonStationaryDistribution(string name, vector<double>& ps, vector<int>& ends, boost::mt19937& rng);
+	double draw(int timestep) override;
+	string toFile() override;
+	double get_mean(int timestep) override;
+};
+
+
+
+// It's equivalent to a UniformNonStationaryDistribution where the mean flips between 0 and v at each timestep
+class SquareWaveDistribution: public Distribution {
+private:
+	double v, cur_v;
+public:
+	SquareWaveDistribution(string name, double v, double cur_v, boost::mt19937& rng);
+	double draw(int timestep) override;
+	string toFile() override;
+	double get_mean(int timestep) override;
+};
+
+
+// TODO: SineDistribution
+
+// TODO: manage in a beautiful way stationary distributions and nonstationary distributions
 
 
 #endif

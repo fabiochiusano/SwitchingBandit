@@ -10,60 +10,46 @@ import sys
 from matplotlib.widgets import Slider
 from PIL import Image
 from random import randint
-
-n = int(sys.argv[1])
-
-should_draw_distributions = False
-
-stddev_amplifier_means = 1/3
-stddev_amplifier_regrets = 1/10
-
-classifier_file = open("temp/classifier_input.csv", "w")
-classifier_file.write("a1_m,a1_sd,a2_m,a2_sd,a3_m,a3_sd,a4_m,a4_sd,model\n")
-
-for window in range(n):
-	f, axarr = plt.subplots(nrows=1, ncols=3, figsize=(20,5), dpi=80)
-
-	# plot distribution --------------------------------------------------------------------------------------------------------
-
-	if should_draw_distributions:
-		file = open("temp/distributions_" + str(window+1) + ".txt", "r")
-
-		patches_1 = []
-		x_span = 20
-
-		axarr[0].set_xlabel("value")
-		axarr[0].set_ylabel("probability")
-		axarr[0].set_title("arms distributions")
-
-		axarr[0].set_ylim(ymin=0, ymax=1)
-
-		for line in file:
-			line_splitted = line.split(" ")
-			distribution_name = line_splitted[0]
-			distribution_type = line_splitted[1]
-
-			x = np.linspace(-x_span/2, x_span/2, 1000)
-
-			if distribution_type == "Normal":
-				mean = float(line_splitted[2])
-				stddev = float(line_splitted[3])
-				p = axarr[0].plot(x, mlab.normpdf(x, mean, stddev))
-
-				classifier_file.write(str(mean) + "," + str(stddev) + ",")
-
-			elif distribution_type == "Uniform":
-				mean = float(line_splitted[2])
-				p = axarr[0].plot(x, [0]*len(x))
-				axarr[0].plot([mean, mean], [0, 0.5], color=p[0].get_color())
+import os
 
 
-			patches_1.append(mpatches.Patch(color=p[0].get_color(), label=distribution_name))
+def plot_distributions():
+	file = open("temp/distributions_" + str(window+1) + ".txt", "r")
 
-		axarr[0].legend(handles=patches_1)
+	patches_1 = []
+	x_span = 20
 
-	# plot means in time ---------------------------------------------------------------------------------------------------------------------
+	axarr[0].set_xlabel("value")
+	axarr[0].set_ylabel("probability")
+	axarr[0].set_title("arms distributions")
 
+	axarr[0].set_ylim(ymin=0, ymax=1)
+
+	for line in file:
+		line_splitted = line.split(" ")
+		distribution_name = line_splitted[0]
+		distribution_type = line_splitted[1]
+
+		x = np.linspace(-x_span/2, x_span/2, 1000)
+
+		if distribution_type == "Normal":
+			mean = float(line_splitted[2])
+			stddev = float(line_splitted[3])
+			p = axarr[0].plot(x, mlab.normpdf(x, mean, stddev))
+
+		elif distribution_type == "Uniform":
+			mean = float(line_splitted[2])
+			p = axarr[0].plot(x, [0]*len(x))
+			axarr[0].plot([mean, mean], [0, 0.5], color=p[0].get_color())
+
+
+		patches_1.append(mpatches.Patch(color=p[0].get_color(), label=distribution_name))
+
+	#axarr[0].legend(handles=patches_1)
+
+
+
+def plot_means_in_time():
 	styles = itertools.cycle((':','-.','--','-'))
 
 	file = open("temp/means_in_time_" + str(window+1) + ".txt", "r")
@@ -75,7 +61,7 @@ for window in range(n):
 	axarr[1].set_ylabel("mean")
 	axarr[1].set_title("means in time")
 
-	axarr[1].set_ylim(ymin=0, ymax=6)
+	axarr[1].set_ylim(ymin=ymin_2, ymax=ymax_2)
 
 	timesteps = int(file.readline())
 	x = list(range(timesteps))
@@ -95,7 +81,7 @@ for window in range(n):
 			mean = float(line_splitted[2])
 			p = axarr[1].plot(x, [mean]*timesteps, linestyle=next(styles))
 
-		elif distribution_type == "Step":
+		elif distribution_type == "UniformNonStationary" or distribution_type == "BernoulliNonStationary":
 			prev_mean = 0
 			prev_end = 0
 			for i, piece in enumerate(line_splitted[2:len(line_splitted)-1]):
@@ -111,18 +97,31 @@ for window in range(n):
 
 		elif distribution_type == "Bernoulli":
 			pr = float(line_splitted[2])
-			v = float(line_splitted[3])
-			mean = pr*v
+			mean = pr
 			stddev = math.sqrt(pr*(1-pr))
+			p = axarr[1].plot(x, [mean]*timesteps, linestyle=next(styles))
+			polycollection = axarr[1].fill_between(x, [mean-stddev*stddev_amplifier_means]*timesteps, [mean+stddev*stddev_amplifier_means]*timesteps, alpha=0.2)
+
+		elif distribution_type == "SquareWave":
+			v = float(line_splitted[2])
+			cur_v = float(line_splitted[3])
+			mean = v/2
+			stddev = math.sqrt(0.25)
 			p = axarr[1].plot(x, [mean]*timesteps, linestyle=next(styles))
 			polycollection = axarr[1].fill_between(x, [mean-stddev*stddev_amplifier_means]*timesteps, [mean+stddev*stddev_amplifier_means]*timesteps, alpha=0.2)
 
 
 		patches_2.append(mpatches.Patch(color=p[0].get_color(), label=distribution_name))
 
-	axarr[1].legend(handles=patches_2)
+	#axarr[1].legend(handles=patches_2)
 
-	# plot regret ----------------------------------------------------------------------------------------------------------------------------------
+
+
+def plot_regret():
+	file = open("experiments_config.txt", "r")
+
+	line = file.readline()
+	num_algs = int(file.readline().split(" ")[-1])
 
 	file = open("temp/regrets_" + str(window+1) + ".txt", "r")
 
@@ -130,13 +129,14 @@ for window in range(n):
 	axarr[2].set_ylabel("total regret")
 	axarr[2].set_title("regret of algorithms")
 
-	axarr[2].set_ylim(ymin=0, ymax=1400)
+	axarr[2].set_ylim(ymin=0, ymax=ymax_3)
 
 	yss = {}
 
+	#counter = 1
 	for line in file:
 		line_splitted = line.split(" ")
-		alg_name = line_splitted[0]
+		alg_name = line_splitted[0]# + "_" + str(counter)
 
 		ys = [0] + list(map(lambda n: float(n), line_splitted[1:len(line_splitted)-1]))
 		for i in range(1, len(ys)):
@@ -147,20 +147,15 @@ for window in range(n):
 		else:
 			yss[alg_name] = yss[alg_name] + [ys]
 
+		#counter += 1
+		#if counter > num_algs:
+		#	counter = 1
+
 
 	patches_3 = []
-	best_alg = "we"
-	best_final_regret = 100000
 	for alg_name, ll in yss.items():
 		sums = reduce(lambda l1,l2: [x+y for x,y in zip(l1, l2)], ll)
 		means = [x/len(ll) for x in sums]
-
-		if means[-1] < best_final_regret:
-			best_final_regret = means[-1]
-			best_alg = alg_name
-
-		if means[-1] == best_final_regret and randint(0, 1) == 0:
-			best_alg = alg_name
 
 		asd = list(map(lambda l: list(map(lambda t: (t[1] - means[t[0]])**2, enumerate(l))), ll))
 		sums_for_variances = reduce(lambda l1,l2: [x+y for x,y in zip(l1, l2)], asd)
@@ -174,8 +169,6 @@ for window in range(n):
 		patches_3.append(mpatches.Patch(color=p[0].get_color(), label=alg_name))
 
 
-	classifier_file.write(best_alg + "\n")
-
 	box = axarr[2].get_position()
 	axarr[2].set_position([box.x0, box.y0 + box.height * 0.1, box.width, box.height * 0.9])
 
@@ -185,18 +178,53 @@ for window in range(n):
 	plt.savefig("images/experiment_" + str(window+1) + ".png")
 	plt.close()
 
-# Concatenate images
-images = list(map(Image.open, ["images/experiment_" + str(i+1) + ".png" for i in range(n)]))
-widths, heights = zip(*(i.size for i in images))
 
-total_height = sum(heights)
-max_width = max(widths)
 
-new_im = Image.new("RGB", (max_width, total_height))
+def concatenate_images():
+	images = list(map(Image.open, ["images/experiment_" + str(i+1) + ".png" for i in range(n)]))
+	widths, heights = zip(*(i.size for i in images))
 
-y_offset = 0
-for im in images:
-	new_im.paste(im, (0, y_offset))
-	y_offset += im.size[1]
+	total_height = sum(heights)
+	max_width = max(widths)
 
-new_im.save("images/experiment_final.png")
+	new_im = Image.new("RGB", (max_width, total_height))
+
+	y_offset = 0
+	for im in images:
+		new_im.paste(im, (0, y_offset))
+		y_offset += im.size[1]
+
+	new_im.save("images/experiment_final.png")
+
+
+
+
+
+n = int(sys.argv[1])
+
+should_draw_distributions = False
+
+stddev_amplifier_means = 1/4 #1/10
+stddev_amplifier_regrets = 1/10 #1/10
+
+ymin_2 = -0.5
+ymax_2 = 1.5
+ymax_3 = 2000
+
+# TODO: beautify the plots selection for each type of environment
+# TODO: make automatic the choice of the plots according to the selected environments
+
+for window in range(n):
+	f, axarr = plt.subplots(nrows=1, ncols=3, figsize=(20,5), dpi=80)
+
+	if should_draw_distributions:
+		plot_distributions()
+
+	plot_means_in_time()
+
+	plot_regret()
+
+
+concatenate_images()
+
+os.system('say "your program has finished"')
