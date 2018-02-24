@@ -5,7 +5,7 @@
 
 #include "mab.h"
 #include "distribution.h"
-#include "mabalg.h"
+#include "allalgorithms.h"
 #include "experiment.h"
 
 #include "experimentloader.h"

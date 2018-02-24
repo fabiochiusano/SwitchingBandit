@@ -2,9 +2,10 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include "allalgorithms.h"
 
 vector<Experiment*>* ExperimentLoader::load_experiments() {
-	ifstream input_file("experiments_config.txt", ifstream::in);
+	ifstream input_file("temp/experiments_config.txt", ifstream::in);
 
 	int num_experiments;
   input_file >> num_experiments;

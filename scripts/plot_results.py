@@ -118,7 +118,7 @@ def plot_means_in_time():
 
 
 def plot_regret():
-	file = open("experiments_config.txt", "r")
+	file = open("temp/experiments_config.txt", "r")
 
 	line = file.readline()
 	num_algs = int(file.readline().split(" ")[-1])
@@ -194,6 +194,18 @@ def concatenate_images():
 		new_im.paste(im, (0, y_offset))
 		y_offset += im.size[1]
 
+	# Remove temporary images
+	import os, shutil
+	folder = 'images'
+	for the_file in os.listdir(folder):
+	    file_path = os.path.join(folder, the_file)
+	    try:
+	        if os.path.isfile(file_path):
+	            os.unlink(file_path)
+	    except Exception as e:
+	        print(e)
+
+	# Create final image
 	new_im.save("images/experiment_final.png")
 
 

@@ -203,7 +203,7 @@ def environment_bernoulli_non_stationary():
 
 
 
-output_file = open("experiments_config.txt", "w")
+output_file = open("temp/experiments_config.txt", "w")
 
 def write_line(f, line):
     f.write(line)

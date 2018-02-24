@@ -89,7 +89,7 @@ void MAB::reset(vector<MABAlgorithm*>& algs) {
 	}
 }
 
-
+// TODO: better handle write methods (maybe it's better to write in only a file?)
 
 void MAB::write_distributions() {
 	ofstream outputFile("temp/distributions_" + to_string(this->id) + ".txt");

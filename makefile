@@ -1,8 +1,8 @@
 CXX=g++
 CXXFLAGS=-std=c++11 -O2 -fopenmp
-BIN=main
+BIN=bin/main
 
-SRC=$(wildcard *.cpp)
+SRC=$(wildcard src/*.cpp)
 OBJ=$(SRC:%.cpp=%.o)
 
 all: $(OBJ)
