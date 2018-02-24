@@ -1,12 +1,12 @@
 1
-100 20000 1 0 2 8
+20 20000 1 0 2 8
 BernoulliNonStationary 1 0.5 20000
 BernoulliNonStationary 4 0.8 6000 0.2 10000 0.8 14000 0.2 20000
 ucb1 ucb1
 ucbt ucbt
 ts_b ts_b
-d_ucb_1_0.999_2 d_ucb 1 0.999 2
-d_ucb_1_0.9993_2 d_ucb 1 0.9993 2
-d_ucb_1_0.9995_2 d_ucb 1 0.9995 2
-d_ucb_1_0.9997_2 d_ucb 1 0.9997 2
-d_ucb_1_0.9999_2 d_ucb 1 0.9999 2
+sw_ucb_1_500_2 sw_ucb 1 500 2
+sw_ucb_1_1000_2 sw_ucb 1 1000 2
+sw_ucb_1_2000_2 sw_ucb 1 2000 2
+sw_ucb_1_3000_2 sw_ucb 1 3000 2
+sw_ucb_1_4000_2 sw_ucb 1 4000 2

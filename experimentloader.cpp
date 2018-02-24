@@ -125,5 +125,10 @@ void ExperimentLoader::parse_alg_line(Experiment* experiment, MAB* mab, string l
 		double B, gamma, epsilon;
 		ss >> B >> gamma >> epsilon;
 		experiment->add_alg(new D_UCB(name, *mab, gamma, B, epsilon));
+	} else if (alg_name == "sw_ucb") { // SW_UCB
+		int tau;
+		double B, epsilon;
+		ss >> B >> tau >> epsilon;
+		experiment->add_alg(new SW_UCB(name, *mab, tau, B, epsilon));
 	}
 }

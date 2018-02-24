@@ -176,12 +176,12 @@ def environment_bernoulli_non_stationary():
 
     algorithms = ["ucb1 ucb1", "ucbt ucbt", "ts_b ts_b"]
     Bs = [1]
-    gammas = [0.995, 0.999, 0.9995]
+    taus = [500, 1000, 2000, 3000]
     epsilons = [2]
     for B in Bs:
-        for gamma in gammas:
+        for tau in taus:
             for epsilon in epsilons:
-                algorithms.append("d_ucb" + "_" + str(B) + "_" + str(gamma) + "_" + str(epsilon) + " d_ucb" + " " + str(B) + " " + str(gamma) + " " + str(epsilon))
+                algorithms.append("sw_ucb" + "_" + str(B) + "_" + str(tau) + "_" + str(epsilon) + " sw_ucb" + " " + str(B) + " " + str(tau) + " " + str(epsilon))
 
     write_line(output_file, str(len(ps_arr)))
 
