@@ -4,24 +4,30 @@
 Greedy::Greedy(string name, MAB& mab) : MABAlgorithm(name, mab) {}
 
 E_Greedy::E_Greedy(string name, MAB& mab, double epsilon) : Greedy(name, mab) {
+	this->reset();
 	this->epsilon = epsilon;
 }
 
 GLIE::GLIE(string name, MAB& mab, double epsilon) : Greedy(name, mab) {
+	this->reset();
 	this->epsilon = epsilon;
 }
 
 
-void E_Greedy::run(vector<double> pulls, int timestep, double highest_mean) {
-	int armToPull = -1;
+void Greedy::reset() {
+	mabalg_reset();
+	this->means.assign(this->num_of_arms, 0.);
+}
 
-	if (!this->allArmsPulled) {
+
+ArmPull E_Greedy::run(vector<double>& pulls, bool generate_new_pulls) {
+	int arm_to_pull = -1;
+
+	// Choose arm to pull
+	int tot_pulls = accumulate(this->num_of_pulls.begin(), this->num_of_pulls.end(), 0.);
+	if (tot_pulls < this->num_of_arms) {
 		// First phase: pull each arm once
-		armToPull = this->lastArmPulled + 1;
-		this->lastArmPulled++;
-		if (this->lastArmPulled == this->mab->arms.size() - 1) {
-			this->allArmsPulled = true;
-		}
+		arm_to_pull = tot_pulls;
 	}
 	else {
 		// Second phase:
@@ -31,64 +37,70 @@ void E_Greedy::run(vector<double> pulls, int timestep, double highest_mean) {
 		if (r <= 1 - this->epsilon) {
 			// pull arm that maximizes Q
 			double bestQ = -100000;
-			int bestArm = -1;
-			for (int i = 0; i < this->mab->arms.size(); i++) {
-				double sum_of_elems = this->totalReward[i];
-				int num_of_pulls = this->collectedRewards[i].size();
-				double Q = sum_of_elems / num_of_pulls;
+			int best_arm = -1;
+			for (int i = 0; i < this->num_of_arms; i++) {
+				double Q = this->means[i];
 				if (Q > bestQ) {
 					bestQ = Q;
-					bestArm = i;
+					best_arm = i;
 				}
 			}
-			armToPull = bestArm;
+			arm_to_pull = best_arm;
 		}
 		else {
 			// choose a random arm
-			armToPull = rand() % this->mab->arms.size();
+			arm_to_pull = rand() % this->num_of_arms;
 		}
 	}
 
-	this->process_chosen_arm(pulls, timestep, highest_mean, armToPull);
+	// Pull arm
+	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+
+	// Update algorithm statistics
+	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];
+
+	return armpull;
 }
 
-void GLIE::run(vector<double> pulls, int timestep, double highest_mean) {
-	int armToPull = -1;
+ArmPull GLIE::run(vector<double>& pulls, bool generate_new_pulls) {
+	int arm_to_pull = -1;
 
-	if (!this->allArmsPulled) {
+	// Choose arm to pull
+	int tot_pulls = accumulate(this->num_of_pulls.begin(), this->num_of_pulls.end(), 0.);
+	if (tot_pulls < this->num_of_arms) {
 		// First phase: pull each arm once
-		armToPull = this->lastArmPulled + 1;
-		this->lastArmPulled++;
-		if (this->lastArmPulled == this->mab->arms.size() - 1) {
-			this->allArmsPulled = true;
-		}
+		arm_to_pull = tot_pulls;
 	}
 	else {
 		// Second phase:
 		// with probability 1 - epsilon: pull arm that maximizes Q
 		// with probability epsilon: choose a random arm
 		float r = random_unit();
-		double cur_epsilon = this->epsilon/(timestep - this->lastArmPulled);
+		double cur_epsilon = this->epsilon/(tot_pulls - this->num_of_arms);
 		if (r <= 1 - cur_epsilon) {
 			// pull arm that maximizes Q
 			double bestQ = -100000;
-			int bestArm = -1;
-			for (int i = 0; i < this->mab->arms.size(); i++) {
-				double sum_of_elems = this->totalReward[i];
-				int num_of_pulls = this->collectedRewards[i].size();
-				double Q = sum_of_elems / num_of_pulls;
+			int best_arm = -1;
+			for (int i = 0; i < this->num_of_arms; i++) {
+				double Q = this->means[i];
 				if (Q > bestQ) {
 					bestQ = Q;
-					bestArm = i;
+					best_arm = i;
 				}
 			}
-			armToPull = bestArm;
+			arm_to_pull = best_arm;
 		}
 		else {
 			// choose a random arm
-			armToPull = rand() % this->mab->arms.size();
+			arm_to_pull = rand() % this->num_of_arms;
 		}
 	}
 
-	this->process_chosen_arm(pulls, timestep, highest_mean, armToPull);
+	// Pull arm
+	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+
+	// Update algorithm statistics
+	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];
+
+	return armpull;
 }

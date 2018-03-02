@@ -5,6 +5,10 @@
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
 #include <string>
+#include "mabalg.h"
+
+
+class MABAlgorithm;
 
 using namespace std;
 
@@ -13,7 +17,9 @@ protected:
 	boost::mt19937* rng;
 public:
 	string name;
+	bool is_mab;
 
+	Distribution(string name);
 	Distribution(string name, boost::mt19937& rng);
 
 	virtual double draw(int timestep) = 0;
@@ -89,6 +95,22 @@ public:
 	double draw(int timestep) override;
 	string toFile() override;
 	double get_mean(int timestep) override;
+};
+
+// Used in meta bandits
+class MABDistribution: public Distribution {
+private:
+	MABAlgorithm* mabalg;
+	vector<double> pulls;
+	int pulled_arm;
+public:
+	MABDistribution(string name, MABAlgorithm* mabalg);
+	double draw(int timestep) override;
+	string toFile() override;
+	double get_mean(int timestep) override;
+
+	void set_pulls(vector<double> pulls);
+	int get_pulled_arm();
 };
 
 

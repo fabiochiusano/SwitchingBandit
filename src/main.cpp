@@ -22,7 +22,8 @@ int main(int argc, char *argv[]){
 		(*experiments)[i]->run();
 	}
 
-	Plotter::plot_experiments(experiments->size());
+	cout << "Plotting..." << endl;
+	Plotter::plot_experiments();
 
 	return 0;
 }

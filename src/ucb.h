@@ -9,15 +9,22 @@ public:
 };
 
 class UCB1: public UCB {
+private:
+	vector<double> means;
 public:
 	UCB1(string name, MAB& mab);
-	void run(vector<double> pulls, int timestep, double highest_mean) override;
+	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	void reset() override;
 };
 
 class UCBT: public UCB {
+private:
+	vector<double> means;
+	vector<vector<double>> collected_rewards;
 public:
 	UCBT(string name, MAB& mab);
-	void run(vector<double> pulls, int timestep, double highest_mean) override;
+	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	void reset() override;
 };
 
 class D_UCB: public UCB {
@@ -26,20 +33,20 @@ private:
 	double B, gamma, epsilon;
 public:
 	D_UCB(string name, MAB& mab, double gamma, double B, double epsilon);
-	void run(vector<double> pulls, int timestep, double highest_mean) override;
-	void reset(MAB& mab);
+	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	void reset() override;
 };
 
 class SW_UCB: public UCB {
 private:
-	vector<vector<double>> arm_pulls_values;
-	vector<vector<int>> arm_pulls;
+	vector<vector<double>> windowed_arm_pulls_values;
+	vector<vector<int>> windowed_arm_pulls;
 	double B, epsilon;
 	int tau;
 public:
 	SW_UCB(string name, MAB& mab, int tau, double B, double epsilon);
-	void run(vector<double> pulls, int timestep, double highest_mean) override;
-	void reset(MAB& mab);
+	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	void reset() override;
 };
 
 #endif

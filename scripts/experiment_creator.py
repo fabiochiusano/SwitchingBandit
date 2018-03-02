@@ -31,17 +31,16 @@ def environment_gaussian():
         gd.append(variances)
 
     # TODO: Add support for algorithms with name (here, in Experimentloader, in plot_results)
-    algorithms = ["ucb1 ucb1", "ucbt ucbt", "ts_g ts_g", "exp3_0.02_0.02 exp3 0.02 0.02", "exp3_0.02_0.002 exp3 0.02 0.002", "exp3_0.002_0.02 exp3 0.002 0.02", "exp3_0.2_0.02 exp3 0.2 0.02", "exp3_0.02_0.2 exp3 0.02 0.2", "exp3_0.2_0.2 exp3 0.2 0.2"]
+    algorithms = ["ucb1 ucb1", "ucbt ucbt", "ts_g ts_g", "exp3_0.05_0.001 exp3 0.05 0.001"]
 
+    write_line(output_file, str(num_experiments) + " " + str(num_simulations) + " " + str(num_timesteps) + " " + str(seed))
 
-    write_line(output_file, str(len(gm)))
-
-    for i in range(len(gm)):
+    for i in range(num_experiments):
         arms = []
         for j in range(len(gm[i])):
             arms.append(distr_names["gaussian"] + " " + str(gm[i][j]) + " " + str(gd[i][j]))
 
-        write_line(output_file, str(num_simulations) + " " + str(num_timesteps) + " " + str(seed) + " " + str(mab_type) + " " + str(len(gm[i])) + " " + str(len(algorithms)));
+        write_line(output_file, str(mab_type) + " " + str(len(gm[i])) + " " + str(len(algorithms)));
 
         for line in arms:
             write_line(output_file, line)
@@ -73,14 +72,14 @@ def environment_bernoulli():
 
     algorithms = ["ucb1 ucb1", "ucbt ucbt", "glie_1 glie 1", "ts_g ts_g", "ts_b ts_b"]
 
-    write_line(output_file, str(len(p_arr)))
+    write_line(output_file, str(num_experiments) + " " + str(num_simulations) + " " + str(num_timesteps) + " " + str(seed))
 
-    for i in range(len(p_arr)):
+    for i in range(num_experiments):
         arms = []
         for j in range(len(p_arr[i])):
             arms.append(distr_names["bernoulli"] + " " + str(p_arr[i][j]))
 
-        write_line(output_file, str(num_simulations) + " " + str(num_timesteps) + " " + str(seed) + " " + str(mab_type) + " " + str(len(p_arr[i])) + " " + str(len(algorithms)))
+        write_line(output_file, str(mab_type) + " " + str(len(p_arr[i])) + " " + str(len(algorithms)))
 
         for line in arms:
             write_line(output_file, line)
@@ -119,14 +118,14 @@ def environment_adversarial():
 
     algorithms = ["ucb1 ucb1", "ucbt ucbt", "ts_g ts_g", "exp3_0.02_0.02 exp3 0.02 0.02", "exp3_0.02_0.002 exp3 0.02 0.002", "exp3_0.002_0.02 exp3 0.002 0.02", "exp3_0.2_0.02 exp3 0.2 0.02", "exp3_0.02_0.2 exp3 0.02 0.2", "exp3_0.2_0.2 exp3 0.2 0.2"]
 
-    write_line(output_file, str(len(v_arr)))
+    write_line(output_file, str(num_experiments) + " " + str(num_simulations) + " " + str(num_timesteps) + " " + str(seed))
 
-    for i in range(len(v_arr)):
+    for i in range(num_experiments):
         arms = []
         for j in range(len(v_arr[i])):
             arms.append(distr_names["squarewave"] + " " + str(v_arr[i][j]) + " " + str(cur_v_arr[i][j]))
 
-        write_line(output_file, str(num_simulations) + " " + str(num_timesteps) + " " + str(seed) + " " + str(mab_type) + " " + str(len(v_arr[i])) + " " + str(len(algorithms)))
+        write_line(output_file, str(mab_type) + " " + str(len(v_arr[i])) + " " + str(len(algorithms)))
 
         for line in arms:
             write_line(output_file, line)
@@ -183,9 +182,9 @@ def environment_bernoulli_non_stationary():
             for epsilon in epsilons:
                 algorithms.append("sw_ucb" + "_" + str(B) + "_" + str(tau) + "_" + str(epsilon) + " sw_ucb" + " " + str(B) + " " + str(tau) + " " + str(epsilon))
 
-    write_line(output_file, str(len(ps_arr)))
+    write_line(output_file, str(num_experiments) + " " + str(num_simulations) + " " + str(num_timesteps) + " " + str(seed))
 
-    for i in range(len(ps_arr)):
+    for i in range(num_experiments):
         arms = []
 
         for j in range(len(ps_arr[i])):
@@ -193,7 +192,7 @@ def environment_bernoulli_non_stationary():
             for k in range(len(ps_arr[i][j])):
                 arms[j] += str(ps_arr[i][j][k]) + " " + str(ends_arr[i][j][k]) + " "
 
-        write_line(output_file, str(num_simulations) + " " + str(num_timesteps) + " " + str(seed) + " " + str(mab_type) + " " + str(len(ps_arr[i])) + " " + str(len(algorithms)))
+        write_line(output_file, str(mab_type) + " " + str(len(ps_arr[i])) + " " + str(len(algorithms)))
 
         for line in arms:
             write_line(output_file, line)

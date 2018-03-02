@@ -5,7 +5,7 @@ using namespace std;
 
 class Plotter {
 public:
-  static void plot_experiments(int num_experiments);
+  static void plot_experiments();
 };
 
 #endif

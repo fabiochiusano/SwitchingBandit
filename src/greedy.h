@@ -7,22 +7,24 @@
 class Greedy: public MABAlgorithm {
 protected:
 	double epsilon;
+	vector<double> means;
 public:
 	Greedy(string name, MAB& mab);
+	void reset() override;
 };
 
 class E_Greedy: public Greedy {
 public:
 	// epsilon corresponds to the amount of exploration
 	E_Greedy(string name, MAB& mab, double epsilon);
-	void run(vector<double> pulls, int timestep, double highest_mean) override;
+	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
 };
 
 class GLIE: public Greedy {
 public:
 	// epsilon corresponds to the amount of exploration
 	GLIE(string name, MAB& mab, double epsilon);
-	void run(vector<double> pulls, int timestep, double highest_mean) override;
+	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
 };
 
 #endif

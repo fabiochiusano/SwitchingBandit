@@ -9,22 +9,29 @@ using namespace std;
 
 class MAB;
 
+class ArmPull {
+public:
+	double reward;
+	int arm_index;
+	ArmPull(double reward, int arm_index);
+};
+
+
 class MABAlgorithm {
 protected:
-	vector<vector<double>> collectedRewards;
-	vector<double> totalReward;
-	bool allArmsPulled = false;
-	int lastArmPulled = -1;
+	int num_of_arms = 0;
 
-	double process_chosen_arm(vector<double> pulls, int timestep, double highest_mean, int arm_index);
+	void mabalg_reset();
+	ArmPull pull_arm(vector<double>& pulls, bool generate_new_pulls, int arm_to_pull);
 public:
+	vector<int> num_of_pulls;
 	MAB* mab;
-	vector<double> regrets;
 	string name;
 
 	MABAlgorithm(string name, MAB& mab);
-	virtual void run(vector<double> pulls, int timestep, double highest_mean) = 0;
-	void reset(MAB& mab);
+	virtual ArmPull run(vector<double>& pulls, bool generate_new_pulls) = 0;
+	virtual void reset() = 0;
 };
+
 
 #endif

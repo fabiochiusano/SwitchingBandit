@@ -3,209 +3,234 @@
 
 UCB::UCB(string name, MAB& mab) : MABAlgorithm(name, mab) {}
 
-UCB1::UCB1(string name, MAB& mab) : UCB(name, mab) {}
+UCB1::UCB1(string name, MAB& mab) : UCB(name, mab) {
+	this->reset();
+}
 
-UCBT::UCBT(string name, MAB& mab) : UCB(name, mab) {}
-
+UCBT::UCBT(string name, MAB& mab) : UCB(name, mab) {
+	this->reset();
+}
 
 D_UCB::D_UCB(string name, MAB& mab, double gamma, double B, double epsilon) : UCB(name, mab) {
+	this->reset();
 	this->gamma = gamma;
 	this->B = B;
 	this->epsilon = epsilon;
-	this->means.assign(mab.arms.size(), 0.);
-	this->ns.assign(mab.arms.size(), 0.);
 }
 
 SW_UCB::SW_UCB(string name, MAB& mab, int tau, double B, double epsilon) : UCB(name, mab) {
+	this->reset();
 	this->tau = tau;
 	this->B = B;
 	this->epsilon = epsilon;
-	this->arm_pulls.resize(mab.arms.size());
-	this->arm_pulls_values.resize(mab.arms.size());
 }
 
 
-void D_UCB::reset(MAB& mab) {
-	MABAlgorithm::reset(mab);
-	this->means.assign(mab.arms.size(), 0.);
-	this->ns.assign(mab.arms.size(), 0.);
+void UCB1::reset() {
+	mabalg_reset();
+	this->means.assign(this->num_of_arms, 0.);
 }
 
-void SW_UCB::reset(MAB& mab) {
-	MABAlgorithm::reset(mab);
-	this->arm_pulls.clear();
-	this->arm_pulls_values.clear();
-	this->arm_pulls.resize(mab.arms.size());
-	this->arm_pulls_values.resize(mab.arms.size());
+void UCBT::reset() {
+	mabalg_reset();
+	this->means.assign(this->num_of_arms, 0.);
+	this->collected_rewards.resize(this->num_of_arms);
+}
+
+void D_UCB::reset() {
+	mabalg_reset();
+	this->means.assign(this->num_of_arms, 0.);
+	this->ns.assign(this->num_of_arms, 0.);
+}
+
+void SW_UCB::reset() {
+	mabalg_reset();
+	this->windowed_arm_pulls.clear();
+	this->windowed_arm_pulls_values.clear();
+	this->windowed_arm_pulls.resize(this->num_of_arms);
+	this->windowed_arm_pulls_values.resize(this->num_of_arms);
 }
 
 
-void UCB1::run(vector<double> pulls, int timestep, double highest_mean) {
-	int armToPull = -1;
+ArmPull UCB1::run(vector<double>& pulls, bool generate_new_pulls) {
+	int arm_to_pull = -1;
 
-	if (!this->allArmsPulled) {
+	// Choose arm to pull
+	int tot_pulls = accumulate(this->num_of_pulls.begin(), this->num_of_pulls.end(), 0.);
+	if (tot_pulls < this->num_of_arms) {
 		// First phase: pull each arm once
-		armToPull = this->lastArmPulled + 1;
-		this->lastArmPulled++;
-		if (this->lastArmPulled == this->mab->arms.size() - 1) {
-			this->allArmsPulled = true;
-		}
+		arm_to_pull = tot_pulls;
 	}
 	else {
 		// Second phase: pull arm that maximizes Q+B
 		double bestQB = -100000;
-		int bestArm = -1;
-		for (int i = 0; i < this->mab->arms.size(); i++) {
-			double sum_of_elems = this->totalReward[i];
-			int num_of_pulls = this->collectedRewards[i].size();
-			double Q = sum_of_elems / num_of_pulls;
-			double B = sqrt((2*log(timestep))/(num_of_pulls));
+		int best_arm = -1;
+		for (int i = 0; i < this->num_of_arms; i++) {
+			double Q = this->means[i];
+			double B = sqrt((2*log(tot_pulls + 1)) / (this->num_of_pulls[i]));
 			double QB = Q + B;
 			if (QB > bestQB) {
 				bestQB = QB;
-				bestArm = i;
+				best_arm = i;
 			}
 		}
-		armToPull = bestArm;
+		arm_to_pull = best_arm;
 	}
 
-	this->process_chosen_arm(pulls, timestep, highest_mean, armToPull);
+	// Pull arm
+	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+
+	// Update algorithm statistics
+	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];
+
+	return armpull;
 }
 
 
-void UCBT::run(vector<double> pulls, int timestep, double highest_mean) {
-	int armToPull = -1;
+ArmPull UCBT::run(vector<double>& pulls, bool generate_new_pulls) {
+	int arm_to_pull = -1;
 
-	if (!this->allArmsPulled) {
+	// Choose arm to pull
+	int tot_pulls = accumulate(this->num_of_pulls.begin(), this->num_of_pulls.end(), 0.);
+	if (tot_pulls < this->num_of_arms) {
 		// First phase: pull each arm once
-		armToPull = this->lastArmPulled + 1;
-		this->lastArmPulled++;
-		if (this->lastArmPulled == this->mab->arms.size() - 1) {
-			this->allArmsPulled = true;
-		}
+		arm_to_pull = tot_pulls;
 	}
 	else {
 		// Second phase: pull arm that maximizes Q+B
 		double bestQB = -100000;
-		int bestArm = -1;
-		for (int i = 0; i < this->mab->arms.size(); i++) {
-			double sum_of_elems = this->totalReward[i];
-			int num_of_pulls = this->collectedRewards[i].size();
-			double Q = sum_of_elems / num_of_pulls;
+		int best_arm = -1;
+		for (int i = 0; i < this->num_of_arms; i++) {
+			double Q = this->means[i];
+			// It's not possible to compute the variance online since the mean of the arm is updated at each step!
 			double variance = 0;
-			for (int j = 0; j < this->collectedRewards[i].size(); j++) {
-				variance += pow((this->collectedRewards[i][j] - Q), 2);
+			for (int j = 0; j < this->collected_rewards[i].size(); j++) {
+				variance += pow((this->collected_rewards[i][j] - Q), 2);
 			}
-			variance /= num_of_pulls;
-			double B = sqrt((2*log(timestep)*min(0.25, variance))/(num_of_pulls));
+			variance /= this->num_of_pulls[i];
+			double B = sqrt((2*log(tot_pulls + 1)*min(0.25, variance))/(this->num_of_pulls[i]));
 			double QB = Q + B;
 			if (QB > bestQB) {
 				bestQB = QB;
-				bestArm = i;
+				best_arm = i;
 			}
 		}
-		armToPull = bestArm;
+		arm_to_pull = best_arm;
 	}
 
-	this->process_chosen_arm(pulls, timestep, highest_mean, armToPull);
+	// Pull arm
+	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+
+	// Update algorithm statistics
+	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];
+
+	return armpull;
 }
 
-void D_UCB::run(vector<double> pulls, int timestep, double highest_mean) {
-	int armToPull = -1;
+ArmPull D_UCB::run(vector<double>& pulls, bool generate_new_pulls) {
+	int arm_to_pull = -1;
 
-	if (!this->allArmsPulled) {
+	// Choose arm to pull
+	int tot_pulls = accumulate(this->num_of_pulls.begin(), this->num_of_pulls.end(), 0.);
+	if (tot_pulls < this->num_of_arms) {
 		// First phase: pull each arm once
-		armToPull = this->lastArmPulled + 1;
-		this->lastArmPulled++;
-		if (this->lastArmPulled == this->mab->arms.size() - 1) {
-			this->allArmsPulled = true;
-		}
+		arm_to_pull = tot_pulls;
 	}
 	else {
 		// Second phase: pull arm that maximizes Q+B
 		double bestQB = -100000;
-		int bestArm = -1;
+		int best_arm = -1;
 		double ns_sum = accumulate(this->ns.begin(), this->ns.end(), 0.);
-		for (int i = 0; i < this->mab->arms.size(); i++) {
+		for (int i = 0; i < this->num_of_arms; i++) {
 			double Q = this->means[i];
 			double B = (2 * this->B) * sqrt((this->epsilon * log(ns_sum)) / (this->ns[i]));
 			double QB = Q + B;
-
 			if (QB > bestQB) {
 				bestQB = QB;
-				bestArm = i;
+				best_arm = i;
 			}
 		}
-		armToPull = bestArm;
+		arm_to_pull = best_arm;
 	}
 
-	double reward = this->process_chosen_arm(pulls, timestep, highest_mean, armToPull);
+	// Pull arm
+	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
 
-	// update this->ns
+	// Update algorithm statistics
+
+	// Update this->ns (it's like this->num_of_pulls, but discounted with this->gamma)
 	vector<double> old_ns;
-	old_ns.assign(this->mab->arms.size(), 0.);;
+	old_ns.assign(this->num_of_arms, 0.);;
 	copy(this->ns.begin(), this->ns.end(), old_ns.begin());
-
-	for (int i = 0; i < this->mab->arms.size(); i++) {
+	for (int i = 0; i < this->num_of_arms; i++) {
 		this->ns[i] *= this->gamma;
 	}
-	this->ns[armToPull] += 1.0;
+	this->ns[arm_to_pull] += 1.0;
 
-	// update this->means
-	for (int i = 0; i < this->mab->arms.size(); i++) {
+	// Update this->means (it's like a normal mean, but discounted with this->gamma)
+	for (int i = 0; i < this->num_of_arms; i++) {
 		this->means[i] *= old_ns[i];
 	}
-	this->means[armToPull] += reward;
-	for (int i = 0; i < this->mab->arms.size(); i++) {
-		if (this->ns[i] > 0) {
+	this->means[arm_to_pull] += armpull.reward;
+	for (int i = 0; i < this->num_of_arms; i++) {
+		if (this->ns[i] > 0) { // Because we don't want to divide by zero...
 			this->means[i] *= this->gamma / this->ns[i];
+		} else {
+			this->means[i] = 0;
 		}
 	}
+
+	return armpull;
 }
 
-void SW_UCB::run(vector<double> pulls, int timestep, double highest_mean) {
-	int armToPull = -1;
+ArmPull SW_UCB::run(vector<double>& pulls, bool generate_new_pulls) {
+	int arm_to_pull = -1;
 
-	if (!this->allArmsPulled) {
+	// Choose arm to pull
+	int tot_pulls = accumulate(this->num_of_pulls.begin(), this->num_of_pulls.end(), 0.);
+	if (tot_pulls < this->num_of_arms) {
 		// First phase: pull each arm once
-		armToPull = this->lastArmPulled + 1;
-		this->lastArmPulled++;
-		if (this->lastArmPulled == this->mab->arms.size() - 1) {
-			this->allArmsPulled = true;
-		}
+		arm_to_pull = tot_pulls;
 	}
 	else {
 		// Second phase: pull arm that maximizes Q+B
 		double bestQB = -100000;
-		int bestArm = -1;
-		for (int i = 0; i < this->mab->arms.size(); i++) {
-			int windowed_N = accumulate(this->arm_pulls[i].begin(), this->arm_pulls[i].end(), 0);
-			double windowed_reward = accumulate(this->arm_pulls_values[i].begin(), this->arm_pulls_values[i].end(), 0.);
+		int best_arm = -1;
+		for (int i = 0; i < this->num_of_arms; i++) {
+			int windowed_N = accumulate(this->windowed_arm_pulls[i].begin(), this->windowed_arm_pulls[i].end(), 0);
+			double windowed_reward = accumulate(this->windowed_arm_pulls_values[i].begin(), this->windowed_arm_pulls_values[i].end(), 0.);
 			double Q = windowed_reward / windowed_N;
-			double B = this->B * sqrt((this->epsilon * log(min(this->tau, timestep))) / windowed_N);
+			double B = this->B * sqrt((this->epsilon * log(min(this->tau, tot_pulls + 1))) / windowed_N);
 			double QB = Q + B;
 
 			if (QB > bestQB) {
 				bestQB = QB;
-				bestArm = i;
+				best_arm = i;
 			}
 		}
-		armToPull = bestArm;
+		arm_to_pull = best_arm;
 	}
 
-	double reward = this->process_chosen_arm(pulls, timestep, highest_mean, armToPull);
+	// Pull arm
+	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
 
-	// move the window
-	for (int i = 0; i < this->mab->arms.size(); i++) {
-		if (i == armToPull) {
-			this->arm_pulls[i].push_back(1);
-			this->arm_pulls_values[i].push_back(reward);
+	// Update algorithm statistics
+
+	// Move the window
+	for (int i = 0; i < this->num_of_arms; i++) {
+		if (i == arm_to_pull) {
+			this->windowed_arm_pulls[i].push_back(1);
+			this->windowed_arm_pulls_values[i].push_back(armpull.reward);
 		} else {
-			this->arm_pulls[i].push_back(0);
-			this->arm_pulls_values[i].push_back(0.);
+			this->windowed_arm_pulls[i].push_back(0);
+			this->windowed_arm_pulls_values[i].push_back(0.);
 		}
 
-		if (this->arm_pulls[i].size() > this->tau) this->arm_pulls[i].erase(this->arm_pulls[i].begin());
-		if (this->arm_pulls_values[i].size() > this->tau) this->arm_pulls_values[i].erase(this->arm_pulls_values[i].begin());
+		if (this->windowed_arm_pulls[i].size() > this->tau)
+			this->windowed_arm_pulls[i].erase(this->windowed_arm_pulls[i].begin());
+		if (this->windowed_arm_pulls_values[i].size() > this->tau)
+			this->windowed_arm_pulls_values[i].erase(this->windowed_arm_pulls_values[i].begin());
 	}
+
+	return armpull;
 }

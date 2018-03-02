@@ -6,6 +6,12 @@
 Distribution::Distribution(string name, boost::mt19937& rng) {
 	this->name = name;
 	this->rng = &rng;
+	this->is_mab = false;
+}
+
+Distribution::Distribution(string name) {
+	this->name = name;
+	this->is_mab = false;
 }
 
 
@@ -167,4 +173,43 @@ string SquareWaveDistribution::toFile() {
 
 double SquareWaveDistribution::get_mean(int timestep) {
 	return this->v / 2;
+}
+
+
+
+
+MABDistribution::MABDistribution(string name, MABAlgorithm* mabalg) : Distribution(name) {
+	this->name = name;
+	this->mabalg = mabalg;
+	this->is_mab = true;
+	this->pulls.clear();
+}
+
+double MABDistribution::draw(int timestep) {
+	if (this->pulls.size() == 0)
+		cout << "Callind draw on MABDistribution without pulls set" << endl;
+
+	ArmPull armpull = this->mabalg->run(this->pulls, false); // TODO: actually I should generate pulls only if the selected arm is a meta-mab
+
+	this->pulled_arm = armpull.arm_index;
+
+	return armpull.reward;
+}
+
+string MABDistribution::toFile() {
+	cout << "Calling toFile on MABDistribution" << endl;
+	return this->name + " MABDistribution ";
+}
+
+double MABDistribution::get_mean(int timestep) {
+	cout << "Calling get_mean on MABDistribution" << endl;
+	return 0;
+}
+
+void MABDistribution::set_pulls(vector<double> pulls) {
+	this->pulls = pulls;
+}
+
+int MABDistribution::get_pulled_arm() {
+	return this->pulled_arm;
 }
