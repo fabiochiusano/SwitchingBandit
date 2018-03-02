@@ -89,6 +89,10 @@ CDT* get_cdt(string line) {
 		double gamma, lambda;
 		ss >> gamma >> lambda;
 		return new CDT_PH(gamma, lambda);
+	} else if (cdt_name == "ph_rho") {
+		double gamma, lambda, rho;
+		ss >> gamma >> lambda >> rho;
+		return new CDT_PH_RHO(gamma, lambda, rho);
 	} else {
 		cout << "Not valid cdt: " << line << endl;
 		return new CDT_PH(0, 0);
