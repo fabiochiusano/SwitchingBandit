@@ -66,7 +66,7 @@ ArmPull EXP3::run(vector<double>& pulls, bool generate_new_pulls) {
 
 	// Update algorithm statistics
 	this->ws[chosen_arm] *= exp(this->nu * (armpull.reward / arm_probabilities[chosen_arm]));
-	this->ws[chosen_arm] = max(0.00001, min(100000.0, this->ws[chosen_arm]));
+	//this->ws[chosen_arm] = max(0.00001, min(100000.0, this->ws[chosen_arm]));
 
 	return armpull;
 }
@@ -105,7 +105,7 @@ ArmPull EXP3_S::run(vector<double>& pulls, bool generate_new_pulls) {
 			k = armpull.reward / arm_probabilities[chosen_arm];
 		}
 		this->ws[i] = this->ws[i] * exp(this->beta * (k / this->num_of_arms)) + (this->alpha / this->num_of_arms) * ws_sum;
-		this->ws[i] = max(0.00001, min(100000.0, this->ws[i]));
+		//this->ws[i] = max(0.00001, min(100000.0, this->ws[i]));
 	}
 
 	return armpull;
@@ -146,7 +146,7 @@ ArmPull REXP3::run(vector<double>& pulls, bool generate_new_pulls) {
 
 	// Update ws
 	this->ws[chosen_arm] *= exp((this->beta / this->num_of_arms) * (armpull.reward / arm_probabilities[chosen_arm]));
-	this->ws[chosen_arm] = max(0.00001, min(100000.0, this->ws[chosen_arm]));
+	//this->ws[chosen_arm] = max(0.00001, min(100000.0, this->ws[chosen_arm]));
 
 	return armpull;
 }

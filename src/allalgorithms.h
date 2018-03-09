@@ -6,5 +6,6 @@
 #include "thompsonsampling.h"
 #include "exp.h"
 #include "adapt_eve.h"
+#include "cd_algorithm.h"
 
 #endif

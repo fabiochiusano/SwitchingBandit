@@ -1,9 +1,15 @@
 #include "ucb.h"
+#include "utils.h"
 
 
 UCB::UCB(string name, MAB& mab) : MABAlgorithm(name, mab) {}
 
 UCB1::UCB1(string name, MAB& mab) : UCB(name, mab) {
+	this->reset();
+}
+
+UCB1_With_Exploration::UCB1_With_Exploration(string name, MAB& mab, double alpha) : UCB(name, mab) {
+	this->alpha = alpha;
 	this->reset();
 }
 
@@ -27,6 +33,11 @@ SW_UCB::SW_UCB(string name, MAB& mab, int tau, double B, double epsilon) : UCB(n
 
 
 void UCB1::reset() {
+	mabalg_reset();
+	this->means.assign(this->num_of_arms, 0.);
+}
+
+void UCB1_With_Exploration::reset() {
 	mabalg_reset();
 	this->means.assign(this->num_of_arms, 0.);
 }
@@ -75,6 +86,45 @@ ArmPull UCB1::run(vector<double>& pulls, bool generate_new_pulls) {
 			}
 		}
 		arm_to_pull = best_arm;
+	}
+
+	// Pull arm
+	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+
+	// Update algorithm statistics
+	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];
+
+	return armpull;
+}
+
+ArmPull UCB1_With_Exploration::run(vector<double>& pulls, bool generate_new_pulls) {
+	int arm_to_pull = -1;
+
+	// Choose arm to pull
+	int tot_pulls = accumulate(this->num_of_pulls.begin(), this->num_of_pulls.end(), 0.);
+	if (tot_pulls < this->num_of_arms) {
+		// First phase: pull each arm once
+		arm_to_pull = tot_pulls;
+	}
+	else {
+		// Second phase: pull arm that maximizes Q+B or random exploration
+		float r = random_unit();
+		if (r < this->alpha) { // explore
+			arm_to_pull = rand() % this->num_of_arms;
+		} else { // maximize Q+B
+			double bestQB = -100000;
+			int best_arm = -1;
+			for (int i = 0; i < this->num_of_arms; i++) {
+				double Q = this->means[i];
+				double B = sqrt((2*log(tot_pulls + 1)) / (this->num_of_pulls[i]));
+				double QB = Q + B;
+				if (QB > bestQB) {
+					bestQB = QB;
+					best_arm = i;
+				}
+			}
+			arm_to_pull = best_arm;
+		}
 	}
 
 	// Pull arm

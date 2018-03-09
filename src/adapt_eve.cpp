@@ -6,22 +6,24 @@
 ADAPT_EVE::ADAPT_EVE(string name, MAB& mab, int meta_duration, string cdt_line, string sub_alg_line, boost::mt19937& rng) : MABAlgorithm(name, mab) {
 
   this->meta_duration = meta_duration;
+  this->sub_alg_line = sub_alg_line;
+  this->rng = &rng;
 
   for (int i = 0; i < this->num_of_arms; i++) {
     this->cdts.push_back(get_cdt(cdt_line));
   }
 
-  this->core_sub_alg = get_algorithm(&mab, sub_alg_line, &rng);
-  this->other_sub_alg = get_algorithm(&mab, sub_alg_line, &rng);
+  this->core_sub_alg = get_algorithm(&mab, sub_alg_line, this->rng);
+  this->other_sub_alg = get_algorithm(&mab, sub_alg_line, this->rng);
 
   MAB* meta_mab = new MAB(this->core_sub_alg->mab->mabtype);
+  MAB::next_id--; // TODO: modify MAB::next_id--;
   MABDistribution *d_1 = new MABDistribution("Core", this->core_sub_alg);
   MABDistribution *d_2 = new MABDistribution("Other", this->other_sub_alg);
   meta_mab->addArm(d_1);
   meta_mab->addArm(d_2);
-  this->meta_mab = meta_mab;
 
-  this->meta_alg = get_algorithm(meta_mab, sub_alg_line, &rng);
+  this->meta_alg = get_algorithm(meta_mab, this->sub_alg_line, this->rng);
 
   this->reset();
 }
@@ -53,7 +55,7 @@ ArmPull ADAPT_EVE::run(vector<double>& pulls, bool generate_new_pulls) {
 
     bool alarm_raised = this->cdts[armpull.arm_index]->run(armpull.reward);
     if (alarm_raised) {
-      cout << "alarm raised at timestep " << this->timestep << endl;
+      cout << this->name << ": alarm raised at timestep " << this->timestep << endl;
 
       this->is_meta = true;
       this->t_meta = 0;
@@ -77,9 +79,19 @@ ArmPull ADAPT_EVE::run(vector<double>& pulls, bool generate_new_pulls) {
         MABAlgorithm *temp = this->core_sub_alg;
         this->core_sub_alg = this->other_sub_alg;
         this->other_sub_alg = temp;
-        cout << "keeping new alg" << endl;
+
+        // Swap algs also in meta_mab
+        MAB* meta_mab = new MAB(this->core_sub_alg->mab->mabtype);
+        MAB::next_id--; // TODO: modify MAB::next_id--;
+        MABDistribution *d_1 = new MABDistribution("Core", this->core_sub_alg);
+        MABDistribution *d_2 = new MABDistribution("Other", this->other_sub_alg);
+        meta_mab->addArm(d_1);
+        meta_mab->addArm(d_2);
+        this->meta_alg = get_algorithm(meta_mab, this->sub_alg_line, this->rng);
+
+        cout << "core pulls: " << core_pulls << ", other pulls: " << other_pulls << ", keeping new alg" << endl;
       } else {
-        cout << "keeping old alg" << endl;
+        cout << "core pulls: " << core_pulls << ", other pulls: " << other_pulls << ", keeping old alg" << endl;
       }
 
       this->is_meta = false;

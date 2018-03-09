@@ -241,4 +241,4 @@ for cur_experiment in range(num_experiments):
 
 concatenate_images()
 
-os.system('say "your program has finished"')
+os.system('say "finito"')

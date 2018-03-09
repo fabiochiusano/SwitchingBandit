@@ -29,4 +29,28 @@ public:
 	void reset() override;
 };
 
+class GlobalCTS: public ThompsonSampling {
+private:
+	double gamma;
+	vector<double> runlength_distribution; // runlength_distribution[runlength]
+	vector<vector<double>> alphas; // alphas[arm][runlength]
+	vector<vector<double>> betas; // betas[arm][runlength]
+public:
+	GlobalCTS(string name, MAB& mab, boost::mt19937& rng, double gamma);
+	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	void reset() override;
+};
+
+class PerArmCTS: public ThompsonSampling {
+private:
+	double gamma;
+	vector<vector<double>> runlength_distribution; // runlength_distribution[arm][runlength]
+	vector<vector<double>> alphas; // alphas[arm][runlength]
+	vector<vector<double>> betas; // betas[arm][runlength]
+public:
+	PerArmCTS(string name, MAB& mab, boost::mt19937& rng, double gamma);
+	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	void reset() override;
+};
+
 #endif

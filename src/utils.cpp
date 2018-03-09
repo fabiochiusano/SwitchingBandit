@@ -18,6 +18,10 @@ MABAlgorithm* get_algorithm(MAB* mab, string line, boost::mt19937* rng) {
 
 	if (alg_name == "ucb1") { // Gaussian
 		return new UCB1(name, *mab);
+	} else if (alg_name == "ucb1_with_exploration") { // Uniform
+		double alpha;
+		ss >> alpha;
+		return new UCB1_With_Exploration(name, *mab, alpha);
 	} else if (alg_name == "ucbt") { // Uniform
 		return new UCBT(name, *mab);
 	} else if (alg_name == "glie") {
@@ -73,7 +77,36 @@ MABAlgorithm* get_algorithm(MAB* mab, string line, boost::mt19937* rng) {
 		}
 
 		return new ADAPT_EVE(name, *mab, meta_duration, cdt_line, sub_alg_line, *rng);
-	} else {
+	} else if (alg_name == "global_cts") { // GlobalCTS
+		double gamma;
+		ss >> gamma;
+		return new GlobalCTS(name, *mab, *rng, gamma);
+	} else if (alg_name == "per_arm_cts") { // PerArmCTS
+		double gamma;
+		ss >> gamma;
+		return new PerArmCTS(name, *mab, *rng, gamma);
+	} else if (alg_name == "cd_algorithm") { // CD_Algorithm
+		int num_cdt_params, num_sub_alg_params;
+
+		ss >> num_cdt_params;
+		string cdt_line;
+		for (int i = 0; i < num_cdt_params; i++) {
+			string temp;
+			ss >> temp;
+			cdt_line += temp + " ";
+		}
+
+		ss >> num_sub_alg_params;
+		string sub_alg_line;
+		for (int i = 0; i < num_sub_alg_params; i++) {
+			string temp;
+			ss >> temp;
+			sub_alg_line += temp + " ";
+		}
+
+		return new CD_Algorithm(name, *mab, cdt_line, sub_alg_line, *rng);
+	}
+	else {
 		cout << "Not valid algorithm: " << line << endl;
 		return new UCB1(name, *mab);
 	}
@@ -93,6 +126,11 @@ CDT* get_cdt(string line) {
 		double gamma, lambda, rho;
 		ss >> gamma >> lambda >> rho;
 		return new CDT_PH_RHO(gamma, lambda, rho);
+	} else if (cdt_name == "cusum") {
+		int M;
+		double epsilon, threshold;
+		ss >> M >> epsilon >> threshold;
+		return new Two_Sided_CUSUM(M, epsilon, threshold);
 	} else {
 		cout << "Not valid cdt: " << line << endl;
 		return new CDT_PH(0, 0);

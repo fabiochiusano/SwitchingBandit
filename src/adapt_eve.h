@@ -4,14 +4,14 @@
 #include "mabalg.h"
 #include "cdt.h"
 #include <string>
-#include <map>
 #include <vector>
 
 class ADAPT_EVE: public MABAlgorithm {
 private:
   vector<CDT*> cdts;
   MABAlgorithm *core_sub_alg, *other_sub_alg, *meta_alg;
-  MAB *meta_mab;
+  boost::mt19937* rng;
+  string sub_alg_line;
 
   double meta_duration;
   bool is_meta;

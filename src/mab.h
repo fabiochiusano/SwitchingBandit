@@ -16,9 +16,10 @@ enum class MABType { Stochastic, Adversarial};
 class MAB {
 private:
 	int id;
-	static int next_id;
 
 public:
+	static int next_id;
+	
 	MABType* mabtype;
 	vector<Distribution*> arms;
 

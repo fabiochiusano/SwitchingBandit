@@ -17,6 +17,16 @@ public:
 	void reset() override;
 };
 
+class UCB1_With_Exploration: public UCB {
+private:
+	double alpha; // Exploration parameter
+	vector<double> means;
+public:
+	UCB1_With_Exploration(string name, MAB& mab, double alpha);
+	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	void reset() override;
+};
+
 class UCBT: public UCB {
 private:
 	vector<double> means;
