@@ -63,7 +63,8 @@ void SW_UCB::reset() {
 }
 
 
-ArmPull UCB1::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull UCB1::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -89,7 +90,7 @@ ArmPull UCB1::run(vector<double>& pulls, bool generate_new_pulls) {
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];
@@ -97,7 +98,8 @@ ArmPull UCB1::run(vector<double>& pulls, bool generate_new_pulls) {
 	return armpull;
 }
 
-ArmPull UCB1_With_Exploration::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull UCB1_With_Exploration::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -128,7 +130,7 @@ ArmPull UCB1_With_Exploration::run(vector<double>& pulls, bool generate_new_pull
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];
@@ -137,7 +139,8 @@ ArmPull UCB1_With_Exploration::run(vector<double>& pulls, bool generate_new_pull
 }
 
 
-ArmPull UCBT::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull UCBT::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -169,7 +172,7 @@ ArmPull UCBT::run(vector<double>& pulls, bool generate_new_pulls) {
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];
@@ -177,7 +180,8 @@ ArmPull UCBT::run(vector<double>& pulls, bool generate_new_pulls) {
 	return armpull;
 }
 
-ArmPull D_UCB::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull D_UCB::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -204,7 +208,7 @@ ArmPull D_UCB::run(vector<double>& pulls, bool generate_new_pulls) {
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 
@@ -233,7 +237,8 @@ ArmPull D_UCB::run(vector<double>& pulls, bool generate_new_pulls) {
 	return armpull;
 }
 
-ArmPull SW_UCB::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull SW_UCB::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -262,7 +267,7 @@ ArmPull SW_UCB::run(vector<double>& pulls, bool generate_new_pulls) {
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 

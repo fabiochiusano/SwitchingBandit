@@ -22,14 +22,14 @@ protected:
 	int num_of_arms = 0;
 
 	void mabalg_reset();
-	ArmPull pull_arm(vector<double>& pulls, bool generate_new_pulls, int arm_to_pull);
+	ArmPull pull_arm(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls, int arm_to_pull);
 public:
 	vector<int> num_of_pulls;
 	MAB* mab;
 	string name;
 
 	MABAlgorithm(string name, MAB& mab);
-	virtual ArmPull run(vector<double>& pulls, bool generate_new_pulls) = 0;
+	virtual ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) = 0;
 	virtual void reset() = 0;
 };
 

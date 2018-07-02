@@ -44,17 +44,18 @@ void ADAPT_EVE::reset() {
   this->timestep = 0;
 }
 
-ArmPull ADAPT_EVE::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull ADAPT_EVE::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+  vector<double> pulls = all_pulls[timestep];
   // pulls and highest mean are relative to the core mab (not the meta mab)
   ArmPull armpull(0,0);
   this->timestep++;
 
   if (!this->is_meta) {
     // If core algorithm is running
-    armpull = this->core_sub_alg->run(pulls, generate_new_pulls);
+    armpull = this->core_sub_alg->run(all_pulls, timestep, generate_new_pulls);
 
-    bool alarm_raised = this->cdts[armpull.arm_index]->run(armpull.reward);
-    if (alarm_raised) {
+    CDT_Result cdt_result = this->cdts[armpull.arm_index]->run(armpull.reward);
+    if (cdt_result.alarm) {
       cout << this->name << ": alarm raised at timestep " << this->timestep << endl;
 
       this->is_meta = true;
@@ -65,7 +66,7 @@ ArmPull ADAPT_EVE::run(vector<double>& pulls, bool generate_new_pulls) {
     }
   } else {
     // If meta algorithm is running
-    armpull = this->meta_alg->run(pulls, true);
+    armpull = this->meta_alg->run(all_pulls, timestep, true);
 
     t_meta++;
     if (t_meta == this->meta_duration) {

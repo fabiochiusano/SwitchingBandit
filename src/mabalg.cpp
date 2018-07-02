@@ -19,17 +19,18 @@ void MABAlgorithm::mabalg_reset() {
 	this->num_of_pulls.assign(this->num_of_arms, 0);
 }
 
-ArmPull MABAlgorithm::pull_arm(vector<double>& pulls, bool generate_new_pulls, int arm_to_pull) {
+ArmPull MABAlgorithm::pull_arm(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls, int arm_to_pull) {
+	vector<double> pulls = all_pulls[timestep];
+
 	ArmPull armpull(0,0);
 	if (generate_new_pulls) {
 		if (this->mab->arms[arm_to_pull]->is_mab) { // TODO: actually we should generate pulls only when the selected arm is a meta-mab
 			// In this case, we should return an armpull relative to the MAB inside the arm
 			MABDistribution* d = (MABDistribution*)(this->mab->arms[arm_to_pull]);
 
-			d->set_pulls(pulls);
-			int fake_timestep = 0;
+			d->set_pulls(all_pulls);
 
-			double reward = d->draw(fake_timestep);
+			double reward = d->draw(timestep);
 
 			armpull.reward = reward;
 			armpull.arm_index = d->get_pulled_arm();

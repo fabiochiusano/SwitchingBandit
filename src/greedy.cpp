@@ -20,7 +20,8 @@ void Greedy::reset() {
 }
 
 
-ArmPull E_Greedy::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull E_Greedy::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -54,7 +55,7 @@ ArmPull E_Greedy::run(vector<double>& pulls, bool generate_new_pulls) {
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];
@@ -62,7 +63,8 @@ ArmPull E_Greedy::run(vector<double>& pulls, bool generate_new_pulls) {
 	return armpull;
 }
 
-ArmPull GLIE::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull GLIE::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -97,7 +99,7 @@ ArmPull GLIE::run(vector<double>& pulls, bool generate_new_pulls) {
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];

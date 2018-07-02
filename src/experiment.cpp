@@ -23,7 +23,6 @@ void Experiment::run() {
   for (int cur_simulation = 1; cur_simulation <= this->num_simulations; cur_simulation++) {
     // Should generate all the pulls because they are needed in advice in an adversary environment
     vector<vector<double>> pulls = this->mab->generate_pulls(this->timesteps); // pulls[timestep][arm]
-
     mab_manager.analyze_pulls(pulls);
 
 		for (int timestep = 0; timestep < this->timesteps; timestep++) {
@@ -31,7 +30,7 @@ void Experiment::run() {
         bool generate_new_pulls = false;
 
         // The generated armpull is relative to the main mab (not to any meta-mab)
-        ArmPull armpull = this->algs[alg_index]->run(pulls[timestep], generate_new_pulls);
+        ArmPull armpull = this->algs[alg_index]->run(pulls, timestep, generate_new_pulls);
 
         mab_manager.update(armpull, alg_index, timestep, pulls[timestep]);
       }

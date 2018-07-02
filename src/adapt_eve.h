@@ -20,7 +20,7 @@ private:
   int timestep;
 public:
 	ADAPT_EVE(string name, MAB& mab, int meta_duration, string cdt_line, string sub_alg_line, boost::mt19937& rng);
-	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
   void reset() override;
 };
 

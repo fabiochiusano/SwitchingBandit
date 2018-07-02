@@ -36,7 +36,8 @@ void REXP3::reset() {
 }
 
 
-ArmPull EXP3::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull EXP3::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	// Find the arms probabilities
 	double ws_sum = accumulate(this->ws.begin(), this->ws.end(), 0.);
 	vector<double> arm_probabilities;
@@ -62,7 +63,7 @@ ArmPull EXP3::run(vector<double>& pulls, bool generate_new_pulls) {
 	if (chosen_arm == -1) cout << "Doh exp3" << endl;
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, chosen_arm);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, chosen_arm);
 
 	// Update algorithm statistics
 	this->ws[chosen_arm] *= exp(this->nu * (armpull.reward / arm_probabilities[chosen_arm]));
@@ -71,7 +72,8 @@ ArmPull EXP3::run(vector<double>& pulls, bool generate_new_pulls) {
 	return armpull;
 }
 
-ArmPull EXP3_S::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull EXP3_S::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	// Find the arms probabilities
 	double ws_sum = accumulate(this->ws.begin(), this->ws.end(), 0.);
 	vector<double> arm_probabilities;
@@ -96,7 +98,7 @@ ArmPull EXP3_S::run(vector<double>& pulls, bool generate_new_pulls) {
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, chosen_arm);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, chosen_arm);
 
 	// Update algorithm statistics
 	for (int i = 0; i < this->num_of_arms; i++) {
@@ -111,7 +113,8 @@ ArmPull EXP3_S::run(vector<double>& pulls, bool generate_new_pulls) {
 	return armpull;
 }
 
-ArmPull REXP3::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull REXP3::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	// Reset if window is finished
 	int tot_pulls = accumulate(this->num_of_pulls.begin(), this->num_of_pulls.end(), 0.);
 	if (tot_pulls % this->window_size == 0) {
@@ -142,7 +145,7 @@ ArmPull REXP3::run(vector<double>& pulls, bool generate_new_pulls) {
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, chosen_arm);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, chosen_arm);
 
 	// Update ws
 	this->ws[chosen_arm] *= exp((this->beta / this->num_of_arms) * (armpull.reward / arm_probabilities[chosen_arm]));

@@ -84,6 +84,17 @@ public:
 	double get_mean(int timestep) override;
 };
 
+class NormalNonStationaryDistribution: public Distribution {
+private:
+	vector<double> means, stddevs;
+	vector<int> ends;
+public:
+	NormalNonStationaryDistribution(string name, vector<double>& means, vector<double>& stddevs, vector<int>& ends, boost::mt19937& rng);
+	double draw(int timestep) override;
+	string toFile() override;
+	double get_mean(int timestep) override;
+};
+
 
 
 // It's equivalent to a UniformNonStationaryDistribution where the mean flips between 0 and v at each timestep
@@ -101,7 +112,7 @@ public:
 class MABDistribution: public Distribution {
 private:
 	MABAlgorithm* mabalg;
-	vector<double> pulls;
+	vector<vector<double>> all_pulls;
 	int pulled_arm;
 public:
 	MABDistribution(string name, MABAlgorithm* mabalg);
@@ -109,7 +120,7 @@ public:
 	string toFile() override;
 	double get_mean(int timestep) override;
 
-	void set_pulls(vector<double> pulls);
+	void set_pulls(vector<vector<double>>& pulls);
 	int get_pulled_arm();
 };
 

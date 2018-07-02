@@ -16,7 +16,7 @@ private:
 	vector<int> alphas, betas;
 public:
 	ThompsonSamplingBernoulli(string name, MAB& mab, boost::mt19937& rng);
-	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
 	void reset() override;
 };
 
@@ -25,7 +25,7 @@ private:
 	vector<double> means;
 public:
 	ThompsonSamplingGaussian(string name, MAB& mab, boost::mt19937& rng);
-	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
 	void reset() override;
 };
 
@@ -37,7 +37,7 @@ private:
 	vector<vector<double>> betas; // betas[arm][runlength]
 public:
 	GlobalCTS(string name, MAB& mab, boost::mt19937& rng, double gamma);
-	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
 	void reset() override;
 };
 
@@ -49,7 +49,7 @@ private:
 	vector<vector<double>> betas; // betas[arm][runlength]
 public:
 	PerArmCTS(string name, MAB& mab, boost::mt19937& rng, double gamma);
-	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
 	void reset() override;
 };
 

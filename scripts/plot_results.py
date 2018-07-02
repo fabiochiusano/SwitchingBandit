@@ -99,6 +99,23 @@ def plot_means_in_time(cur_experiment):
 						p = axarr[1].plot([prev_end, new_end], [prev_mean, prev_mean], color=p[0].get_color(), linestyle=p[0].get_linestyle())
 					prev_end = int(piece)
 
+		elif distribution_type == "NormalNonStationary":
+			prev_mean = 0
+			prev_std = 0
+			prev_end = 0
+			for i, piece in enumerate(line_splitted[2:len(line_splitted)-1]):
+				if i % 3 == 0:
+					prev_mean = float(piece)
+				elif i % 3 == 1:
+					prev_std = float(piece)
+				else:
+					new_end = int(piece)
+					if i == 2:
+						p = axarr[1].plot([prev_end, new_end], [prev_mean, prev_mean], linestyle=next(styles))
+					else:
+						p = axarr[1].plot([prev_end, new_end], [prev_mean, prev_mean], color=p[0].get_color(), linestyle=p[0].get_linestyle())
+					prev_end = int(piece)
+
 		elif distribution_type == "Bernoulli":
 			pr = float(line_splitted[2])
 			mean = pr
@@ -223,7 +240,7 @@ stddev_amplifier_regrets = 1/10 #1/10
 ymin_2 = -0.5
 ymax_2 = 1.5
 ymin_3 = 0
-ymax_3 = 1500
+ymax_3 = 500
 
 # TODO: beautify the plots selection for each type of environment
 # TODO: make automatic the choice of the plots according to the selected environments

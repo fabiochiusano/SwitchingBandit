@@ -9,11 +9,10 @@ public:
 };
 
 class UCB1: public UCB {
-private:
-	vector<double> means;
 public:
+	vector<double> means;
 	UCB1(string name, MAB& mab);
-	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
 	void reset() override;
 };
 
@@ -23,7 +22,7 @@ private:
 	vector<double> means;
 public:
 	UCB1_With_Exploration(string name, MAB& mab, double alpha);
-	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
 	void reset() override;
 };
 
@@ -33,7 +32,7 @@ private:
 	vector<vector<double>> collected_rewards;
 public:
 	UCBT(string name, MAB& mab);
-	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
 	void reset() override;
 };
 
@@ -43,7 +42,7 @@ private:
 	double B, gamma, epsilon;
 public:
 	D_UCB(string name, MAB& mab, double gamma, double B, double epsilon);
-	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
 	void reset() override;
 };
 
@@ -55,7 +54,7 @@ private:
 	int tau;
 public:
 	SW_UCB(string name, MAB& mab, int tau, double B, double epsilon);
-	ArmPull run(vector<double>& pulls, bool generate_new_pulls) override;
+	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
 	void reset() override;
 };
 

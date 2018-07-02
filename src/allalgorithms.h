@@ -7,5 +7,6 @@
 #include "exp.h"
 #include "adapt_eve.h"
 #include "cd_algorithm.h"
+#include "glr.h"
 
 #endif

@@ -152,6 +152,49 @@ double BernoulliNonStationaryDistribution::get_mean(int timestep) {
 
 
 
+NormalNonStationaryDistribution::NormalNonStationaryDistribution(string name, vector<double>& means, vector<double>& stddevs, vector<int>& ends, boost::mt19937& rng) : Distribution(name, rng) {
+	this->means = means;
+	this->stddevs = stddevs;
+	this->ends = ends;
+}
+
+double NormalNonStationaryDistribution::draw(int timestep) {
+	int correct_i = this->ends.size() - 1;
+	for (int i = 0; i < this->ends.size(); i++) {
+		if (this->ends[i] >= timestep) {
+			correct_i = i;
+			break;
+		}
+	}
+	double mean = this->means[correct_i];
+	double stddev = this->stddevs[correct_i];
+	boost::normal_distribution<> nd = boost::normal_distribution<>(mean, stddev);
+	boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > vg = boost::variate_generator<boost::mt19937&, boost::normal_distribution<> >(*(this->rng), nd);
+	double res = (double)(vg)();
+	return res;
+}
+
+string NormalNonStationaryDistribution::toFile() {
+	string result = this->name + " NormalNonStationary ";
+	for (int i = 0; i < this->means.size(); i++) {
+		result += to_string(this->means[i]) + " " + to_string(this->stddevs[i]) + " " + to_string(this->ends[i]) + " ";
+	}
+	return result;
+}
+
+double NormalNonStationaryDistribution::get_mean(int timestep) {
+	int correct_i = this->ends.size() - 1;
+	for (int i = 0; i < this->ends.size(); i++) {
+		if (this->ends[i] >= timestep) {
+			correct_i = i;
+			break;
+		}
+	}
+	return this->means[correct_i];
+}
+
+
+
 
 SquareWaveDistribution::SquareWaveDistribution(string name, double v, double cur_v, boost::mt19937& rng) : Distribution(name, rng) {
 	this->v = v;
@@ -182,14 +225,14 @@ MABDistribution::MABDistribution(string name, MABAlgorithm* mabalg) : Distributi
 	this->name = name;
 	this->mabalg = mabalg;
 	this->is_mab = true;
-	this->pulls.clear();
+	this->all_pulls.clear();
 }
 
 double MABDistribution::draw(int timestep) {
-	if (this->pulls.size() == 0)
+	if (this->all_pulls.size() == 0)
 		cout << "Callind draw on MABDistribution without pulls set" << endl;
 
-	ArmPull armpull = this->mabalg->run(this->pulls, false); // TODO: actually I should generate pulls only if the selected arm is a meta-mab
+	ArmPull armpull = this->mabalg->run(this->all_pulls, timestep, false); // TODO: actually I should generate pulls only if the selected arm is a meta-mab
 
 	this->pulled_arm = armpull.arm_index;
 
@@ -206,8 +249,8 @@ double MABDistribution::get_mean(int timestep) {
 	return 0;
 }
 
-void MABDistribution::set_pulls(vector<double> pulls) {
-	this->pulls = pulls;
+void MABDistribution::set_pulls(vector<vector<double>>& all_pulls) {
+	this->all_pulls = all_pulls;
 }
 
 int MABDistribution::get_pulled_arm() {

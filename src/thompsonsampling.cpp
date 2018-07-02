@@ -75,7 +75,8 @@ void PerArmCTS::reset() {
 }
 
 
-ArmPull ThompsonSamplingBernoulli::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull ThompsonSamplingBernoulli::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -99,7 +100,7 @@ ArmPull ThompsonSamplingBernoulli::run(vector<double>& pulls, bool generate_new_
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 	if (armpull.reward > 0) {
@@ -112,7 +113,8 @@ ArmPull ThompsonSamplingBernoulli::run(vector<double>& pulls, bool generate_new_
 	return armpull;
 }
 
-ArmPull ThompsonSamplingGaussian::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull ThompsonSamplingGaussian::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -138,7 +140,7 @@ ArmPull ThompsonSamplingGaussian::run(vector<double>& pulls, bool generate_new_p
 	if (arm_to_pull == -1) cout << "DOH ts_g" << endl;
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 	this->means[arm_to_pull] = (this->means[arm_to_pull] * (this->num_of_pulls[arm_to_pull] - 1) + armpull.reward) / this->num_of_pulls[arm_to_pull];
@@ -146,7 +148,8 @@ ArmPull ThompsonSamplingGaussian::run(vector<double>& pulls, bool generate_new_p
 	return armpull;
 }
 
-ArmPull GlobalCTS::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull GlobalCTS::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -182,7 +185,7 @@ ArmPull GlobalCTS::run(vector<double>& pulls, bool generate_new_pulls) {
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 
@@ -244,7 +247,8 @@ ArmPull GlobalCTS::run(vector<double>& pulls, bool generate_new_pulls) {
 }
 
 
-ArmPull PerArmCTS::run(vector<double>& pulls, bool generate_new_pulls) {
+ArmPull PerArmCTS::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
+	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
 
 	// Choose arm to pull
@@ -284,7 +288,7 @@ ArmPull PerArmCTS::run(vector<double>& pulls, bool generate_new_pulls) {
 	}
 
 	// Pull arm
-	ArmPull armpull = this->pull_arm(pulls, generate_new_pulls, arm_to_pull);
+	ArmPull armpull = this->pull_arm(all_pulls, timestep, generate_new_pulls, arm_to_pull);
 
 	// Update algorithm statistics
 

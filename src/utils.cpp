@@ -104,7 +104,19 @@ MABAlgorithm* get_algorithm(MAB* mab, string line, boost::mt19937* rng) {
 			sub_alg_line += temp + " ";
 		}
 
-		return new CD_Algorithm(name, *mab, cdt_line, sub_alg_line, *rng);
+		int use_history;
+		ss >> use_history;
+
+		double alpha;
+		ss >> alpha;
+
+		return new CD_Algorithm(name, *mab, cdt_line, sub_alg_line, use_history==1, alpha, *rng);
+	} else if (alg_name == "glr") {
+		int M, mod;
+		double alpha;
+
+		ss >> M >> mod >> alpha;
+		return new GLR(name, *mab, M, mod, alpha, *rng);
 	}
 	else {
 		cout << "Not valid algorithm: " << line << endl;
@@ -129,8 +141,15 @@ CDT* get_cdt(string line) {
 	} else if (cdt_name == "cusum") {
 		int M;
 		double epsilon, threshold;
-		ss >> M >> epsilon >> threshold;
-		return new Two_Sided_CUSUM(M, epsilon, threshold);
+		int gaussian;
+		ss >> M >> epsilon >> threshold >> gaussian;
+		return new Two_Sided_CUSUM(M, epsilon, threshold, gaussian!=0);
+	} else if (cdt_name == "ici") {
+		int S0, nu;
+		double gamma;
+
+		ss >> S0 >> nu >> gamma;
+		return new ICI(S0, nu, gamma);
 	} else {
 		cout << "Not valid cdt: " << line << endl;
 		return new CDT_PH(0, 0);
@@ -176,6 +195,23 @@ Distribution* get_distribution(string line, boost::mt19937* rng) {
 		}
 
 		return new BernoulliNonStationaryDistribution("BNS", *ps, *ends, *rng);
+	} else if (distr == "NormalNonStationary") {
+		int distr_changes;
+		vector<double>* means = new vector<double>();
+		vector<double>* stddevs = new vector<double>();
+		vector<int>* ends = new vector<int>();
+
+		ss >> distr_changes;
+		for (int i = 0; i < distr_changes; i++) {
+			double mean, stddev;
+			int end;
+			ss >> mean >> stddev >> end;
+			means->push_back(mean);
+			stddevs->push_back(stddev);
+			ends->push_back(end);
+		}
+
+		return new NormalNonStationaryDistribution("NNS", *means, *stddevs, *ends, *rng);
 	} else if (distr == "SquareWave") { // SquareWave
 		double v, cur_v;
 		ss >> v >> cur_v;
@@ -184,5 +220,31 @@ Distribution* get_distribution(string line, boost::mt19937* rng) {
 	} else {
 		cout << "Not valid distribution: " << line << endl;
 		return new NormalDistribution("G", 0, 1, *rng);
+	}
+}
+
+double get_moment(vector<double> data, int moment) {
+	// mu_{i} = E[X^{i}]
+	double tot = 0;
+	for (auto d : data) {
+		tot += pow(d, moment);
+	}
+	if (data.size() > 0)
+		return tot/data.size();
+	return 0;
+}
+
+double get_cumulant(vector<double> data, int cumulant) {
+	// http://www.scholarpedia.org/article/Cumulants#Examples
+	if (cumulant == 1) {
+		return get_moment(data, 1);
+	} else if (cumulant == 2) {
+		return get_moment(data, 2) - pow(get_moment(data, 1), 2);
+	} else if (cumulant == 3) {
+		return get_moment(data, 3) - 3*get_moment(data, 2)*get_moment(data, 1) + 2*pow(get_moment(data, 1), 3);
+	} else {
+		printf("CALLING get_cumulant with 'cumulant' parameter outside {1,2,3}");
+		printf("Returning 0");
+		return 0;
 	}
 }
