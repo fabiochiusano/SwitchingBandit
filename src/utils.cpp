@@ -10,50 +10,71 @@ double random_unit() {
 	return static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 }
 
-MABAlgorithm* get_algorithm(MAB* mab, string line, boost::mt19937* rng) {
+MABAlgorithm* get_algorithm(string line, int num_of_arms, boost::mt19937* rng) {
 	stringstream ss(line);
 
 	string name, alg_name;
 	ss >> name >> alg_name;
 
 	if (alg_name == "ucb1") { // Gaussian
-		return new UCB1(name, *mab);
-	} else if (alg_name == "ucb1_with_exploration") { // Uniform
+		return new UCB1(name, num_of_arms);
+	} else if (alg_name == "alg_with_exploration") { // Uniform
+		int num_sub_alg_params;
+		ss >> num_sub_alg_params;
+		string sub_alg_line;
+		for (int i = 0; i < num_sub_alg_params; i++) {
+			string temp;
+			ss >> temp;
+			sub_alg_line += temp + " ";
+		}
+
 		double alpha;
 		ss >> alpha;
-		return new UCB1_With_Exploration(name, *mab, alpha);
+
+		return new Algorithm_With_Uniform_Exploration(name, num_of_arms, sub_alg_line, alpha, *rng);
+	} else if (alg_name == "round") {
+		int num_sub_alg_params;
+		ss >> num_sub_alg_params;
+		string sub_alg_line;
+		for (int i = 0; i < num_sub_alg_params; i++) {
+			string temp;
+			ss >> temp;
+			sub_alg_line += temp + " ";
+		}
+
+		return new Round_Algorithm(name, num_of_arms, sub_alg_line, *rng);
 	} else if (alg_name == "ucbt") { // Uniform
-		return new UCBT(name, *mab);
-	} else if (alg_name == "glie") {
+		return new UCBT(name, num_of_arms);
+	} /*else if (alg_name == "glie") {
 		double epsilon;
 		ss >> epsilon;
-		return new GLIE(name, *mab, epsilon);
-	} else if (alg_name == "ts_g") { // Thompson Sampling for gaussians
-		return new ThompsonSamplingGaussian(name, *mab, *rng);
+		return new GLIE(name, num_of_arms, epsilon);
+	}*/ else if (alg_name == "ts_g") { // Thompson Sampling for gaussians
+		return new ThompsonSamplingGaussian(name, num_of_arms, *rng);
 	} else if (alg_name == "ts_b") { // Thompson Sampling for bernoullis
-		return new ThompsonSamplingBernoulli(name, *mab, *rng);
+		return new ThompsonSamplingBernoulli(name, num_of_arms, *rng);
 	} else if (alg_name == "exp3") { // EXP3
 		double beta, nu;
 		ss >> beta >> nu;
-		return new EXP3(name, *mab, beta, nu);
+		return new EXP3(name, num_of_arms, beta, nu);
 	} else if (alg_name == "d_ucb") { // D_UCB
 		double B, gamma, epsilon;
 		ss >> B >> gamma >> epsilon;
-		return new D_UCB(name, *mab, gamma, B, epsilon);
+		return new D_UCB(name, num_of_arms, gamma, B, epsilon);
 	} else if (alg_name == "sw_ucb") { // SW_UCB
 		int tau;
 		double B, epsilon;
 		ss >> B >> tau >> epsilon;
-		return new SW_UCB(name, *mab, tau, B, epsilon);
+		return new SW_UCB(name, num_of_arms, tau, B, epsilon);
 	} else if (alg_name == "exp3_s") { // EXP3_S
 		double beta, alpha;
 		ss >> beta >> alpha;
-		return new EXP3_S(name, *mab, beta, alpha);
+		return new EXP3_S(name, num_of_arms, beta, alpha);
 	} else if (alg_name == "rexp3") { // REXP3
 		double beta;
 		int window_size;
 		ss >> beta >> window_size;
-		return new REXP3(name, *mab, beta, window_size);
+		return new REXP3(name, num_of_arms, beta, window_size);
 	} else if (alg_name == "adapt_eve") { // Adapt_EvE
 		int meta_duration;
 		int num_cdt_params, num_sub_alg_params;
@@ -76,15 +97,15 @@ MABAlgorithm* get_algorithm(MAB* mab, string line, boost::mt19937* rng) {
 			sub_alg_line += temp + " ";
 		}
 
-		return new ADAPT_EVE(name, *mab, meta_duration, cdt_line, sub_alg_line, *rng);
+		return new ADAPT_EVE(name, num_of_arms, meta_duration, cdt_line, sub_alg_line, *rng);
 	} else if (alg_name == "global_cts") { // GlobalCTS
 		double gamma;
 		ss >> gamma;
-		return new GlobalCTS(name, *mab, *rng, gamma);
+		return new GlobalCTS(name, num_of_arms, *rng, gamma);
 	} else if (alg_name == "per_arm_cts") { // PerArmCTS
 		double gamma;
 		ss >> gamma;
-		return new PerArmCTS(name, *mab, *rng, gamma);
+		return new PerArmCTS(name, num_of_arms, *rng, gamma);
 	} else if (alg_name == "cd_algorithm") { // CD_Algorithm
 		int num_cdt_params, num_sub_alg_params;
 
@@ -110,17 +131,17 @@ MABAlgorithm* get_algorithm(MAB* mab, string line, boost::mt19937* rng) {
 		double alpha;
 		ss >> alpha;
 
-		return new CD_Algorithm(name, *mab, cdt_line, sub_alg_line, use_history==1, alpha, *rng);
-	} else if (alg_name == "glr") {
+		return new CD_Algorithm(name, num_of_arms, cdt_line, sub_alg_line, use_history==1, *rng);
+	} /*else if (alg_name == "glr") {
 		int M, mod;
 		double alpha;
 
 		ss >> M >> mod >> alpha;
-		return new GLR(name, *mab, M, mod, alpha, *rng);
-	}
+		return new GLR(name, num_of_arms, M, mod, alpha, *rng);
+	}*/
 	else {
 		cout << "Not valid algorithm: " << line << endl;
-		return new UCB1(name, *mab);
+		return new UCB1(name, num_of_arms);
 	}
 }
 
@@ -247,4 +268,8 @@ double get_cumulant(vector<double> data, int cumulant) {
 		printf("Returning 0");
 		return 0;
 	}
+}
+
+void make_dir(string name) {
+	system(("mkdir -p " + name).c_str());
 }

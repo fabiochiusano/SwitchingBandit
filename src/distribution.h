@@ -107,7 +107,7 @@ public:
 	string toFile() override;
 	double get_mean(int timestep) override;
 };
-
+/*
 // Used in meta bandits
 class MABDistribution: public Distribution {
 private:
@@ -123,7 +123,7 @@ public:
 	void set_pulls(vector<vector<double>>& pulls);
 	int get_pulled_arm();
 };
-
+*/
 
 // TODO: SineDistribution
 

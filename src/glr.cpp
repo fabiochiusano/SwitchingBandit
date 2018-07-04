@@ -1,7 +1,7 @@
 #include "glr.h"
 #include "utils.h"
 #include <math.h>
-
+/*
 GLR::GLR(string name, MAB& mab, int M, int mod, double alpha, boost::mt19937& rng) : MABAlgorithm(name, mab) {
   this->ucb = (UCB1*)get_algorithm(&mab, "ucb1 ucb1", &rng);
   this->M = M;
@@ -297,3 +297,4 @@ void GLR::update_UCB(int arm_pulled) {
   this->ucb->means[arm_pulled] = accumulate(this->rewards[arm_pulled].begin() + this->changepoints[arm_pulled], this->rewards[arm_pulled].end(), 0.) / this->ucb->num_of_pulls[arm_pulled];
 
 }
+*/

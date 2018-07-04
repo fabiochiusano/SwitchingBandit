@@ -8,7 +8,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-
+/*
 class GLR: public MABAlgorithm {
 private:
   UCB1* ucb;
@@ -25,6 +25,6 @@ public:
   GLR(string name, MAB& mab, int M, int mod, double alpha, boost::mt19937& rng);
 	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
   void reset() override;
-};
+};*/
 
 #endif

@@ -5,8 +5,6 @@
 #include "ucb.h"
 #include "thompsonsampling.h"
 #include "exp.h"
-#include "adapt_eve.h"
-#include "cd_algorithm.h"
-#include "glr.h"
+#include "meta_algorithms.h"
 
 #endif

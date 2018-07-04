@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+/*
 class ADAPT_EVE: public MABAlgorithm {
 private:
   vector<CDT*> cdts;
@@ -23,5 +24,5 @@ public:
 	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
   void reset() override;
 };
-
+*/
 #endif

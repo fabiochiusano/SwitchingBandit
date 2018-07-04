@@ -1,25 +1,46 @@
 #include "greedy.h"
 
-
-Greedy::Greedy(string name, MAB& mab) : MABAlgorithm(name, mab) {}
-
-E_Greedy::E_Greedy(string name, MAB& mab, double epsilon) : Greedy(name, mab) {
+/*
+Greedy::Greedy(string name, int num_of_arms, double epsilon) : MABAlgorithm(name, num_of_arms) {
+	this->epsilon;
 	this->reset();
-	this->epsilon = epsilon;
 }
 
-GLIE::GLIE(string name, MAB& mab, double epsilon) : Greedy(name, mab) {
+E_Greedy::E_Greedy(string name, int num_of_arms, double epsilon) : Greedy(name, num_of_arms, epsilon) {
 	this->reset();
-	this->epsilon = epsilon;
-}
+}*/
+/*
+GLIE::GLIE(string name, int num_of_arms, double epsilon) : Greedy(name, num_of_arms, epsilon) {
+	this->reset();
+}*/
 
-
+/*
 void Greedy::reset() {
 	mabalg_reset();
 	this->means.assign(this->num_of_arms, 0.);
 }
 
 
+int E_Greedy::choose_action() {
+	// pull arm that maximizes Q
+	double bestQ = -100000;
+	int best_arm = -1;
+	for (int i = 0; i < this->num_of_arms; i++) {
+		double Q = this->means[i];
+		if (Q > bestQ) {
+			bestQ = Q;
+			best_arm = i;
+		}
+	}
+	return best_arm;
+}
+
+void E_Greedy::receive_reward(double reward, int pulled_arm) {
+	this->MABAlgorithm::receive_reward(reward, pulled_arm);
+	this->means[pulled_arm] = (this->means[pulled_arm] * (this->num_of_pulls[pulled_arm] - 1) + reward) / this->num_of_pulls[pulled_arm];
+}*/
+
+/*
 ArmPull E_Greedy::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
 	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
@@ -62,7 +83,9 @@ ArmPull E_Greedy::run(vector<vector<double>>& all_pulls, int timestep, bool gene
 
 	return armpull;
 }
+*/
 
+/*
 ArmPull GLIE::run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) {
 	vector<double> pulls = all_pulls[timestep];
 	int arm_to_pull = -1;
@@ -106,3 +129,4 @@ ArmPull GLIE::run(vector<vector<double>>& all_pulls, int timestep, bool generate
 
 	return armpull;
 }
+*/

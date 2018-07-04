@@ -6,15 +6,18 @@
 
 class Experiment {
 private:
-  MAB* mab;
+  MABExperiment* mab;
+  RegretType mabtype;
   vector<MABAlgorithm*> algs;
 public:
+  string name;
   int num_simulations;
   int timesteps;
   int seed;
 
-  Experiment(int num_simulations, int timesteps, int seed);
-  void set_mab(MAB* mab);
+  Experiment(string name, int num_simulations, int timesteps, int seed);
+  void set_mab(MABExperiment* mab);
+  void set_mab_type(RegretType mabtype);
   void add_alg(MABAlgorithm* alg);
   void run();
 };

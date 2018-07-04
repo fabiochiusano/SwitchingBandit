@@ -5,24 +5,15 @@
 
 class UCB: public MABAlgorithm {
 public:
-	UCB(string name, MAB& mab);
+	UCB(string name, int num_of_arms);
 };
 
 class UCB1: public UCB {
 public:
 	vector<double> means;
-	UCB1(string name, MAB& mab);
-	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
-	void reset() override;
-};
-
-class UCB1_With_Exploration: public UCB {
-private:
-	double alpha; // Exploration parameter
-	vector<double> means;
-public:
-	UCB1_With_Exploration(string name, MAB& mab, double alpha);
-	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
+	UCB1(string name, int num_of_arms);
+	int choose_action() override;
+	void receive_reward(double reward, int pulled_arm) override;
 	void reset() override;
 };
 
@@ -31,8 +22,9 @@ private:
 	vector<double> means;
 	vector<vector<double>> collected_rewards;
 public:
-	UCBT(string name, MAB& mab);
-	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
+	UCBT(string name, int num_of_arms);
+	int choose_action() override;
+	void receive_reward(double reward, int pulled_arm) override;
 	void reset() override;
 };
 
@@ -41,8 +33,9 @@ private:
 	vector<double> means, ns;
 	double B, gamma, epsilon;
 public:
-	D_UCB(string name, MAB& mab, double gamma, double B, double epsilon);
-	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
+	D_UCB(string name, int num_of_arms, double gamma, double B, double epsilon);
+	int choose_action() override;
+	void receive_reward(double reward, int pulled_arm) override;
 	void reset() override;
 };
 
@@ -53,8 +46,9 @@ private:
 	double B, epsilon;
 	int tau;
 public:
-	SW_UCB(string name, MAB& mab, int tau, double B, double epsilon);
-	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
+	SW_UCB(string name, int num_of_arms, int tau, double B, double epsilon);
+	int choose_action() override;
+	void receive_reward(double reward, int pulled_arm) override;
 	void reset() override;
 };
 

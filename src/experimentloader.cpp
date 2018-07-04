@@ -7,8 +7,8 @@
 vector<Experiment*>* ExperimentLoader::load_experiments() {
 	ifstream input_file("temp/experiments_config.txt", ifstream::in);
 
-	int num_experiments, num_simulations, timesteps, seed;
-  input_file >> num_experiments >> num_simulations >> timesteps >> seed;
+	int num_experiments, num_simulations, seed;
+  input_file >> num_experiments >> num_simulations >> seed;
 
 	vector<Experiment*>* experiments = new vector<Experiment*>();
 
@@ -20,33 +20,34 @@ vector<Experiment*>* ExperimentLoader::load_experiments() {
 		// BUG: Actually this should be set at the beginning of each experiment for each thread independently
 		srand(seed);
 
-		int mab_type, num_arms, num_algs;
+		string exp_name;
+		int mab_type, num_arms, num_algs, timesteps;
 
-		input_file >> mab_type >> num_arms >> num_algs;
+		input_file >> exp_name >> mab_type >> num_arms >> num_algs >> timesteps;
 
-		Experiment* experiment = new Experiment(num_simulations, timesteps, seed);
+		Experiment* experiment = new Experiment(exp_name, num_simulations, timesteps, seed);
 
-		MABType* mt;
 		if (mab_type == 0) {
-			mt = new MABType(MABType::Stochastic);
+			experiment->set_mab_type(RegretType::Stochastic);
 		} else {
-			mt = new MABType(MABType::Adversarial);
+			experiment->set_mab_type(RegretType::Adversarial);
 		}
-		MAB* mab = new MAB(mt);
 
 		string line;
 		getline(input_file, line); // Read till newline character
 
+		vector<Distribution*> distributions;
 		for (int arm_i = 0; arm_i < num_arms; arm_i++) {
 			getline(input_file, line);
-			mab->addArm(get_distribution(line, rng));
+			distributions.push_back(get_distribution(line, rng));
 		}
 
+		MABExperiment* mab = new MABExperiment(distributions);
 		experiment->set_mab(mab);
 
 		for (int alg_i = 0; alg_i < num_algs; alg_i++) {
 			getline(input_file, line);
-			experiment->add_alg(get_algorithm(mab, line, rng));
+			experiment->add_alg(get_algorithm(line, num_arms, rng));
 		}
 
 		experiments->push_back(experiment);

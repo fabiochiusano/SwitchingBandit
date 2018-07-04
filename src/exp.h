@@ -9,8 +9,9 @@ private:
 	double beta, nu;
 	vector<double> ws;
 public:
-	EXP3(string name, MAB& mab, double beta, double nu);
-	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
+	EXP3(string name, int num_of_arms, double beta, double nu);
+	int choose_action() override;
+	void receive_reward(double reward, int pulled_arm) override;
 	void reset() override;
 };
 
@@ -19,8 +20,9 @@ private:
 	double beta, alpha;
 	vector<double> ws;
 public:
-	EXP3_S(string name, MAB& mab, double beta, double alpha);
-	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
+	EXP3_S(string name, int num_of_arms, double beta, double alpha);
+	int choose_action() override;
+	void receive_reward(double reward, int pulled_arm) override;
 	void reset() override;
 };
 
@@ -30,8 +32,9 @@ private:
 	int window_size;
 	vector<double> ws;
 public:
-	REXP3(string name, MAB& mab, double beta, int window_size);
-	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
+	REXP3(string name, int num_of_arms, double beta, int window_size);
+	int choose_action() override;
+	void receive_reward(double reward, int pulled_arm) override;
 	void reset() override;
 };
 

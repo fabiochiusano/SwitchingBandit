@@ -220,7 +220,7 @@ double SquareWaveDistribution::get_mean(int timestep) {
 
 
 
-
+/*
 MABDistribution::MABDistribution(string name, MABAlgorithm* mabalg) : Distribution(name) {
 	this->name = name;
 	this->mabalg = mabalg;
@@ -256,3 +256,4 @@ void MABDistribution::set_pulls(vector<vector<double>>& all_pulls) {
 int MABDistribution::get_pulled_arm() {
 	return this->pulled_arm;
 }
+*/

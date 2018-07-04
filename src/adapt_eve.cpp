@@ -2,7 +2,7 @@
 #include "utils.h"
 
 // TODO: add destructors in order to free dynamic memory (everywhere)
-
+/*
 ADAPT_EVE::ADAPT_EVE(string name, MAB& mab, int meta_duration, string cdt_line, string sub_alg_line, boost::mt19937& rng) : MABAlgorithm(name, mab) {
 
   this->meta_duration = meta_duration;
@@ -106,3 +106,4 @@ ArmPull ADAPT_EVE::run(vector<vector<double>>& all_pulls, int timestep, bool gen
 
   return armpull;
 }
+*/
