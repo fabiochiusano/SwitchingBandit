@@ -33,6 +33,7 @@ private:
   vector<CDT*> cdts;
   MABAlgorithm* sub_alg;
   bool use_history;
+  int timestep;
 
   vector<vector<double>> collected_rewards;
   //vector<int> chosen_arms;

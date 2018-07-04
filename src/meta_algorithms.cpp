@@ -80,7 +80,9 @@ void CD_Algorithm::reset() {
   for (int i = 0; i < this->num_of_arms; i++) {
     this->cdts[i]->reset();
   }
+  this->collected_rewards.clear();
   this->collected_rewards.resize(this->num_of_arms);
+  this->timestep = 0;
   //this->chosen_arms.clear();
   //this->last_resets_global.assign(this->num_of_arms, -1);
 }
@@ -97,7 +99,7 @@ void CD_Algorithm::receive_reward(double reward, int pulled_arm) {
   //this->chosen_arm.push_back(pulled_arm);
   CDT_Result cdt_result = this->cdts[pulled_arm]->run(reward);
   if (cdt_result.alarm) {
-    //cout << this->name << ": alarm raised at timestep " << timestep << " on arm " << armpull.arm_index << endl;
+    cout << this->name << ": alarm raised at timestep " << this->timestep << " on arm " << pulled_arm << endl;
 
     this->sub_alg->reset();
     if (this->use_history) {
@@ -109,6 +111,7 @@ void CD_Algorithm::receive_reward(double reward, int pulled_arm) {
 
     this->cdts[pulled_arm]->reset();
   }
+  this->timestep++;
 }
 
 /*
