@@ -125,7 +125,7 @@ void StatisticManager::write_regrets(int sim) {
 
 		double cum_regret = 0;
 		for (int j = 0; j < this->regrets[alg_index].size(); j++) {
-			if (j % write_every == 0) {
+			if ((j + 1) % write_every == 0) {
 				outputFile << (cum_regret + this->regrets[alg_index][j]) << " ";
 				cum_regret = 0;
 			} else {
@@ -148,7 +148,7 @@ void StatisticManager::write_rewards(int sim) {
 
     double cum_reward = 0;
 		for (int j = 0; j < this->rewards[alg_index].size(); j++) {
-			if (j % write_every == 0) {
+			if ((j + 1) % write_every == 0) {
 				outputFile << (cum_reward + this->rewards[alg_index][j]) << " ";
 				cum_reward = 0;
 			} else {

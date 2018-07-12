@@ -5,51 +5,74 @@
 UCB::UCB(string name, int num_of_arms) : MABAlgorithm(name, num_of_arms) {}
 
 UCB1::UCB1(string name, int num_of_arms) : UCB(name, num_of_arms) {
-	this->reset();
+	this->reset(-1);
 }
 
 UCBT::UCBT(string name, int num_of_arms) : UCB(name, num_of_arms) {
-	this->reset();
+	this->reset(-1);
 }
 
 D_UCB::D_UCB(string name, int num_of_arms, double gamma, double B, double epsilon) : UCB(name, num_of_arms) {
-	this->reset();
+	this->reset(-1);
 	this->gamma = gamma;
 	this->B = B;
 	this->epsilon = epsilon;
 }
 
 SW_UCB::SW_UCB(string name, int num_of_arms, int tau, double B, double epsilon) : UCB(name, num_of_arms) {
-	this->reset();
+	this->reset(-1);
 	this->tau = tau;
 	this->B = B;
 	this->epsilon = epsilon;
 }
 
 
-void UCB1::reset() {
-	this->MABAlgorithm::reset();
-	this->means.assign(this->num_of_arms, 0.);
+void UCB1::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+		this->means.assign(this->num_of_arms, 0.);
+	}
+	else {
+		this->means[action] = 0;
+	}
 }
 
-void UCBT::reset() {
-	this->MABAlgorithm::reset();
-	this->means.assign(this->num_of_arms, 0.);
-	this->collected_rewards.resize(this->num_of_arms);
+void UCBT::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+		this->means.assign(this->num_of_arms, 0.);
+		this->collected_rewards.resize(this->num_of_arms);
+	}
+	else {
+		this->means[action] = 0;
+		this->collected_rewards[action].clear();
+	}
 }
 
-void D_UCB::reset() {
-	this->MABAlgorithm::reset();
-	this->means.assign(this->num_of_arms, 0.);
-	this->ns.assign(this->num_of_arms, 0.);
+void D_UCB::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+		this->means.assign(this->num_of_arms, 0.);
+		this->ns.assign(this->num_of_arms, 0.);
+	}
+	else {
+		this->means[action] = 0;
+		this->ns[action] = 0;
+	}
 }
 
-void SW_UCB::reset() {
-	this->MABAlgorithm::reset();
-	this->windowed_arm_pulls.clear();
-	this->windowed_arm_pulls_values.clear();
-	this->windowed_arm_pulls.resize(this->num_of_arms);
-	this->windowed_arm_pulls_values.resize(this->num_of_arms);
+void SW_UCB::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+		this->windowed_arm_pulls.clear();
+		this->windowed_arm_pulls_values.clear();
+		this->windowed_arm_pulls.resize(this->num_of_arms);
+		this->windowed_arm_pulls_values.resize(this->num_of_arms);
+	}
+	else {
+		this->windowed_arm_pulls[action].clear();
+		this->windowed_arm_pulls_values[action].clear();
+	}
 }
 
 int UCB1::choose_action() {

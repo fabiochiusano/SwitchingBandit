@@ -185,7 +185,7 @@ def plot_reward(cur_experiment, axarr):
 		xs = np.arange(0, len(ll[0])*write_every, write_every)
 
 		p = axarr[1,1].plot(xs, means, linestyle='-')
-		polycollection = axarr[1,1].fill_between(xs, [x-y*stddev_amplifier_regrets for x,y in zip(means,stddevs)], [x+y*stddev_amplifier_regrets for x,y in zip(means,stddevs)], alpha=0.2)
+		polycollection = axarr[1,1].fill_between(xs, [x-(stddev_amplifier_regrets*y/math.sqrt(num_simulations)) for x,y in zip(means,stddevs)], [x+(stddev_amplifier_regrets*y/math.sqrt(num_simulations)) for x,y in zip(means,stddevs)], alpha=0.2)
 
 		patches_3.append(mpatches.Patch(color=p[0].get_color(), label=alg_name))
 
@@ -252,6 +252,29 @@ def plot_regret(cur_experiment, axarr):
 	# Put a legend below current axis
 	axarr[0,1].legend(handles=patches_3, loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=5)
 
+def plot_alarms(experiment_name, axarr):
+	cdt_file = open("temp/cdt.txt", "r")
+
+	line = cdt_file.readline()[0:-1]
+	while (line != experiment_name):
+		line = cdt_file.readline()[0:-1]
+
+	alarms = cdt_file.readline()[0:-2].split(" ")
+	d = {}
+	for alarm in alarms:
+		if alarm not in d:
+			d[alarm] = 1
+		else:
+			d[alarm] += 1
+
+	x = 0.05
+	y = 0.8
+	y_step = 0.05
+	axarr[1,0].text(x, y, "AVERAGE ALARMS:")
+	y -= y_step
+	for alarm in sorted(d, key=lambda k: d[k])[::-1]:
+		axarr[1,0].text(x, y, alarm + ": " + "{0:.2f}".format(d[alarm]/num_simulations))
+		y -= y_step
 
 
 def concatenate_images():
@@ -282,13 +305,12 @@ def concatenate_images():
 	# Create final image
 	new_im.save("images/experiment_final.png")
 
-
-stddev_amplifier_means = 1/4 #1/10
-stddev_amplifier_regrets = 1/5 #1/10
+stddev_amplifier_means = 0#1/4 #1/10
+stddev_amplifier_regrets = 0.683 # 50% confidence level, t student with 30 dof
 ymin_mean = -0.5
 ymax_mean = 1.5
 ymin_regret = 0
-ymax_regret = 500
+ymax_regret = 1500
 ymin_reward = 0
 ymax_reward = 10000
 
@@ -303,6 +325,7 @@ for experiment_name in dirs:
 	plot_means_in_time(experiment_name, axarr)
 	plot_regret(experiment_name, axarr)
 	plot_reward(experiment_name, axarr)
+	plot_alarms(experiment_name, axarr)
 	plt.savefig("images/experiment_" + experiment_name + ".png")
 	plt.close()
 

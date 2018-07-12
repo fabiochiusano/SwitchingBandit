@@ -14,7 +14,7 @@ public:
 	UCB1(string name, int num_of_arms);
 	int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 class UCBT: public UCB {
@@ -25,7 +25,7 @@ public:
 	UCBT(string name, int num_of_arms);
 	int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 class D_UCB: public UCB {
@@ -36,7 +36,7 @@ public:
 	D_UCB(string name, int num_of_arms, double gamma, double B, double epsilon);
 	int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 class SW_UCB: public UCB {
@@ -49,7 +49,7 @@ public:
 	SW_UCB(string name, int num_of_arms, int tau, double B, double epsilon);
 	int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 #endif

@@ -19,6 +19,9 @@ MABAlgorithm* get_algorithm(string line, int num_of_arms, boost::mt19937* rng) {
 	if (alg_name == "ucb1") { // Gaussian
 		return new UCB1(name, num_of_arms);
 	} else if (alg_name == "alg_with_exploration") { // Uniform
+		double alpha;
+		ss >> alpha;
+
 		int num_sub_alg_params;
 		ss >> num_sub_alg_params;
 		string sub_alg_line;
@@ -27,9 +30,6 @@ MABAlgorithm* get_algorithm(string line, int num_of_arms, boost::mt19937* rng) {
 			ss >> temp;
 			sub_alg_line += temp + " ";
 		}
-
-		double alpha;
-		ss >> alpha;
 
 		return new Algorithm_With_Uniform_Exploration(name, num_of_arms, sub_alg_line, alpha, *rng);
 	} else if (alg_name == "round") {
@@ -107,6 +107,12 @@ MABAlgorithm* get_algorithm(string line, int num_of_arms, boost::mt19937* rng) {
 		ss >> gamma;
 		return new PerArmCTS(name, num_of_arms, *rng, gamma);
 	} else if (alg_name == "cd_algorithm") { // CD_Algorithm
+		int M;
+		ss >> M;
+
+		int use_history;
+		ss >> use_history;
+
 		int num_cdt_params, num_sub_alg_params;
 
 		ss >> num_cdt_params;
@@ -125,21 +131,22 @@ MABAlgorithm* get_algorithm(string line, int num_of_arms, boost::mt19937* rng) {
 			sub_alg_line += temp + " ";
 		}
 
-		int use_history;
-		ss >> use_history;
+		return new CD_Algorithm(name, num_of_arms, M, cdt_line, sub_alg_line, use_history==1, *rng);
+	} else if (alg_name == "glr") {
+		int M;
+		ss >> M;
 
-		double alpha;
-		ss >> alpha;
+		int num_sub_alg_params;
+		ss >> num_sub_alg_params;
+		string sub_alg_line;
+		for (int i = 0; i < num_sub_alg_params; i++) {
+			string temp;
+			ss >> temp;
+			sub_alg_line += temp + " ";
+		}
 
-		return new CD_Algorithm(name, num_of_arms, cdt_line, sub_alg_line, use_history==1, *rng);
-	} /*else if (alg_name == "glr") {
-		int M, mod;
-		double alpha;
-
-		ss >> M >> mod >> alpha;
-		return new GLR(name, num_of_arms, M, mod, alpha, *rng);
-	}*/
-	else {
+		return new GLR(name, num_of_arms, M, sub_alg_line, *rng);
+	} else {
 		cout << "Not valid algorithm: " << line << endl;
 		return new UCB1(name, num_of_arms);
 	}
@@ -272,4 +279,8 @@ double get_cumulant(vector<double> data, int cumulant) {
 
 void make_dir(string name) {
 	system(("mkdir -p " + name).c_str());
+}
+
+void remove_dirs() {
+	system("rm -R -f -- ./temp/*/");
 }

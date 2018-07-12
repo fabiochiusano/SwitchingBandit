@@ -30,7 +30,7 @@ public:
 
 	virtual int choose_action() = 0; // returns the number of the selected action
 	virtual void receive_reward(double reward, int pulled_arm);
-	virtual void reset();
+	virtual void reset(int action = -1); // -1 means reset all arms
 };
 
 

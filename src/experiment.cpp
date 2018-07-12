@@ -1,5 +1,6 @@
 #include "experiment.h"
 #include "statistic_manager.h"
+#include <fstream>
 
 Experiment::Experiment(string name, int num_simulations, int timesteps, int seed) {
   this->name = name;
@@ -24,6 +25,10 @@ void Experiment::run() {
   StatisticManager stat_manager(this->name, this->mab, this->algs);
 
   stat_manager.write_distributions();
+
+  // For change detection logs
+  ofstream cdt_file("temp/cdt.txt", fstream::app);
+  cdt_file << this->name << endl;
 
   for (int cur_simulation = 1; cur_simulation <= this->num_simulations; cur_simulation++) {
     // Should generate all the pulls because they are needed in advice in an adversary environment
@@ -53,4 +58,6 @@ void Experiment::run() {
     this->mab->reset();
     stat_manager.reset();
 	}
+
+  cdt_file << endl;
 }

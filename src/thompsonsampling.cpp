@@ -15,62 +15,84 @@ ThompsonSampling::ThompsonSampling(string name, int num_of_arms, boost::mt19937&
 }
 
 ThompsonSamplingBernoulli::ThompsonSamplingBernoulli(string name, int num_of_arms, boost::mt19937& rng) : ThompsonSampling(name, num_of_arms, rng) {
-	this->reset();
+	this->reset(-1);
 }
 
 ThompsonSamplingGaussian::ThompsonSamplingGaussian(string name, int num_of_arms, boost::mt19937& rng) : ThompsonSampling(name, num_of_arms, rng) {
-	this->reset();
+	this->reset(-1);
 }
 
 GlobalCTS::GlobalCTS(string name, int num_of_arms, boost::mt19937& rng, double gamma) : ThompsonSampling(name, num_of_arms, rng) {
 	this->gamma = gamma;
-	this->reset();
+	this->reset(-1);
 }
 
 PerArmCTS::PerArmCTS(string name, int num_of_arms, boost::mt19937& rng, double gamma) : ThompsonSampling(name, num_of_arms, rng) {
 	this->gamma = gamma;
-	this->reset();
+	this->reset(-1);
 }
 
 
 
-void ThompsonSamplingBernoulli::reset() {
-	this->MABAlgorithm::reset();
-	this->alphas.assign(this->num_of_arms, 1);
-	this->betas.assign(this->num_of_arms, 1);
-}
-
-void ThompsonSamplingGaussian::reset() {
-	this->MABAlgorithm::reset();
-	this->means.assign(this->num_of_arms, 0.);
-}
-
-void GlobalCTS::reset() {
-	this->MABAlgorithm::reset();
-	this->runlength_distribution.clear();
-	this->runlength_distribution.push_back(1.);
-	this->alphas.clear();
-	this->betas.clear();
-	this->alphas.resize(this->num_of_arms);
-	this->betas.resize(this->num_of_arms);
-	for (int i = 0; i < this->num_of_arms; i++) {
-		this->alphas[i].push_back(1.);
-		this->betas[i].push_back(1.);
+void ThompsonSamplingBernoulli::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+		this->alphas.assign(this->num_of_arms, 1);
+		this->betas.assign(this->num_of_arms, 1);
+	} else {
+		this->alphas[action] = 1;
+		this->betas[action] = 1;
 	}
 }
 
-void PerArmCTS::reset() {
-	this->MABAlgorithm::reset();
-	this->runlength_distribution.clear();
-	this->alphas.clear();
-	this->betas.clear();
-	this->runlength_distribution.resize(this->num_of_arms);
-	this->alphas.resize(this->num_of_arms);
-	this->betas.resize(this->num_of_arms);
-	for (int i = 0; i < this->num_of_arms; i++) {
-		this->runlength_distribution[i].push_back(1.);
-		this->alphas[i].push_back(1.);
-		this->betas[i].push_back(1.);
+void ThompsonSamplingGaussian::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+		this->means.assign(this->num_of_arms, 0.);
+	} else {
+		this->means[action] = 0;
+	}
+}
+
+void GlobalCTS::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+		this->runlength_distribution.clear();
+		this->runlength_distribution.push_back(1.);
+		this->alphas.clear();
+		this->betas.clear();
+		this->alphas.resize(this->num_of_arms);
+		this->betas.resize(this->num_of_arms);
+		for (int i = 0; i < this->num_of_arms; i++) {
+			this->alphas[i].push_back(1.);
+			this->betas[i].push_back(1.);
+		}
+	} else {
+		cout << "Not possible to reset a single arm on GlobalCTS" << endl;
+	}
+}
+
+void PerArmCTS::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+		this->runlength_distribution.clear();
+		this->alphas.clear();
+		this->betas.clear();
+		this->runlength_distribution.resize(this->num_of_arms);
+		this->alphas.resize(this->num_of_arms);
+		this->betas.resize(this->num_of_arms);
+		for (int i = 0; i < this->num_of_arms; i++) {
+			this->runlength_distribution[i].push_back(1.);
+			this->alphas[i].push_back(1.);
+			this->betas[i].push_back(1.);
+		}
+	} else {
+		this->runlength_distribution[action].clear();
+		this->runlength_distribution[action].push_back(1.);
+		this->alphas[action].clear();
+		this->alphas[action].push_back(1.);
+		this->betas[action].clear();
+		this->betas[action].push_back(1.);
 	}
 }
 

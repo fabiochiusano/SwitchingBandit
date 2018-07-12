@@ -10,10 +10,12 @@
 
 #include "experimentloader.h"
 #include "plotter.h"
+#include "utils.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]){
+	remove_dirs();
 	vector<Experiment*>* experiments = ExperimentLoader::load_experiments();
 
 	//#pragma omp parallel for num_threads(4)

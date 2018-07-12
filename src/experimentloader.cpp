@@ -12,6 +12,8 @@ vector<Experiment*>* ExperimentLoader::load_experiments() {
 
 	vector<Experiment*>* experiments = new vector<Experiment*>();
 
+	ofstream cdt_file("temp/cdt.txt");
+
 	while (num_experiments--) {
 		 // This should be put inside the while loop, otherwise segmentation error may
 		 // happen since it's shared across threads

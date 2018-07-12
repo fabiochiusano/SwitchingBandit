@@ -14,7 +14,7 @@ public:
   Round_Algorithm(string name, int num_of_arms, string sub_alg_line, boost::mt19937& rng);
   int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 class Algorithm_With_Uniform_Exploration: public MABAlgorithm {
@@ -25,7 +25,7 @@ public:
 	Algorithm_With_Uniform_Exploration(string name, int num_of_arms, string sub_alg_line, double alpha, boost::mt19937& rng);
 	int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 class CD_Algorithm: public MABAlgorithm {
@@ -33,18 +33,16 @@ private:
   vector<CDT*> cdts;
   MABAlgorithm* sub_alg;
   bool use_history;
+  int M;
   int timestep;
 
+  vector<int> till_M;
   vector<vector<double>> collected_rewards;
-  //vector<int> chosen_arms;
-  //vector<int> last_resets_global;
-
-  //void update_history_UCB(vector<vector<double>>& all_pulls, int timestep, int arm_reset, CDT_Result cdt_result);
 public:
-  CD_Algorithm(string name, int num_of_arms, string cdt_line, string sub_alg_line, bool use_history, boost::mt19937& rng);
+  CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, boost::mt19937& rng);
   int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 class ADAPT_EVE: public MABAlgorithm {
@@ -64,7 +62,24 @@ public:
 	ADAPT_EVE(string name, int num_of_arms, int meta_duration, string cdt_line, string sub_alg_line, boost::mt19937& rng);
   int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
+};
+
+class GLR: public MABAlgorithm {
+private:
+  MABAlgorithm* sub_alg;
+  vector<vector<double>> rewards;
+  vector<int> changepoints;
+  int M;
+  vector<vector<int>> past_k;
+
+  void find_changepoints(int arm_pulled);
+  void update_sub_alg(int arm_pulled);
+public:
+  GLR(string name, int num_of_arms, int M, string sub_alg_line, boost::mt19937& rng);
+  int choose_action() override;
+	void receive_reward(double reward, int pulled_arm) override;
+  void reset(int action = -1) override;
 };
 
 #endif

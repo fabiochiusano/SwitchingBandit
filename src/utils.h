@@ -18,5 +18,6 @@ double get_moment(vector<double> data, int moment);
 double get_cumulant(vector<double> data, int cumulant);
 
 void make_dir(string name);
+void remove_dirs();
 
 #endif

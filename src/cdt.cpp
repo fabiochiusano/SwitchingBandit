@@ -120,7 +120,6 @@ CDT_Result Two_Sided_CUSUM::run(double reward) {
 
     this->g_plus = max(0., this->g_plus + s_plus);
     this->cum_plus = this->cum_plus + s_plus;
-
     if (this->cum_plus <= this->min_cum_plus) {
       this->min_cum_plus = this->cum_plus;
       this->t_estimate_plus = this->num_rewards;

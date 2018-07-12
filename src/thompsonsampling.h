@@ -18,7 +18,7 @@ public:
 	ThompsonSamplingBernoulli(string name, int num_of_arms, boost::mt19937& rng);
 	int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 class ThompsonSamplingGaussian: public ThompsonSampling {
@@ -28,7 +28,7 @@ public:
 	ThompsonSamplingGaussian(string name, int num_of_arms, boost::mt19937& rng);
 	int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 class GlobalCTS: public ThompsonSampling {
@@ -41,7 +41,7 @@ public:
 	GlobalCTS(string name, int num_of_arms, boost::mt19937& rng, double gamma);
 	int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 class PerArmCTS: public ThompsonSampling {
@@ -54,7 +54,7 @@ public:
 	PerArmCTS(string name, int num_of_arms, boost::mt19937& rng, double gamma);
 	int choose_action() override;
 	void receive_reward(double reward, int pulled_arm) override;
-	void reset() override;
+	void reset(int action = -1) override;
 };
 
 #endif

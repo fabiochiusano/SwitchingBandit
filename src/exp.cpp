@@ -2,37 +2,49 @@
 
 
 EXP3::EXP3(string name, int num_of_arms, double beta, double nu): MABAlgorithm(name, num_of_arms) {
-	this->reset();
+	this->reset(-1);
 	this->beta = beta;
 	this->nu = nu;
 }
 
 EXP3_S::EXP3_S(string name, int num_of_arms, double beta, double alpha): MABAlgorithm(name, num_of_arms) {
-	this->reset();
+	this->reset(-1);
 	this->beta = beta;
 	this->alpha = alpha;
 }
 
 REXP3::REXP3(string name, int num_of_arms, double beta, int window_size): MABAlgorithm(name, num_of_arms) {
-	this->reset();
+	this->reset(-1);
 	this->beta = beta;
 	this->window_size = window_size;
 }
 
 
-void EXP3::reset() {
-	this->MABAlgorithm::reset();
-	this->ws.assign(this->num_of_arms, 1.);
+void EXP3::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+			this->ws.assign(this->num_of_arms, 1.);
+	} else {
+			this->ws[action] = 1;
+	}
 }
 
-void EXP3_S::reset() {
-	this->MABAlgorithm::reset();
-	this->ws.assign(this->num_of_arms, 1.);
+void EXP3_S::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+		this->ws.assign(this->num_of_arms, 1.);
+	} else {
+		this->ws[action] = 1;
+	}
 }
 
-void REXP3::reset() {
-	this->MABAlgorithm::reset();
-	this->ws.assign(this->num_of_arms, 1.);
+void REXP3::reset(int action) {
+	this->MABAlgorithm::reset(action);
+	if (action == -1) {
+		this->ws.assign(this->num_of_arms, 1.);
+	} else {
+		this->ws[action] = 1;
+	}
 }
 
 int EXP3::choose_action() {

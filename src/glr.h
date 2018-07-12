@@ -6,25 +6,23 @@
 #include "ucb.h"
 #include <string>
 #include <vector>
-#include <fstream>
 #include <iostream>
 /*
 class GLR: public MABAlgorithm {
 private:
-  UCB1* ucb;
+  MABAlgorithm* sub_alg;
   vector<vector<double>> rewards;
   vector<int> changepoints;
-  int M, mod;
-  double alpha;
-  ofstream output_file;
+  int M;
   vector<vector<int>> past_k;
-  ArmPull ucb_epsilon_greedy(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls);
-  void find_changepoints(int arm_pulled);
-  void update_UCB(int arm_pulled);
-public:
-  GLR(string name, MAB& mab, int M, int mod, double alpha, boost::mt19937& rng);
-	ArmPull run(vector<vector<double>>& all_pulls, int timestep, bool generate_new_pulls) override;
-  void reset() override;
-};*/
 
+  void find_changepoints(int arm_pulled);
+  void update_sub_alg(int arm_pulled);
+public:
+  GLR(string name, int num_of_arms, int M, string sub_alg_line, boost::mt19937& rng);
+  int choose_action() override;
+	void receive_reward(double reward, int pulled_arm) override;
+  void reset(int action = -1) override;
+};
+*/
 #endif
