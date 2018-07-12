@@ -107,23 +107,6 @@ public:
 	string toFile() override;
 	double get_mean(int timestep) override;
 };
-/*
-// Used in meta bandits
-class MABDistribution: public Distribution {
-private:
-	MABAlgorithm* mabalg;
-	vector<vector<double>> all_pulls;
-	int pulled_arm;
-public:
-	MABDistribution(string name, MABAlgorithm* mabalg);
-	double draw(int timestep) override;
-	string toFile() override;
-	double get_mean(int timestep) override;
-
-	void set_pulls(vector<vector<double>>& pulls);
-	int get_pulled_arm();
-};
-*/
 
 // TODO: SineDistribution
 

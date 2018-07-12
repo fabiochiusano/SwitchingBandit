@@ -6,6 +6,9 @@
 #include <map>
 #include "cdt.h"
 
+static int WRITE_EVERY = 5; // write to file every 5 timestep (value used by statistic_manager and in plot_results.py)
+static int NEG_INF = -100000;
+
 class CDT;
 
 double random_unit();

@@ -30,7 +30,7 @@ void StatisticManager::analyze_pulls(vector<vector<double>>& pulls) {
   // Fill best_arm vector
   if (this->mabtype == RegretType::Stochastic) {
     for (int t = 0; t < total_timesteps; t++) {
-  		double cur_best_mean = -10000; // TODO: substitute -10000 with -INF
+  		double cur_best_mean = NEG_INF;
       int best_arm = -1;
   		for (int a = 0; a < mabexp->arms.size(); a++) {
         double arm_mean = mabexp->arms[a]->get_mean(t);
@@ -43,7 +43,7 @@ void StatisticManager::analyze_pulls(vector<vector<double>>& pulls) {
   	}
   } else {
     int best_arm = -1;
-		double max_sum = -10000;
+		double max_sum = NEG_INF;
 		for (int a = 0; a < mabexp->arms.size(); a++) {
       double sum_of_elems = 0;
       for (int t = 0; t < total_timesteps; t++) {
@@ -117,15 +117,14 @@ void StatisticManager::write_distributions() {
 void StatisticManager::write_regrets(int sim) {
   make_dir("temp/" + this->name + "/regrets");
 	ofstream outputFile("temp/" + this->name + "/regrets/" + to_string(sim) + ".txt");
-	int write_every = 5; // TODO: move this somewhere else
-  outputFile << write_every << endl;
+  outputFile << WRITE_EVERY << endl;
 
 	for (int alg_index = 0; alg_index < this->algs.size(); alg_index++) {
 		outputFile << this->algs[alg_index]->name << " ";
 
 		double cum_regret = 0;
 		for (int j = 0; j < this->regrets[alg_index].size(); j++) {
-			if ((j + 1) % write_every == 0) {
+			if ((j + 1) % WRITE_EVERY == 0) {
 				outputFile << (cum_regret + this->regrets[alg_index][j]) << " ";
 				cum_regret = 0;
 			} else {
@@ -140,15 +139,14 @@ void StatisticManager::write_regrets(int sim) {
 void StatisticManager::write_rewards(int sim) {
   make_dir("temp/" + this->name + "/rewards");
   ofstream outputFile("temp/" + this->name + "/rewards/" + to_string(sim) + ".txt");
-  int write_every = 5; // TODO: move this somewhere else
-  outputFile << write_every << endl;
+  outputFile << WRITE_EVERY << endl;
 
   for (int alg_index = 0; alg_index < this->algs.size(); alg_index++) {
 		outputFile << this->algs[alg_index]->name << " ";
 
     double cum_reward = 0;
 		for (int j = 0; j < this->rewards[alg_index].size(); j++) {
-			if ((j + 1) % write_every == 0) {
+			if ((j + 1) % WRITE_EVERY == 0) {
 				outputFile << (cum_reward + this->rewards[alg_index][j]) << " ";
 				cum_reward = 0;
 			} else {

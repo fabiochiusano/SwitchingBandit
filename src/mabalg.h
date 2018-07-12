@@ -9,15 +9,6 @@ using namespace std;
 
 class MAB;
 
-/*
-class ArmPull {
-public:
-	double reward;
-	int arm_index;
-	ArmPull(double reward, int arm_index);
-};*/
-
-
 class MABAlgorithm {
 protected:
 	int num_of_arms = 0;

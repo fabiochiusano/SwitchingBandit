@@ -45,11 +45,7 @@ MABAlgorithm* get_algorithm(string line, int num_of_arms, boost::mt19937* rng) {
 		return new Round_Algorithm(name, num_of_arms, sub_alg_line, *rng);
 	} else if (alg_name == "ucbt") { // Uniform
 		return new UCBT(name, num_of_arms);
-	} /*else if (alg_name == "glie") {
-		double epsilon;
-		ss >> epsilon;
-		return new GLIE(name, num_of_arms, epsilon);
-	}*/ else if (alg_name == "ts_g") { // Thompson Sampling for gaussians
+	}  else if (alg_name == "ts_g") { // Thompson Sampling for gaussians
 		return new ThompsonSamplingGaussian(name, num_of_arms, *rng);
 	} else if (alg_name == "ts_b") { // Thompson Sampling for bernoullis
 		return new ThompsonSamplingBernoulli(name, num_of_arms, *rng);

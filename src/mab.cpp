@@ -1,24 +1,9 @@
 #include "mab.h"
 #include <numeric>
 
-//int MAB::next_id = 1;
-
-/*
-MAB::MAB(MABType* mabtype) {
-	this->mabtype = mabtype;
-	this->id = MAB::next_id;
-	MAB::next_id++;
-}
-*/
-
 MABExperiment::MABExperiment(vector<Distribution*>& arms) {
 	this->arms = arms;
 }
-
-/*
-int MAB::get_id() {
-	return this->id;
-}*/
 
 vector<vector<double>> MABExperiment::generate_pulls(int timesteps) {
 	vector<vector<double>> rewards; // res[timestep][arm]
