@@ -109,6 +109,9 @@ MABAlgorithm* get_algorithm(string line, int num_of_arms, boost::mt19937* rng) {
 		int use_history;
 		ss >> use_history;
 
+		int max_history;
+		ss >> max_history;
+
 		int num_cdt_params, num_sub_alg_params;
 
 		ss >> num_cdt_params;
@@ -127,10 +130,13 @@ MABAlgorithm* get_algorithm(string line, int num_of_arms, boost::mt19937* rng) {
 			sub_alg_line += temp + " ";
 		}
 
-		return new CD_Algorithm(name, num_of_arms, M, cdt_line, sub_alg_line, use_history==1, *rng);
+		return new CD_Algorithm(name, num_of_arms, M, cdt_line, sub_alg_line, use_history==1, max_history, *rng);
 	} else if (alg_name == "glr") {
 		int M;
 		ss >> M;
+
+		int max_history;
+		ss >> max_history;
 
 		int num_sub_alg_params;
 		ss >> num_sub_alg_params;
@@ -141,7 +147,7 @@ MABAlgorithm* get_algorithm(string line, int num_of_arms, boost::mt19937* rng) {
 			sub_alg_line += temp + " ";
 		}
 
-		return new GLR(name, num_of_arms, M, sub_alg_line, *rng);
+		return new GLR(name, num_of_arms, M, max_history, sub_alg_line, *rng);
 	} else {
 		cout << "Not valid algorithm: " << line << endl;
 		return new UCB1(name, num_of_arms);
@@ -191,14 +197,26 @@ Distribution* get_distribution(string line, boost::mt19937* rng) {
 		ss >> mean >> variance;
 
 		return new NormalDistribution("G", mean, variance, *rng);
-	} else if (distr == "Uniform") { // Uniform
+	} else if (distr == "Fixed") { // Fixed
 		double v;
 		ss >> v;
 
-		return new UniformDistribution("U", v, *rng);
-	} else if (distr == "UniformNonStationary") { // Uniform
-		cout << "NOT IMPLEMENTED UniformNonStationary" << endl;
-		// TODO: implement UniformNonStationary in experimentloader
+		return new FixedDistribution("F", v, *rng);
+	} else if (distr == "FixedNonStationary") { // Uniform
+		int distr_changes;
+		vector<double>* ps = new vector<double>();
+		vector<int>* ends = new vector<int>();
+
+		ss >> distr_changes;
+		for (int i = 0; i < distr_changes; i++) {
+			double p;
+			int end;
+			ss >> p >> end;
+			ps->push_back(p);
+			ends->push_back(end);
+		}
+
+		return new FixedNonStationaryDistribution("FNS", *ps, *ends, *rng);
 	} else if (distr == "Bernoulli") { // Bernoulli
 		double p;
 		ss >> p;

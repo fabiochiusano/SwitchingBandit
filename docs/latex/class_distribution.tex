@@ -1,0 +1,178 @@
+\hypertarget{class_distribution}{}\section{Distribution Class Reference}
+\label{class_distribution}\index{Distribution@{Distribution}}
+
+
+Base class of all the \mbox{\hyperlink{class_distribution}{Distribution}} classes.  
+
+
+
+
+{\ttfamily \#include $<$distribution.\+h$>$}
+
+
+
+Inheritance diagram for Distribution\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=301pt]{class_distribution__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_distribution_a7734801d8703a4d0f43a83d7439e5ca6}{Distribution}} (string \mbox{\hyperlink{class_distribution_ab3b7be02f0401cb76beb2e744b6161f9}{name}})
+\begin{DoxyCompactList}\small\item\em Constructor of \mbox{\hyperlink{class_distribution}{Distribution}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_distribution_a405bc928b7710b5362c7070489a7362e}{Distribution}} (string \mbox{\hyperlink{class_distribution_ab3b7be02f0401cb76beb2e744b6161f9}{name}}, boost\+::mt19937 \&\mbox{\hyperlink{class_distribution_ac8915a45ce85ab6b7506fa42bb850a89}{rng}})
+\begin{DoxyCompactList}\small\item\em Constructor of \mbox{\hyperlink{class_distribution}{Distribution}}. \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{class_distribution_a742b398af4a461243028cce3c47d8080}{draw}} (int timestep)=0
+\begin{DoxyCompactList}\small\item\em draw the reward for a certain timestep \end{DoxyCompactList}\item 
+virtual string \mbox{\hyperlink{class_distribution_ac41d57a4d7f82041810f886590a236a5}{to\+File}} ()=0
+\begin{DoxyCompactList}\small\item\em build a representation of this \mbox{\hyperlink{class_distribution}{Distribution}} so that it can be printed to a file and be later analysed by another script \end{DoxyCompactList}\item 
+virtual double \mbox{\hyperlink{class_distribution_ac9c74d18549f532caa09ae86d8b25b55}{get\+\_\+mean}} (int timestep)=0
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{class_distribution_ab3b7be02f0401cb76beb2e744b6161f9}{name}}
+\item 
+bool \mbox{\hyperlink{class_distribution_a58fa80cadc13b26e12e9ed34aa8b926c}{is\+\_\+mab}}
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+boost\+::mt19937 $\ast$ \mbox{\hyperlink{class_distribution_ac8915a45ce85ab6b7506fa42bb850a89}{rng}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Base class of all the \mbox{\hyperlink{class_distribution}{Distribution}} classes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & string, id of the distribution \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_distribution_a7734801d8703a4d0f43a83d7439e5ca6}\label{class_distribution_a7734801d8703a4d0f43a83d7439e5ca6}} 
+\index{Distribution@{Distribution}!Distribution@{Distribution}}
+\index{Distribution@{Distribution}!Distribution@{Distribution}}
+\subsubsection{\texorpdfstring{Distribution()}{Distribution()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Distribution\+::\+Distribution (\begin{DoxyParamCaption}\item[{string}]{name }\end{DoxyParamCaption})}
+
+
+
+Constructor of \mbox{\hyperlink{class_distribution}{Distribution}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & string, id of the distribution \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_distribution_a405bc928b7710b5362c7070489a7362e}\label{class_distribution_a405bc928b7710b5362c7070489a7362e}} 
+\index{Distribution@{Distribution}!Distribution@{Distribution}}
+\index{Distribution@{Distribution}!Distribution@{Distribution}}
+\subsubsection{\texorpdfstring{Distribution()}{Distribution()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Distribution\+::\+Distribution (\begin{DoxyParamCaption}\item[{string}]{name,  }\item[{boost\+::mt19937 \&}]{rng }\end{DoxyParamCaption})}
+
+
+
+Constructor of \mbox{\hyperlink{class_distribution}{Distribution}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & string, id of the distribution \\
+\hline
+{\em rng} & boost\+::mt19937\&, rng used to generate data \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_distribution_a742b398af4a461243028cce3c47d8080}\label{class_distribution_a742b398af4a461243028cce3c47d8080}} 
+\index{Distribution@{Distribution}!draw@{draw}}
+\index{draw@{draw}!Distribution@{Distribution}}
+\subsubsection{\texorpdfstring{draw()}{draw()}}
+{\footnotesize\ttfamily virtual double Distribution\+::draw (\begin{DoxyParamCaption}\item[{int}]{timestep }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+draw the reward for a certain timestep 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timestep} & int, timestep at which the reward is drawn \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a double which is the drawn reward 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_square_wave_distribution_a7994182585346203ec158272cc39b17e}{Square\+Wave\+Distribution}}, \mbox{\hyperlink{class_bernoulli_non_stationary_distribution_a4aee952b4eebc5d36ff318b4c30f4a5d}{Bernoulli\+Non\+Stationary\+Distribution}}, \mbox{\hyperlink{class_bernoulli_distribution_ae733579a1c78c01ba8d915bfb8d7b088}{Bernoulli\+Distribution}}, \mbox{\hyperlink{class_fixed_non_stationary_distribution_afd4a118bfe398f700e93430ca05dbae6}{Fixed\+Non\+Stationary\+Distribution}}, \mbox{\hyperlink{class_fixed_distribution_a1babd43b5bbc4e0a720ca77690c9adad}{Fixed\+Distribution}}, \mbox{\hyperlink{class_normal_non_stationary_distribution_a0bd7d418784487c822c330f2b51a6112}{Normal\+Non\+Stationary\+Distribution}}, and \mbox{\hyperlink{class_normal_distribution_abd089ca83f0b358099aba4873a86f091}{Normal\+Distribution}}.
+
+\mbox{\Hypertarget{class_distribution_ac9c74d18549f532caa09ae86d8b25b55}\label{class_distribution_ac9c74d18549f532caa09ae86d8b25b55}} 
+\index{Distribution@{Distribution}!get\+\_\+mean@{get\+\_\+mean}}
+\index{get\+\_\+mean@{get\+\_\+mean}!Distribution@{Distribution}}
+\subsubsection{\texorpdfstring{get\+\_\+mean()}{get\_mean()}}
+{\footnotesize\ttfamily virtual double Distribution\+::get\+\_\+mean (\begin{DoxyParamCaption}\item[{int}]{timestep }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em timestep} & integer, the timestep at which the mean is asked \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the mean (double) at the specified timestep 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_square_wave_distribution_ac2e790a852c02473e70e4ff5090cfc51}{Square\+Wave\+Distribution}}, \mbox{\hyperlink{class_bernoulli_non_stationary_distribution_ab1cf34057259a933b7957fbff28ed442}{Bernoulli\+Non\+Stationary\+Distribution}}, \mbox{\hyperlink{class_bernoulli_distribution_a7756a9b4861bf90bc7cc346e77b40603}{Bernoulli\+Distribution}}, \mbox{\hyperlink{class_fixed_non_stationary_distribution_aa9ed51fbf731f288a76a3a9e0aee8390}{Fixed\+Non\+Stationary\+Distribution}}, \mbox{\hyperlink{class_fixed_distribution_af9199f9076551694af2397c7dd69096e}{Fixed\+Distribution}}, \mbox{\hyperlink{class_normal_non_stationary_distribution_ae3d2f4fb0e5c9b706c84d05ac14de2aa}{Normal\+Non\+Stationary\+Distribution}}, and \mbox{\hyperlink{class_normal_distribution_ad3165276bf35135409974e73f3cdd6d0}{Normal\+Distribution}}.
+
+\mbox{\Hypertarget{class_distribution_ac41d57a4d7f82041810f886590a236a5}\label{class_distribution_ac41d57a4d7f82041810f886590a236a5}} 
+\index{Distribution@{Distribution}!to\+File@{to\+File}}
+\index{to\+File@{to\+File}!Distribution@{Distribution}}
+\subsubsection{\texorpdfstring{to\+File()}{toFile()}}
+{\footnotesize\ttfamily virtual string Distribution\+::to\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+build a representation of this \mbox{\hyperlink{class_distribution}{Distribution}} so that it can be printed to a file and be later analysed by another script 
+
+\begin{DoxyReturn}{Returns}
+a string that represents this \mbox{\hyperlink{class_distribution}{Distribution}} 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_square_wave_distribution_a8ba3fbbf02f23f02697f34f841e9a870}{Square\+Wave\+Distribution}}, \mbox{\hyperlink{class_bernoulli_non_stationary_distribution_a5db3f4675ff988f3c775a939f8ef4847}{Bernoulli\+Non\+Stationary\+Distribution}}, \mbox{\hyperlink{class_bernoulli_distribution_a29f9f1014234828255def7bf9872b086}{Bernoulli\+Distribution}}, \mbox{\hyperlink{class_fixed_non_stationary_distribution_aaea49214758451b31f83a272af1626e0}{Fixed\+Non\+Stationary\+Distribution}}, \mbox{\hyperlink{class_fixed_distribution_a6396ce831e3ff31ecc39bda45e3ecb08}{Fixed\+Distribution}}, \mbox{\hyperlink{class_normal_non_stationary_distribution_a4f2f7cdfacf8b54a0cb2b5237213a693}{Normal\+Non\+Stationary\+Distribution}}, and \mbox{\hyperlink{class_normal_distribution_aba8376a8b209a82d8d042c9d2a4c412c}{Normal\+Distribution}}.
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_distribution_a58fa80cadc13b26e12e9ed34aa8b926c}\label{class_distribution_a58fa80cadc13b26e12e9ed34aa8b926c}} 
+\index{Distribution@{Distribution}!is\+\_\+mab@{is\+\_\+mab}}
+\index{is\+\_\+mab@{is\+\_\+mab}!Distribution@{Distribution}}
+\subsubsection{\texorpdfstring{is\+\_\+mab}{is\_mab}}
+{\footnotesize\ttfamily bool Distribution\+::is\+\_\+mab}
+
+\mbox{\Hypertarget{class_distribution_ab3b7be02f0401cb76beb2e744b6161f9}\label{class_distribution_ab3b7be02f0401cb76beb2e744b6161f9}} 
+\index{Distribution@{Distribution}!name@{name}}
+\index{name@{name}!Distribution@{Distribution}}
+\subsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily string Distribution\+::name}
+
+\mbox{\Hypertarget{class_distribution_ac8915a45ce85ab6b7506fa42bb850a89}\label{class_distribution_ac8915a45ce85ab6b7506fa42bb850a89}} 
+\index{Distribution@{Distribution}!rng@{rng}}
+\index{rng@{rng}!Distribution@{Distribution}}
+\subsubsection{\texorpdfstring{rng}{rng}}
+{\footnotesize\ttfamily boost\+::mt19937$\ast$ Distribution\+::rng\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{distribution_8h}{distribution.\+h}}\item 
+src/\mbox{\hyperlink{distribution_8cpp}{distribution.\+cpp}}\end{DoxyCompactItemize}

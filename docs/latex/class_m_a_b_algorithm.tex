@@ -1,0 +1,148 @@
+\hypertarget{class_m_a_b_algorithm}{}\section{M\+A\+B\+Algorithm Class Reference}
+\label{class_m_a_b_algorithm}\index{M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}}
+
+
+Base class of all the algorithms for multi armed bandits.  
+
+
+
+
+{\ttfamily \#include $<$mabalg.\+h$>$}
+
+
+
+Inheritance diagram for M\+A\+B\+Algorithm\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_m_a_b_algorithm__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m_a_b_algorithm_a9a938041685a1912995d427027971de4}{M\+A\+B\+Algorithm}} (string \mbox{\hyperlink{class_m_a_b_algorithm_a77b10ecc4b49d519c557f65358167b82}{name}}, int \mbox{\hyperlink{class_m_a_b_algorithm_a340fa9e83e85b092f2c6125fc4e8549b}{num\+\_\+of\+\_\+arms}})
+\item 
+virtual int \mbox{\hyperlink{class_m_a_b_algorithm_afb48f01df0e1860d19759f6e20335007}{choose\+\_\+action}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_m_a_b_algorithm_aa584b3d6b86fa050e3389be9781b5782}{receive\+\_\+reward}} (double reward, int pulled\+\_\+arm)
+\begin{DoxyCompactList}\small\item\em Update the internal variables of the algorithm according to the new received reward. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_m_a_b_algorithm_ad5761cee0b0e3421d1f043dbcc0b5f85}{reset}} (int action=-\/1)
+\begin{DoxyCompactList}\small\item\em resets the internal variables of the algorithm \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ int $>$ \mbox{\hyperlink{class_m_a_b_algorithm_a46daff3833924ea5ebbda86113699fd3}{num\+\_\+of\+\_\+pulls}}
+\item 
+string \mbox{\hyperlink{class_m_a_b_algorithm_a77b10ecc4b49d519c557f65358167b82}{name}}
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_m_a_b_algorithm_a340fa9e83e85b092f2c6125fc4e8549b}{num\+\_\+of\+\_\+arms}} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Base class of all the algorithms for multi armed bandits. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m_a_b_algorithm_a9a938041685a1912995d427027971de4}\label{class_m_a_b_algorithm_a9a938041685a1912995d427027971de4}} 
+\index{M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}!M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}}
+\index{M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}!M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}}
+\subsubsection{\texorpdfstring{M\+A\+B\+Algorithm()}{MABAlgorithm()}}
+{\footnotesize\ttfamily M\+A\+B\+Algorithm\+::\+M\+A\+B\+Algorithm (\begin{DoxyParamCaption}\item[{string}]{name,  }\item[{int}]{num\+\_\+of\+\_\+arms }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & string, id of the algorithm \\
+\hline
+{\em num\+\_\+of\+\_\+arms} & integer, number of arms the algorithm will work with \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_a_b_algorithm_afb48f01df0e1860d19759f6e20335007}\label{class_m_a_b_algorithm_afb48f01df0e1860d19759f6e20335007}} 
+\index{M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}!choose\+\_\+action@{choose\+\_\+action}}
+\index{choose\+\_\+action@{choose\+\_\+action}!M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}}
+\subsubsection{\texorpdfstring{choose\+\_\+action()}{choose\_action()}}
+{\footnotesize\ttfamily virtual int M\+A\+B\+Algorithm\+::choose\+\_\+action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\mbox{[}choose\+\_\+action description\mbox{]} \begin{DoxyReturn}{Returns}
+\mbox{[}description\mbox{]} 
+
+an integer representing the chosen arm 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_g_l_r_ad6b3e9f19e0bea4d6067b491c33640e0}{G\+LR}}, \mbox{\hyperlink{class_a_d_a_p_t___e_v_e_aa878cacd23fbe8743493623f8a9be6d6}{A\+D\+A\+P\+T\+\_\+\+E\+VE}}, \mbox{\hyperlink{class_per_arm_c_t_s_ab8904bef227b13aed75aade589421c5a}{Per\+Arm\+C\+TS}}, \mbox{\hyperlink{class_s_w___u_c_b_a819ec3b60cd7a8e5f3983b979d3d765f}{S\+W\+\_\+\+U\+CB}}, \mbox{\hyperlink{class_c_d___algorithm_a10d80cbf4687e2c0ef69466ee6deb1a9}{C\+D\+\_\+\+Algorithm}}, \mbox{\hyperlink{class_r_e_x_p3_aba9cbcdc74602157701b022a7758d584}{R\+E\+X\+P3}}, \mbox{\hyperlink{class_global_c_t_s_a48f9873be9f993e78fdbdd93ad4806bc}{Global\+C\+TS}}, \mbox{\hyperlink{class_d___u_c_b_ac48b99c21eb02361707988f6ac012408}{D\+\_\+\+U\+CB}}, \mbox{\hyperlink{class_algorithm___with___uniform___exploration_a42d5f75def328c83dce00f73dbe26d58}{Algorithm\+\_\+\+With\+\_\+\+Uniform\+\_\+\+Exploration}}, \mbox{\hyperlink{class_e_x_p3___s_afc9e4825004f5f541f774ac0debe6bee}{E\+X\+P3\+\_\+S}}, \mbox{\hyperlink{class_thompson_sampling_gaussian_a36e15e9a5d9f5cae94fef686c2cbb4be}{Thompson\+Sampling\+Gaussian}}, \mbox{\hyperlink{class_u_c_b_t_a6bebf23b2dd926e49794a4fb0fefe358}{U\+C\+BT}}, \mbox{\hyperlink{class_round___algorithm_a019a9a7a564a49512f5089c3829e6f4e}{Round\+\_\+\+Algorithm}}, \mbox{\hyperlink{class_e_x_p3_adb52fc51fbc5ef97e3d67c2437634be8}{E\+X\+P3}}, \mbox{\hyperlink{class_thompson_sampling_bernoulli_a80f2f22f0bbf71b60a7a7133ce49d917}{Thompson\+Sampling\+Bernoulli}}, and \mbox{\hyperlink{class_u_c_b1_ac71b279c529fdcca156e984550ad3ed3}{U\+C\+B1}}.
+
+\mbox{\Hypertarget{class_m_a_b_algorithm_aa584b3d6b86fa050e3389be9781b5782}\label{class_m_a_b_algorithm_aa584b3d6b86fa050e3389be9781b5782}} 
+\index{M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}!receive\+\_\+reward@{receive\+\_\+reward}}
+\index{receive\+\_\+reward@{receive\+\_\+reward}!M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}}
+\subsubsection{\texorpdfstring{receive\+\_\+reward()}{receive\_reward()}}
+{\footnotesize\ttfamily void M\+A\+B\+Algorithm\+::receive\+\_\+reward (\begin{DoxyParamCaption}\item[{double}]{reward,  }\item[{int}]{pulled\+\_\+arm }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Update the internal variables of the algorithm according to the new received reward. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reward} & double, new received reward \\
+\hline
+{\em pulled\+\_\+arm} & integer, represents the pulled arm \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{class_g_l_r_ad8e409518a110bd57f42a2de1b759707}{G\+LR}}, \mbox{\hyperlink{class_a_d_a_p_t___e_v_e_ab626b3d8e8f27200e35a0fc3c80f9539}{A\+D\+A\+P\+T\+\_\+\+E\+VE}}, \mbox{\hyperlink{class_per_arm_c_t_s_af9ac7b45d329223ce506e977b96a32ee}{Per\+Arm\+C\+TS}}, \mbox{\hyperlink{class_s_w___u_c_b_acddb0c5385d33d332a2fbf1b739142c2}{S\+W\+\_\+\+U\+CB}}, \mbox{\hyperlink{class_c_d___algorithm_a2427ddf68550eda00a0992b875c10834}{C\+D\+\_\+\+Algorithm}}, \mbox{\hyperlink{class_r_e_x_p3_a535d6667ecfa71568a68a5a09c44d4bf}{R\+E\+X\+P3}}, \mbox{\hyperlink{class_global_c_t_s_acb2f35fa8c6b2ae61912f6f337ed815f}{Global\+C\+TS}}, \mbox{\hyperlink{class_d___u_c_b_a23b79f3f23095ae6e824b36a3856ff7c}{D\+\_\+\+U\+CB}}, \mbox{\hyperlink{class_algorithm___with___uniform___exploration_a946808f681cd7b54bd557e1d8f15c5d0}{Algorithm\+\_\+\+With\+\_\+\+Uniform\+\_\+\+Exploration}}, \mbox{\hyperlink{class_e_x_p3___s_a93cef92a4f0213f7d247768b610071ad}{E\+X\+P3\+\_\+S}}, \mbox{\hyperlink{class_thompson_sampling_gaussian_a21d02f760e6738a8e209f46e57ffa341}{Thompson\+Sampling\+Gaussian}}, \mbox{\hyperlink{class_u_c_b_t_a0e9b24c391f3934e59809419e0b04e52}{U\+C\+BT}}, \mbox{\hyperlink{class_round___algorithm_a945da188a51c00d1923f4eb8434042eb}{Round\+\_\+\+Algorithm}}, \mbox{\hyperlink{class_e_x_p3_a9408f963aa533ffb298deba2fbc65529}{E\+X\+P3}}, \mbox{\hyperlink{class_thompson_sampling_bernoulli_a02d2aabd642f0b1149963539178f2a1e}{Thompson\+Sampling\+Bernoulli}}, and \mbox{\hyperlink{class_u_c_b1_a79106e98a38550c3f1f03e10f72226c6}{U\+C\+B1}}.
+
+\mbox{\Hypertarget{class_m_a_b_algorithm_ad5761cee0b0e3421d1f043dbcc0b5f85}\label{class_m_a_b_algorithm_ad5761cee0b0e3421d1f043dbcc0b5f85}} 
+\index{M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}!reset@{reset}}
+\index{reset@{reset}!M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}}
+\subsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily void M\+A\+B\+Algorithm\+::reset (\begin{DoxyParamCaption}\item[{int}]{action = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+resets the internal variables of the algorithm 
+
+
+\begin{DoxyParams}{Parameters}
+{\em action} & integer, specifies which variables to reset. If in (0, num\+\_\+of\+\_\+arms -\/ 1), then it resets only the info related to such arm. If == -\/1, resets all the arms. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{class_g_l_r_ad6c979e855b56e80ecfc54c8c93f035e}{G\+LR}}, \mbox{\hyperlink{class_a_d_a_p_t___e_v_e_aa89f094cbcba01accada672f0924a5f3}{A\+D\+A\+P\+T\+\_\+\+E\+VE}}, \mbox{\hyperlink{class_per_arm_c_t_s_ae5f8998bfb68b4a9cbdea7bca34f5cbe}{Per\+Arm\+C\+TS}}, \mbox{\hyperlink{class_s_w___u_c_b_afbbe9a17cc00402d2487260b530bbee2}{S\+W\+\_\+\+U\+CB}}, \mbox{\hyperlink{class_c_d___algorithm_a493e6eaafb4ab105c94e9e4c33143d39}{C\+D\+\_\+\+Algorithm}}, \mbox{\hyperlink{class_r_e_x_p3_ad99a97c07f75addc64e612774de81307}{R\+E\+X\+P3}}, \mbox{\hyperlink{class_global_c_t_s_a1e2c899b85ec7adf92a28ac758f556b5}{Global\+C\+TS}}, \mbox{\hyperlink{class_d___u_c_b_a454ffcd1e17989f0b049790cfc5fc515}{D\+\_\+\+U\+CB}}, \mbox{\hyperlink{class_algorithm___with___uniform___exploration_a96b0df2a59099ba8b4cc83f21b407642}{Algorithm\+\_\+\+With\+\_\+\+Uniform\+\_\+\+Exploration}}, \mbox{\hyperlink{class_e_x_p3___s_a70bfd4fc19a73ab7d2903672c36b2765}{E\+X\+P3\+\_\+S}}, \mbox{\hyperlink{class_thompson_sampling_gaussian_a847a421af9da4c81c10c395ebde1d8c8}{Thompson\+Sampling\+Gaussian}}, \mbox{\hyperlink{class_u_c_b_t_a4830934c071870d6f8680f90a247f9a7}{U\+C\+BT}}, \mbox{\hyperlink{class_round___algorithm_ae2c21984dbd89f5ba1a4f530472cf7f7}{Round\+\_\+\+Algorithm}}, \mbox{\hyperlink{class_e_x_p3_a30530aa50cd991eda2f9f2f170b92d0e}{E\+X\+P3}}, \mbox{\hyperlink{class_thompson_sampling_bernoulli_abb2e2c252333090ac1bd63e4297e99ba}{Thompson\+Sampling\+Bernoulli}}, and \mbox{\hyperlink{class_u_c_b1_aa426545f69a7e168ffcdcc3c9e8cd490}{U\+C\+B1}}.
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_a_b_algorithm_a77b10ecc4b49d519c557f65358167b82}\label{class_m_a_b_algorithm_a77b10ecc4b49d519c557f65358167b82}} 
+\index{M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}!name@{name}}
+\index{name@{name}!M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}}
+\subsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily string M\+A\+B\+Algorithm\+::name}
+
+\mbox{\Hypertarget{class_m_a_b_algorithm_a340fa9e83e85b092f2c6125fc4e8549b}\label{class_m_a_b_algorithm_a340fa9e83e85b092f2c6125fc4e8549b}} 
+\index{M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}!num\+\_\+of\+\_\+arms@{num\+\_\+of\+\_\+arms}}
+\index{num\+\_\+of\+\_\+arms@{num\+\_\+of\+\_\+arms}!M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}}
+\subsubsection{\texorpdfstring{num\+\_\+of\+\_\+arms}{num\_of\_arms}}
+{\footnotesize\ttfamily int M\+A\+B\+Algorithm\+::num\+\_\+of\+\_\+arms = 0\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_m_a_b_algorithm_a46daff3833924ea5ebbda86113699fd3}\label{class_m_a_b_algorithm_a46daff3833924ea5ebbda86113699fd3}} 
+\index{M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}!num\+\_\+of\+\_\+pulls@{num\+\_\+of\+\_\+pulls}}
+\index{num\+\_\+of\+\_\+pulls@{num\+\_\+of\+\_\+pulls}!M\+A\+B\+Algorithm@{M\+A\+B\+Algorithm}}
+\subsubsection{\texorpdfstring{num\+\_\+of\+\_\+pulls}{num\_of\_pulls}}
+{\footnotesize\ttfamily vector$<$int$>$ M\+A\+B\+Algorithm\+::num\+\_\+of\+\_\+pulls}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{mabalg_8h}{mabalg.\+h}}\item 
+src/\mbox{\hyperlink{mabalg_8cpp}{mabalg.\+cpp}}\end{DoxyCompactItemize}

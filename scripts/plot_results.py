@@ -306,7 +306,7 @@ def concatenate_images():
 	new_im.save("images/experiment_final.png")
 
 stddev_amplifier_means = 0#1/4 #1/10
-stddev_amplifier_regrets = 0.683 # 50% confidence level, t student with 30 dof
+stddev_amplifier_regrets = 0#0.683 # 50% confidence level, t student with 30 dof
 ymin_mean = -0.5
 ymax_mean = 1.5
 ymin_regret = 0

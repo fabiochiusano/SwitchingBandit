@@ -1,0 +1,78 @@
+\hypertarget{class_thompson_sampling}{}\section{Thompson\+Sampling Class Reference}
+\label{class_thompson_sampling}\index{Thompson\+Sampling@{Thompson\+Sampling}}
+
+
+base class of all the Thompson Sampling based algorithms  
+
+
+
+
+{\ttfamily \#include $<$thompsonsampling.\+h$>$}
+
+
+
+Inheritance diagram for Thompson\+Sampling\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_thompson_sampling__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Thompson\+Sampling\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=163pt]{class_thompson_sampling__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_thompson_sampling_a6a36c5be2a981c8cf21bd3bfbb66f9e8}{Thompson\+Sampling}} (string \mbox{\hyperlink{class_m_a_b_algorithm_a77b10ecc4b49d519c557f65358167b82}{name}}, int \mbox{\hyperlink{class_m_a_b_algorithm_a340fa9e83e85b092f2c6125fc4e8549b}{num\+\_\+of\+\_\+arms}}, boost\+::mt19937 \&\mbox{\hyperlink{class_thompson_sampling_a1b66efa9bb0912df92975147f8923216}{rng}})
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+boost\+::mt19937 $\ast$ \mbox{\hyperlink{class_thompson_sampling_a1b66efa9bb0912df92975147f8923216}{rng}}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+base class of all the Thompson Sampling based algorithms 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_thompson_sampling_a6a36c5be2a981c8cf21bd3bfbb66f9e8}\label{class_thompson_sampling_a6a36c5be2a981c8cf21bd3bfbb66f9e8}} 
+\index{Thompson\+Sampling@{Thompson\+Sampling}!Thompson\+Sampling@{Thompson\+Sampling}}
+\index{Thompson\+Sampling@{Thompson\+Sampling}!Thompson\+Sampling@{Thompson\+Sampling}}
+\subsubsection{\texorpdfstring{Thompson\+Sampling()}{ThompsonSampling()}}
+{\footnotesize\ttfamily Thompson\+Sampling\+::\+Thompson\+Sampling (\begin{DoxyParamCaption}\item[{string}]{name,  }\item[{int}]{num\+\_\+of\+\_\+arms,  }\item[{boost\+::mt19937 \&}]{rng }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & string, id of the algorithm \\
+\hline
+{\em num\+\_\+of\+\_\+arms} & integer, number of arms the algorithm will work on \\
+\hline
+{\em rng} & boost\+::mt19937\&, random number generator \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_thompson_sampling_a1b66efa9bb0912df92975147f8923216}\label{class_thompson_sampling_a1b66efa9bb0912df92975147f8923216}} 
+\index{Thompson\+Sampling@{Thompson\+Sampling}!rng@{rng}}
+\index{rng@{rng}!Thompson\+Sampling@{Thompson\+Sampling}}
+\subsubsection{\texorpdfstring{rng}{rng}}
+{\footnotesize\ttfamily boost\+::mt19937$\ast$ Thompson\+Sampling\+::rng\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{thompsonsampling_8h}{thompsonsampling.\+h}}\item 
+src/\mbox{\hyperlink{thompsonsampling_8cpp}{thompsonsampling.\+cpp}}\end{DoxyCompactItemize}

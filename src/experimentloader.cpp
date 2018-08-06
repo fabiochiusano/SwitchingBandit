@@ -15,8 +15,6 @@ vector<Experiment*>* ExperimentLoader::load_experiments() {
 	ofstream cdt_file("temp/cdt.txt");
 
 	while (num_experiments--) {
-		 // This should be put inside the while loop, otherwise segmentation error may
-		 // happen since it's shared across threads
 		boost::mt19937* rng = new boost::mt19937(seed);
 
 		// BUG: Actually this should be set at the beginning of each experiment for each thread independently

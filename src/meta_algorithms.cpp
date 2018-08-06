@@ -3,7 +3,9 @@
 #include "meta_algorithms.h"
 #include <fstream>
 
-Round_Algorithm::Round_Algorithm(string name, int num_of_arms, string sub_alg_line, boost::mt19937& rng) : MABAlgorithm(name, num_of_arms) {
+MetaAlgorithm::MetaAlgorithm(string name, int num_of_arms) : MABAlgorithm(name, num_of_arms) {}
+
+Round_Algorithm::Round_Algorithm(string name, int num_of_arms, string sub_alg_line, boost::mt19937& rng) : MetaAlgorithm(name, num_of_arms) {
   this->sub_alg = get_algorithm(sub_alg_line, num_of_arms, &rng);
   this->reset(-1);
 }
@@ -42,7 +44,7 @@ void Round_Algorithm::receive_reward(double reward, int pulled_arm) {
 
 
 
-Algorithm_With_Uniform_Exploration::Algorithm_With_Uniform_Exploration(string name, int num_of_arms, string sub_alg_line, double alpha, boost::mt19937& rng) : MABAlgorithm(name, num_of_arms) {
+Algorithm_With_Uniform_Exploration::Algorithm_With_Uniform_Exploration(string name, int num_of_arms, string sub_alg_line, double alpha, boost::mt19937& rng) : MetaAlgorithm(name, num_of_arms) {
 	this->sub_alg = get_algorithm(sub_alg_line, num_of_arms, &rng);
 	this->alpha = alpha;
 }
@@ -70,8 +72,9 @@ void Algorithm_With_Uniform_Exploration::receive_reward(double reward, int pulle
 
 
 
-CD_Algorithm::CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, boost::mt19937& rng) : MABAlgorithm(name, num_of_arms) {
+CD_Algorithm::CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, int max_history, boost::mt19937& rng) : MetaAlgorithm(name, num_of_arms) {
   this->M = M;
+  this->max_history = max_history;
   this->sub_alg = get_algorithm(sub_alg_line, num_of_arms, &rng);
   for (int i = 0; i < num_of_arms; i++) {
     this->cdts.push_back(get_cdt(cdt_line));
@@ -127,7 +130,13 @@ void CD_Algorithm::receive_reward(double reward, int pulled_arm) {
 
     this->sub_alg->reset(pulled_arm);
     if (this->use_history) {
-      for (int i = cdt_result.change_estimate + 1; i < this->collected_rewards[pulled_arm].size(); i++) {
+      int history_amount = this->collected_rewards[pulled_arm].size() - (cdt_result.change_estimate + 1);
+      int t_start = cdt_result.change_estimate + 1;
+      if (history_amount > this->max_history) {
+        t_start = this->collected_rewards[pulled_arm].size() - this->max_history;
+        // cout << "clipped " << history_amount << endl;
+      }
+      for (int i = t_start; i < this->collected_rewards[pulled_arm].size(); i++) {
         this->sub_alg->receive_reward(this->collected_rewards[pulled_arm][i], pulled_arm);
       }
     }
@@ -138,7 +147,7 @@ void CD_Algorithm::receive_reward(double reward, int pulled_arm) {
   this->timestep++;
 }
 
-ADAPT_EVE::ADAPT_EVE(string name, int num_of_arms, int meta_duration, string cdt_line, string sub_alg_line, boost::mt19937& rng) : MABAlgorithm(name, num_of_arms) {
+ADAPT_EVE::ADAPT_EVE(string name, int num_of_arms, int meta_duration, string cdt_line, string sub_alg_line, boost::mt19937& rng) : MetaAlgorithm(name, num_of_arms) {
 
   this->meta_duration = meta_duration;
   //this->sub_alg_line = sub_alg_line;
@@ -245,8 +254,9 @@ void ADAPT_EVE::receive_reward(double reward, int pulled_arm) {
   }
 }
 
-GLR::GLR(string name, int num_of_arms, int M, string sub_alg_line, boost::mt19937& rng) : MABAlgorithm(name, num_of_arms) {
+GLR::GLR(string name, int num_of_arms, int M, int max_history, string sub_alg_line, boost::mt19937& rng) : MetaAlgorithm(name, num_of_arms) {
   this->sub_alg = get_algorithm(sub_alg_line, num_of_arms, &rng);
+  this->max_history = max_history;
   this->M = M;
   this->reset();
 }
@@ -276,9 +286,17 @@ int GLR::choose_action() {
 }
 
 void GLR::receive_reward(double reward, int pulled_arm) {
-  this->rewards[pulled_arm].push_back(reward);
+  this->cycle_reward(reward, pulled_arm);
   this->find_changepoints(pulled_arm);
   this->update_sub_alg(pulled_arm);
+}
+
+void GLR::cycle_reward(double new_reward, int arm_pulled) {
+  this->rewards[arm_pulled].push_back(new_reward);
+  if (this->rewards[arm_pulled].size() > this->max_history) {
+    // Delete first element
+    this->rewards[arm_pulled].erase(this->rewards[arm_pulled].begin(), this->rewards[arm_pulled].begin()+1);
+  }
 }
 
 void GLR::find_changepoints(int arm_pulled) {
@@ -292,7 +310,6 @@ void GLR::find_changepoints(int arm_pulled) {
 
       double prev_l = l_m;
       double highest_l = l_m;
-      double lowest_l = l_m;
       int worst_k = this->M;
       int best_k = this->M;
       for (int k = this->M+1; k < num_of_pulls - this->M; k++) {
@@ -306,9 +323,6 @@ void GLR::find_changepoints(int arm_pulled) {
         if (l_k > highest_l) {
           highest_l = l_k;
           best_k = k;
-        } else if (l_k < lowest_l) {
-          lowest_l = l_k;
-          worst_k = k;
         }
         prev_l = l_k;
       }

@@ -1,19 +1,20 @@
 #include "exp.h"
 
+EXP::EXP(string name, int num_of_arms) : MABAlgorithm(name, num_of_arms) {}
 
-EXP3::EXP3(string name, int num_of_arms, double beta, double nu): MABAlgorithm(name, num_of_arms) {
+EXP3::EXP3(string name, int num_of_arms, double beta, double nu): EXP(name, num_of_arms) {
 	this->reset(-1);
 	this->beta = beta;
 	this->nu = nu;
 }
 
-EXP3_S::EXP3_S(string name, int num_of_arms, double beta, double alpha): MABAlgorithm(name, num_of_arms) {
+EXP3_S::EXP3_S(string name, int num_of_arms, double beta, double alpha): EXP(name, num_of_arms) {
 	this->reset(-1);
 	this->beta = beta;
 	this->alpha = alpha;
 }
 
-REXP3::REXP3(string name, int num_of_arms, double beta, int window_size): MABAlgorithm(name, num_of_arms) {
+REXP3::REXP3(string name, int num_of_arms, double beta, int window_size): EXP(name, num_of_arms) {
 	this->reset(-1);
 	this->beta = beta;
 	this->window_size = window_size;

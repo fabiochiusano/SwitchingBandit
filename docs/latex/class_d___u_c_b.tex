@@ -1,0 +1,130 @@
+\hypertarget{class_d___u_c_b}{}\section{D\+\_\+\+U\+CB Class Reference}
+\label{class_d___u_c_b}\index{D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}}
+
+
+discounted \mbox{\hyperlink{class_u_c_b}{U\+CB}} algorithm  
+
+
+
+
+{\ttfamily \#include $<$ucb.\+h$>$}
+
+
+
+Inheritance diagram for D\+\_\+\+U\+CB\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=144pt]{class_d___u_c_b__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for D\+\_\+\+U\+CB\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=144pt]{class_d___u_c_b__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_d___u_c_b_adc6258dbbe7449d0ec6b7b7bb3ae88e8}{D\+\_\+\+U\+CB}} (string \mbox{\hyperlink{class_m_a_b_algorithm_a77b10ecc4b49d519c557f65358167b82}{name}}, int \mbox{\hyperlink{class_m_a_b_algorithm_a340fa9e83e85b092f2c6125fc4e8549b}{num\+\_\+of\+\_\+arms}}, double gamma, double B, double epsilon)
+\item 
+int \mbox{\hyperlink{class_d___u_c_b_ac48b99c21eb02361707988f6ac012408}{choose\+\_\+action}} () override
+\item 
+void \mbox{\hyperlink{class_d___u_c_b_a23b79f3f23095ae6e824b36a3856ff7c}{receive\+\_\+reward}} (double reward, int pulled\+\_\+arm) override
+\begin{DoxyCompactList}\small\item\em Update the internal variables of the algorithm according to the new received reward. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_d___u_c_b_a454ffcd1e17989f0b049790cfc5fc515}{reset}} (int action=-\/1) override
+\begin{DoxyCompactList}\small\item\em resets the internal variables of the algorithm \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+discounted \mbox{\hyperlink{class_u_c_b}{U\+CB}} algorithm 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_d___u_c_b_adc6258dbbe7449d0ec6b7b7bb3ae88e8}\label{class_d___u_c_b_adc6258dbbe7449d0ec6b7b7bb3ae88e8}} 
+\index{D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}!D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}}
+\index{D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}!D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}}
+\subsubsection{\texorpdfstring{D\+\_\+\+U\+C\+B()}{D\_UCB()}}
+{\footnotesize\ttfamily D\+\_\+\+U\+C\+B\+::\+D\+\_\+\+U\+CB (\begin{DoxyParamCaption}\item[{string}]{name,  }\item[{int}]{num\+\_\+of\+\_\+arms,  }\item[{double}]{gamma,  }\item[{double}]{B,  }\item[{double}]{epsilon }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & string, id of the algorithm \\
+\hline
+{\em num\+\_\+of\+\_\+arms} & integer, number of arms the algorithm will work on \\
+\hline
+{\em gamma} & double in (0,1), discount factor \\
+\hline
+{\em B} & double, confidence parameter \\
+\hline
+{\em epsilon} & double in (1,inf), confidence parameter \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_d___u_c_b_ac48b99c21eb02361707988f6ac012408}\label{class_d___u_c_b_ac48b99c21eb02361707988f6ac012408}} 
+\index{D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}!choose\+\_\+action@{choose\+\_\+action}}
+\index{choose\+\_\+action@{choose\+\_\+action}!D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}}
+\subsubsection{\texorpdfstring{choose\+\_\+action()}{choose\_action()}}
+{\footnotesize\ttfamily int D\+\_\+\+U\+C\+B\+::choose\+\_\+action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+an integer representing the chosen arm 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_m_a_b_algorithm_afb48f01df0e1860d19759f6e20335007}{M\+A\+B\+Algorithm}}.
+
+\mbox{\Hypertarget{class_d___u_c_b_a23b79f3f23095ae6e824b36a3856ff7c}\label{class_d___u_c_b_a23b79f3f23095ae6e824b36a3856ff7c}} 
+\index{D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}!receive\+\_\+reward@{receive\+\_\+reward}}
+\index{receive\+\_\+reward@{receive\+\_\+reward}!D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}}
+\subsubsection{\texorpdfstring{receive\+\_\+reward()}{receive\_reward()}}
+{\footnotesize\ttfamily void D\+\_\+\+U\+C\+B\+::receive\+\_\+reward (\begin{DoxyParamCaption}\item[{double}]{reward,  }\item[{int}]{pulled\+\_\+arm }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Update the internal variables of the algorithm according to the new received reward. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reward} & double, new received reward \\
+\hline
+{\em pulled\+\_\+arm} & integer, represents the pulled arm \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_a_b_algorithm_aa584b3d6b86fa050e3389be9781b5782}{M\+A\+B\+Algorithm}}.
+
+\mbox{\Hypertarget{class_d___u_c_b_a454ffcd1e17989f0b049790cfc5fc515}\label{class_d___u_c_b_a454ffcd1e17989f0b049790cfc5fc515}} 
+\index{D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}!reset@{reset}}
+\index{reset@{reset}!D\+\_\+\+U\+CB@{D\+\_\+\+U\+CB}}
+\subsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily void D\+\_\+\+U\+C\+B\+::reset (\begin{DoxyParamCaption}\item[{int}]{action = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+resets the internal variables of the algorithm 
+
+
+\begin{DoxyParams}{Parameters}
+{\em action} & integer, specifies which variables to reset. If in (0, num\+\_\+of\+\_\+arms -\/ 1), then it resets only the info related to such arm. If == -\/1, resets all the arms. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_a_b_algorithm_ad5761cee0b0e3421d1f043dbcc0b5f85}{M\+A\+B\+Algorithm}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{ucb_8h}{ucb.\+h}}\item 
+src/\mbox{\hyperlink{ucb_8cpp}{ucb.\+cpp}}\end{DoxyCompactItemize}

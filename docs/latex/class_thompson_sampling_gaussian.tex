@@ -1,0 +1,126 @@
+\hypertarget{class_thompson_sampling_gaussian}{}\section{Thompson\+Sampling\+Gaussian Class Reference}
+\label{class_thompson_sampling_gaussian}\index{Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}}
+
+
+Thompson Sampling for gaussian arms.  
+
+
+
+
+{\ttfamily \#include $<$thompsonsampling.\+h$>$}
+
+
+
+Inheritance diagram for Thompson\+Sampling\+Gaussian\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=195pt]{class_thompson_sampling_gaussian__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Thompson\+Sampling\+Gaussian\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=195pt]{class_thompson_sampling_gaussian__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_thompson_sampling_gaussian_a52540125c2391c76e5b176054c3fa2e7}{Thompson\+Sampling\+Gaussian}} (string \mbox{\hyperlink{class_m_a_b_algorithm_a77b10ecc4b49d519c557f65358167b82}{name}}, int \mbox{\hyperlink{class_m_a_b_algorithm_a340fa9e83e85b092f2c6125fc4e8549b}{num\+\_\+of\+\_\+arms}}, boost\+::mt19937 \&\mbox{\hyperlink{class_thompson_sampling_a1b66efa9bb0912df92975147f8923216}{rng}})
+\item 
+int \mbox{\hyperlink{class_thompson_sampling_gaussian_a36e15e9a5d9f5cae94fef686c2cbb4be}{choose\+\_\+action}} () override
+\item 
+void \mbox{\hyperlink{class_thompson_sampling_gaussian_a21d02f760e6738a8e209f46e57ffa341}{receive\+\_\+reward}} (double reward, int pulled\+\_\+arm) override
+\begin{DoxyCompactList}\small\item\em Update the internal variables of the algorithm according to the new received reward. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_thompson_sampling_gaussian_a847a421af9da4c81c10c395ebde1d8c8}{reset}} (int action=-\/1) override
+\begin{DoxyCompactList}\small\item\em resets the internal variables of the algorithm \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Thompson Sampling for gaussian arms. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_thompson_sampling_gaussian_a52540125c2391c76e5b176054c3fa2e7}\label{class_thompson_sampling_gaussian_a52540125c2391c76e5b176054c3fa2e7}} 
+\index{Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}!Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}}
+\index{Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}!Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}}
+\subsubsection{\texorpdfstring{Thompson\+Sampling\+Gaussian()}{ThompsonSamplingGaussian()}}
+{\footnotesize\ttfamily Thompson\+Sampling\+Gaussian\+::\+Thompson\+Sampling\+Gaussian (\begin{DoxyParamCaption}\item[{string}]{name,  }\item[{int}]{num\+\_\+of\+\_\+arms,  }\item[{boost\+::mt19937 \&}]{rng }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & string, id of the algorithm \\
+\hline
+{\em num\+\_\+of\+\_\+arms} & integer, number of arms the algorithm will work on \\
+\hline
+{\em rng} & boost\+::mt19937\&, random number generator \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_thompson_sampling_gaussian_a36e15e9a5d9f5cae94fef686c2cbb4be}\label{class_thompson_sampling_gaussian_a36e15e9a5d9f5cae94fef686c2cbb4be}} 
+\index{Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}!choose\+\_\+action@{choose\+\_\+action}}
+\index{choose\+\_\+action@{choose\+\_\+action}!Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}}
+\subsubsection{\texorpdfstring{choose\+\_\+action()}{choose\_action()}}
+{\footnotesize\ttfamily int Thompson\+Sampling\+Gaussian\+::choose\+\_\+action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+\begin{DoxyReturn}{Returns}
+an integer representing the chosen arm 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_m_a_b_algorithm_afb48f01df0e1860d19759f6e20335007}{M\+A\+B\+Algorithm}}.
+
+\mbox{\Hypertarget{class_thompson_sampling_gaussian_a21d02f760e6738a8e209f46e57ffa341}\label{class_thompson_sampling_gaussian_a21d02f760e6738a8e209f46e57ffa341}} 
+\index{Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}!receive\+\_\+reward@{receive\+\_\+reward}}
+\index{receive\+\_\+reward@{receive\+\_\+reward}!Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}}
+\subsubsection{\texorpdfstring{receive\+\_\+reward()}{receive\_reward()}}
+{\footnotesize\ttfamily void Thompson\+Sampling\+Gaussian\+::receive\+\_\+reward (\begin{DoxyParamCaption}\item[{double}]{reward,  }\item[{int}]{pulled\+\_\+arm }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Update the internal variables of the algorithm according to the new received reward. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reward} & double, new received reward \\
+\hline
+{\em pulled\+\_\+arm} & integer, represents the pulled arm \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_a_b_algorithm_aa584b3d6b86fa050e3389be9781b5782}{M\+A\+B\+Algorithm}}.
+
+\mbox{\Hypertarget{class_thompson_sampling_gaussian_a847a421af9da4c81c10c395ebde1d8c8}\label{class_thompson_sampling_gaussian_a847a421af9da4c81c10c395ebde1d8c8}} 
+\index{Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}!reset@{reset}}
+\index{reset@{reset}!Thompson\+Sampling\+Gaussian@{Thompson\+Sampling\+Gaussian}}
+\subsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily void Thompson\+Sampling\+Gaussian\+::reset (\begin{DoxyParamCaption}\item[{int}]{action = {\ttfamily -\/1} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+resets the internal variables of the algorithm 
+
+
+\begin{DoxyParams}{Parameters}
+{\em action} & integer, specifies which variables to reset. If in (0, num\+\_\+of\+\_\+arms -\/ 1), then it resets only the info related to such arm. If == -\/1, resets all the arms. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_a_b_algorithm_ad5761cee0b0e3421d1f043dbcc0b5f85}{M\+A\+B\+Algorithm}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{thompsonsampling_8h}{thompsonsampling.\+h}}\item 
+src/\mbox{\hyperlink{thompsonsampling_8cpp}{thompsonsampling.\+cpp}}\end{DoxyCompactItemize}

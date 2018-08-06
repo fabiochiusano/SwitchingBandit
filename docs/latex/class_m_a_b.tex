@@ -1,0 +1,70 @@
+\hypertarget{class_m_a_b}{}\section{M\+AB Class Reference}
+\label{class_m_a_b}\index{M\+AB@{M\+AB}}
+
+
+Class representing a \mbox{\hyperlink{class_m_a_b}{M\+AB}} setting, which is a collection of arms.  
+
+
+
+
+{\ttfamily \#include $<$mab.\+h$>$}
+
+
+
+Inheritance diagram for M\+AB\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=151pt]{class_m_a_b__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual vector$<$ int $>$ \mbox{\hyperlink{class_m_a_b_a8323d26ac3720c2f3949298d5f7cf60f}{get\+\_\+available\+\_\+actions}} ()=0
+\item 
+virtual double \mbox{\hyperlink{class_m_a_b_a83c6ba499e761ea4a246aa7bb790eb46}{observe\+\_\+reward}} (int action)=0
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class representing a \mbox{\hyperlink{class_m_a_b}{M\+AB}} setting, which is a collection of arms. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_a_b_a8323d26ac3720c2f3949298d5f7cf60f}\label{class_m_a_b_a8323d26ac3720c2f3949298d5f7cf60f}} 
+\index{M\+AB@{M\+AB}!get\+\_\+available\+\_\+actions@{get\+\_\+available\+\_\+actions}}
+\index{get\+\_\+available\+\_\+actions@{get\+\_\+available\+\_\+actions}!M\+AB@{M\+AB}}
+\subsubsection{\texorpdfstring{get\+\_\+available\+\_\+actions()}{get\_available\_actions()}}
+{\footnotesize\ttfamily virtual vector$<$int$>$ M\+A\+B\+::get\+\_\+available\+\_\+actions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+\begin{DoxyReturn}{Returns}
+a vector containing the ids of all the currently available actions 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_m_a_b_experiment_af64386f9138dcd31873d9218b7adf6fb}{M\+A\+B\+Experiment}}.
+
+\mbox{\Hypertarget{class_m_a_b_a83c6ba499e761ea4a246aa7bb790eb46}\label{class_m_a_b_a83c6ba499e761ea4a246aa7bb790eb46}} 
+\index{M\+AB@{M\+AB}!observe\+\_\+reward@{observe\+\_\+reward}}
+\index{observe\+\_\+reward@{observe\+\_\+reward}!M\+AB@{M\+AB}}
+\subsubsection{\texorpdfstring{observe\+\_\+reward()}{observe\_reward()}}
+{\footnotesize\ttfamily virtual double M\+A\+B\+::observe\+\_\+reward (\begin{DoxyParamCaption}\item[{int}]{action }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em action} & integer, the arm to pull \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the reward obtained pulling the specified arm 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_m_a_b_experiment_acf2ca557df3d30325d8ff180c223a54a}{M\+A\+B\+Experiment}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{mab_8h}{mab.\+h}}\end{DoxyCompactItemize}

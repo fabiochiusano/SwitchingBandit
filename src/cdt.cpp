@@ -1,6 +1,7 @@
 #include "cdt.h"
 #include <algorithm>
 
+
 CDT_Result::CDT_Result(bool alarm, int change_estimate) {
   this->alarm = alarm;
   this->change_estimate = change_estimate;
@@ -65,7 +66,6 @@ void ICI::reset() {
   this->reward_buffer.clear();
 }
 
-
 CDT_Result CDT_PH::run(double reward) {
   // Update reward mean
   this->num_rewards++;
@@ -75,7 +75,7 @@ CDT_Result CDT_PH::run(double reward) {
   this->PH = max(this->PH - reward + this->mean_reward - this->gamma, 0.);
 
   // Return alarm
-  return CDT_Result(this->PH > this->lambda, this->num_rewards);
+  return CDT_Result(this->PH > this->lambda, this->num_rewards); // the estimation of the timestep of the change is not implemented
 }
 
 CDT_Result CDT_PH_RHO::run(double reward) {

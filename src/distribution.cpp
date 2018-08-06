@@ -37,31 +37,31 @@ double NormalDistribution::get_mean(int timestep) {
 
 
 
-UniformDistribution::UniformDistribution(string name, double v, boost::mt19937& rng) : Distribution(name, rng) {
-	this->mean = v;
+FixedDistribution::FixedDistribution(string name, double v, boost::mt19937& rng) : Distribution(name, rng) {
+	this->v = v;
 }
 
-double UniformDistribution::draw(int timestep) {
-	return this->mean;
+double FixedDistribution::draw(int timestep) {
+	return this->v;
 }
 
-string UniformDistribution::toFile() {
-	return this->name + " Uniform " + to_string(this->mean);
+string FixedDistribution::toFile() {
+	return this->name + " Fixed " + to_string(this->v);
 }
 
-double UniformDistribution::get_mean(int timestep) {
-	return this->mean;
+double FixedDistribution::get_mean(int timestep) {
+	return this->v;
 }
 
 
 
 
-UniformNonStationaryDistribution::UniformNonStationaryDistribution(string name, vector<double>& means, vector<int> ends, boost::mt19937& rng) : Distribution(name, rng) {
-	this->means = means;
+FixedNonStationaryDistribution::FixedNonStationaryDistribution(string name, vector<double>& vs, vector<int> ends, boost::mt19937& rng) : Distribution(name, rng) {
+	this->vs = vs;
 	this->ends = ends;
 }
 
-double UniformNonStationaryDistribution::draw(int timestep) {
+double FixedNonStationaryDistribution::draw(int timestep) {
 	int correct_i = this->ends.size() - 1;
 	for (int i = 0; i < this->ends.size(); i++) {
 		if (this->ends[i] > timestep) {
@@ -69,18 +69,18 @@ double UniformNonStationaryDistribution::draw(int timestep) {
 			break;
 		}
 	}
-	return this->means[correct_i];
+	return this->vs[correct_i];
 }
 
-string UniformNonStationaryDistribution::toFile() {
+string FixedNonStationaryDistribution::toFile() {
 	string result = this->name + " UniformNonStationary ";
-	for (int i = 0; i < this->means.size(); i++) {
-		result += to_string(this->means[i]) + " " + to_string(this->ends[i]) + " ";
+	for (int i = 0; i < this->vs.size(); i++) {
+		result += to_string(this->vs[i]) + " " + to_string(this->ends[i]) + " ";
 	}
 	return result;
 }
 
-double UniformNonStationaryDistribution::get_mean(int timestep) {
+double FixedNonStationaryDistribution::get_mean(int timestep) {
 	return this->draw(timestep);
 }
 

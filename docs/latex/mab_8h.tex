@@ -1,0 +1,70 @@
+\hypertarget{mab_8h}{}\section{src/mab.h File Reference}
+\label{mab_8h}\index{src/mab.\+h@{src/mab.\+h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include \char`\"{}mabalg.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}distribution.\+h\char`\"{}}\newline
+Include dependency graph for mab.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mab_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{mab_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_m_a_b}{M\+AB}}
+\begin{DoxyCompactList}\small\item\em Class representing a \mbox{\hyperlink{class_m_a_b}{M\+AB}} setting, which is a collection of arms. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_m_a_b_experiment}{M\+A\+B\+Experiment}}
+\begin{DoxyCompactList}\small\item\em In order to test different algorithms with the same data, they must be able to obtain the same reward when pulling an arm in the same timestep. The \mbox{\hyperlink{class_m_a_b_experiment}{M\+A\+B\+Experiment}} class generate all the rewards of the arms up to the time horizon, before the algorithm starts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{mab_8h_ab8d3b06b9f83219c5bb8daa68136f908}{Regret\+Type}} \{ \mbox{\hyperlink{mab_8h_ab8d3b06b9f83219c5bb8daa68136f908a7034d72178527959767784e9faadfca7}{Regret\+Type\+::\+Stochastic}}, 
+\mbox{\hyperlink{mab_8h_ab8d3b06b9f83219c5bb8daa68136f908a731708243bf8067cec2d08a453541028}{Regret\+Type\+::\+Adversarial}}
+ \}
+\begin{DoxyCompactList}\small\item\em enum class representing the type of regret to consider among Stochastic and Adversarial regret. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Fabio Chiusano 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+08/06/2018 
+\end{DoxyDate}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{mab_8h_ab8d3b06b9f83219c5bb8daa68136f908}\label{mab_8h_ab8d3b06b9f83219c5bb8daa68136f908}} 
+\index{mab.\+h@{mab.\+h}!Regret\+Type@{Regret\+Type}}
+\index{Regret\+Type@{Regret\+Type}!mab.\+h@{mab.\+h}}
+\subsubsection{\texorpdfstring{Regret\+Type}{RegretType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{mab_8h_ab8d3b06b9f83219c5bb8daa68136f908}{Regret\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+enum class representing the type of regret to consider among Stochastic and Adversarial regret. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Stochastic@{Stochastic}!mab.\+h@{mab.\+h}}\index{mab.\+h@{mab.\+h}!Stochastic@{Stochastic}}}\mbox{\Hypertarget{mab_8h_ab8d3b06b9f83219c5bb8daa68136f908a7034d72178527959767784e9faadfca7}\label{mab_8h_ab8d3b06b9f83219c5bb8daa68136f908a7034d72178527959767784e9faadfca7}} 
+Stochastic&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Adversarial@{Adversarial}!mab.\+h@{mab.\+h}}\index{mab.\+h@{mab.\+h}!Adversarial@{Adversarial}}}\mbox{\Hypertarget{mab_8h_ab8d3b06b9f83219c5bb8daa68136f908a731708243bf8067cec2d08a453541028}\label{mab_8h_ab8d3b06b9f83219c5bb8daa68136f908a731708243bf8067cec2d08a453541028}} 
+Adversarial&\\
+\hline
+
+\end{DoxyEnumFields}

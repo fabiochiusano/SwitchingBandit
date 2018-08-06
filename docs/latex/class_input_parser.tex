@@ -1,0 +1,99 @@
+\hypertarget{class_input_parser}{}\section{Input\+Parser Class Reference}
+\label{class_input_parser}\index{Input\+Parser@{Input\+Parser}}
+
+
+class whose goal is to parse the input arguments of the program  
+
+
+
+
+{\ttfamily \#include $<$input\+\_\+parser.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_input_parser_af9fa5ead1f28b5294a713410df5b9531}{Input\+Parser}} (int \&argc, char $\ast$$\ast$argv)
+\begin{DoxyCompactList}\small\item\em constructor of \mbox{\hyperlink{class_input_parser}{Input\+Parser}} \end{DoxyCompactList}\item 
+const string \& \mbox{\hyperlink{class_input_parser_a494c1de8c06fbb5a88343686e36fbf50}{get\+Cmd\+Option}} (const string \&option) const
+\begin{DoxyCompactList}\small\item\em returns the string in argv after the specified option \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_input_parser_ad3d06a9c59e91f425295bdc8408e0544}{cmd\+Option\+Exists}} (const string \&option) const
+\begin{DoxyCompactList}\small\item\em returns true if the specified option exists in ergv. Return false otherwise \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+class whose goal is to parse the input arguments of the program 
+
+\begin{DoxyAuthor}{Author}
+iain (stackoverflow) 
+\end{DoxyAuthor}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_input_parser_af9fa5ead1f28b5294a713410df5b9531}\label{class_input_parser_af9fa5ead1f28b5294a713410df5b9531}} 
+\index{Input\+Parser@{Input\+Parser}!Input\+Parser@{Input\+Parser}}
+\index{Input\+Parser@{Input\+Parser}!Input\+Parser@{Input\+Parser}}
+\subsubsection{\texorpdfstring{Input\+Parser()}{InputParser()}}
+{\footnotesize\ttfamily Input\+Parser\+::\+Input\+Parser (\begin{DoxyParamCaption}\item[{int \&}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+
+constructor of \mbox{\hyperlink{class_input_parser}{Input\+Parser}} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & the argc of the main \\
+\hline
+{\em argv} & the argv of the main \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_input_parser_ad3d06a9c59e91f425295bdc8408e0544}\label{class_input_parser_ad3d06a9c59e91f425295bdc8408e0544}} 
+\index{Input\+Parser@{Input\+Parser}!cmd\+Option\+Exists@{cmd\+Option\+Exists}}
+\index{cmd\+Option\+Exists@{cmd\+Option\+Exists}!Input\+Parser@{Input\+Parser}}
+\subsubsection{\texorpdfstring{cmd\+Option\+Exists()}{cmdOptionExists()}}
+{\footnotesize\ttfamily bool Input\+Parser\+::cmd\+Option\+Exists (\begin{DoxyParamCaption}\item[{const string \&}]{option }\end{DoxyParamCaption}) const}
+
+
+
+returns true if the specified option exists in ergv. Return false otherwise 
+
+
+\begin{DoxyParams}{Parameters}
+{\em option} & string, the option to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a boolean representing the presence of the specified option in argv
+\end{DoxyReturn}
+\begin{DoxyAuthor}{Author}
+iain 
+\end{DoxyAuthor}
+\mbox{\Hypertarget{class_input_parser_a494c1de8c06fbb5a88343686e36fbf50}\label{class_input_parser_a494c1de8c06fbb5a88343686e36fbf50}} 
+\index{Input\+Parser@{Input\+Parser}!get\+Cmd\+Option@{get\+Cmd\+Option}}
+\index{get\+Cmd\+Option@{get\+Cmd\+Option}!Input\+Parser@{Input\+Parser}}
+\subsubsection{\texorpdfstring{get\+Cmd\+Option()}{getCmdOption()}}
+{\footnotesize\ttfamily const string \& Input\+Parser\+::get\+Cmd\+Option (\begin{DoxyParamCaption}\item[{const string \&}]{option }\end{DoxyParamCaption}) const}
+
+
+
+returns the string in argv after the specified option 
+
+
+\begin{DoxyParams}{Parameters}
+{\em option} & string, the option to check (e.\+g. -\/d) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the string after the specified option
+\end{DoxyReturn}
+\begin{DoxyAuthor}{Author}
+iain 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{input__parser_8h}{input\+\_\+parser.\+h}}\item 
+src/\mbox{\hyperlink{input__parser_8cpp}{input\+\_\+parser.\+cpp}}\end{DoxyCompactItemize}
