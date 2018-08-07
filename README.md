@@ -1,5 +1,5 @@
 # Switching Bandit
-This repository contains the code for my thesis on switching bandits. The simulation code is written in C++ and makes use of _OpenMP_. The scripts that plot the results of the simulations are written in Python using _numpy_ and _matplotlib_.
+This repository contains the code for my thesis on switching bandits. The simulation code is written in C++ and uses _OpenMP_. The scripts that plot the results of the simulations are written in Python using _numpy_ and _matplotlib_.
 
 ## Algorithms
 The algorithms implemented are:
@@ -39,3 +39,6 @@ The implemented CDTs are:
 - Discounted Page-Hinkley
 - Two-sided CUSUM
 - ICI
+
+## How to configure experiments
+Instructions on how to configure experiments can be found in the README inside the _exp_config_ folder.
