@@ -329,5 +329,5 @@ for experiment_name in dirs:
 	plt.savefig("images/experiment_" + experiment_name + ".png")
 	plt.close()
 
-concatenate_images()
+#concatenate_images()
 os.system('say "finito"')

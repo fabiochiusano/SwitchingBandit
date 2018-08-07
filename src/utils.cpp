@@ -192,7 +192,7 @@ Distribution* get_distribution(string line, boost::mt19937* rng) {
 	string distr;
 	ss >> distr;
 
-	if (distr == "Gaussian") { // Gaussian
+	if (distr == "Normal") { // Gaussian
 		double mean, variance;
 		ss >> mean >> variance;
 

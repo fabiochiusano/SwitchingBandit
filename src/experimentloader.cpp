@@ -5,7 +5,7 @@
 #include "allalgorithms.h"
 
 vector<Experiment*>* ExperimentLoader::load_experiments() {
-	ifstream input_file("temp/experiments_config.txt", ifstream::in);
+	ifstream input_file("exp_config/experiments_config.txt", ifstream::in);
 
 	int num_experiments, num_simulations, seed;
   input_file >> num_experiments >> num_simulations >> seed;
