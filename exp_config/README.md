@@ -48,9 +48,9 @@ _algorithms_ is a list of _algorithm_specification_. Examples of _algorithm_spec
 - `exp3 exp3 0.1 3 ---------- alg_name alg_id beta nu`
 - `ucb1_round round 2 ucb1 ucb1 ---------- alg_name alg_id length_of_subalg_specification subalg_specification`
 
-Since "round" is a meta-algorithm that requires a sub-algorithm, its specification needs the sub-algorithm specification.
+Since `round` is a meta-algorithm that requires a sub-algorithm, its specification needs the sub-algorithm specification.
 Multiple meta-algorithm can be nested, allowing for easy creation of new algorithms.
 - `cusum_2_b cd_algorithm 30 0 30 5 cusum 30 0.1 25 0 9 round round 6 alg_with_exploration alg_with_exploration 0.01 2 ucb1 ucb1
  ---------- alg_name alg_id M use_history max_history length_of_cdt_specification cdt_specification length_of_subalg_specification subalg_specification`
 
-Other distributions specifications can be inferred reading the parser implementation, which is the get_algorithm function in utils.cpp.
+Other distributions specifications can be inferred reading the parser implementation, which is the _get_algorithm_ function in _utils.cpp_.
