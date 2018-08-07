@@ -1,13 +1,14 @@
-~~~~~~~~~~~~ HOW TO CONFIGURE EXPERIMENTS ~~~~~~~~~~~~~~
-In order to configure experiments, you need to fill the experiments_config.txt file in this folder.
+# HOW TO CONFIGURE EXPERIMENTS 
+In order to configure experiments, you need to fill the _experiments_config.txt_ file in this folder.
 
 EXAMPLE:
-1 30 432145
+```1 30 432145
 first 0 2 2 10000
 BernoulliNonStationary 2 0.2 5000 0.8 10000
 BernoulliNonStationary 1 0.5 10000
 ucb1_round round 2 ucb1 ucb1
 ucbt_round round 2 ucbt ucbt
+```
 
 EXAMPLE DESCRIPTION:
 1 30 432145 ---------- number_of_experiments simulations_per_experiment seed
@@ -43,4 +44,4 @@ Since "round" is a meta-algorithm that requires a sub-algorithm, its specificati
 Multiple meta-algorithm can be nested, allowing for easy creation of new algorithms.
 - cusum_2_b cd_algorithm 30 0 30 5 cusum 30 0.1 25 0 9 round round 6 alg_with_exploration alg_with_exploration 0.01 2 ucb1 ucb1
  ---------- alg_name alg_id M use_history max_history length_of_cdt_specification cdt_specification length_of_subalg_specification subalg_specification
- Other distributions specifications can be inferred reading the parser implementation, which is the get_algorithm function in utils.cpp.
+Other distributions specifications can be inferred reading the parser implementation, which is the get_algorithm function in utils.cpp.
