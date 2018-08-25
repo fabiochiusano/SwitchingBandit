@@ -193,10 +193,10 @@ void GlobalCTS::receive_reward(double reward, int pulled_arm) {
 	for (int run = 0; run < this->runlength_distribution.size()-1; run++) {
 		double likelihood;
 		if (reward > 0) {
-			likelihood = this->alphas[pulled_arm][run] / (this->alphas[pulled_arm][run] + this->betas[pulled_arm][run]);
+			likelihood = this->alphas[pulled_arm][run] * 1.0 / (this->alphas[pulled_arm][run] + this->betas[pulled_arm][run]);
 		}
 		else {
-			likelihood = this->betas[pulled_arm][run] / (this->alphas[pulled_arm][run] + this->betas[pulled_arm][run]);
+			likelihood = this->betas[pulled_arm][run] * 1.0 / (this->alphas[pulled_arm][run] + this->betas[pulled_arm][run]);
 		}
 		likelihoods.push_back(likelihood);
 		this->runlength_distribution[run+1] = (1 - this->gamma) * likelihood * old_runlength_distribution[run];
@@ -293,10 +293,10 @@ void PerArmCTS::receive_reward(double reward, int pulled_arm) {
 			double likelihood;
 			if (i == pulled_arm) {
 				if (reward > 0) {
-					likelihood = this->alphas[pulled_arm][run] / (this->alphas[pulled_arm][run] + this->betas[pulled_arm][run]);
+					likelihood = this->alphas[pulled_arm][run] * 1.0 / (this->alphas[pulled_arm][run] + this->betas[pulled_arm][run]);
 				}
 				else {
-					likelihood = this->betas[pulled_arm][run] / (this->alphas[pulled_arm][run] + this->betas[pulled_arm][run]);
+					likelihood = this->betas[pulled_arm][run] * 1.0 / (this->alphas[pulled_arm][run] + this->betas[pulled_arm][run]);
 				}
 			} else {
 				likelihood = 1;

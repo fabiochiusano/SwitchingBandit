@@ -41,11 +41,11 @@ void UCBT::reset(int action) {
 	this->MABAlgorithm::reset(action);
 	if (action == -1) {
 		this->means.assign(this->num_of_arms, 0.);
-		this->collected_rewards.resize(this->num_of_arms);
+		this->variances.assign(this->num_of_arms, 0.);
 	}
 	else {
 		this->means[action] = 0;
-		this->collected_rewards[action].clear();
+		this->variances[action] = 0;
 	}
 }
 
@@ -106,12 +106,7 @@ int UCBT::choose_action() {
 	int best_arm = -1;
 	for (int i = 0; i < this->num_of_arms; i++) {
 		double Q = this->means[i];
-		// It's not possible to compute the variance online since the mean of the arm is updated at each step!
-		double variance = 0;
-		for (int j = 0; j < this->collected_rewards[i].size(); j++) {
-			variance += pow((this->collected_rewards[i][j] - Q), 2);
-		}
-		variance /= this->num_of_pulls[i];
+		double variance = this->variances[i];
 		double B = sqrt((2*log(tot_pulls + 1)*min(0.25, variance))/(this->num_of_pulls[i]));
 		double QB = Q + B;
 		if (QB > bestQB) {
@@ -125,8 +120,10 @@ int UCBT::choose_action() {
 
 void UCBT::receive_reward(double reward, int pulled_arm) {
 	this->MABAlgorithm::receive_reward(reward, pulled_arm);
-	this->means[pulled_arm] = (this->means[pulled_arm] * (this->num_of_pulls[pulled_arm] - 1) + reward) / this->num_of_pulls[pulled_arm];
-	this->collected_rewards[pulled_arm].push_back(reward);
+	double old_mean = this->means[pulled_arm];
+	int n = this->num_of_pulls[pulled_arm];
+	this->means[pulled_arm] = (old_mean * (n - 1) + reward) / n;
+	this->variances[pulled_arm] = ((this->variances[pulled_arm] + pow(old_mean, 2))*(n - 1) + pow(reward, 2)) / n - pow(this->means[pulled_arm], 2);
 }
 
 int D_UCB::choose_action() {

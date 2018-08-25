@@ -60,10 +60,8 @@ int main(int argc, char *argv[]){
 	for (int i = 0; i < experiments->size(); i++) {
 		cout << "experiment " << i << " started" << endl;
 		(*experiments)[i]->run();
+		Plotter::plot_experiment(i);
 	}
-
-	cout << "Plotting..." << endl;
-	Plotter::plot_experiments();
 
 	return 0;
 }

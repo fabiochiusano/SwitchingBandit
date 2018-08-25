@@ -5,7 +5,7 @@ InputParser::InputParser(int &argc, char **argv){
         this->tokens.push_back(string(argv[i]));
 }
 
-/// @author iain
+// @author iain
 const string& InputParser::getCmdOption(const string &option) const{
     vector<string>::const_iterator itr;
     itr =  find(this->tokens.begin(), this->tokens.end(), option);
@@ -16,7 +16,7 @@ const string& InputParser::getCmdOption(const string &option) const{
     return empty_string;
 }
 
-/// @author iain
+// @author iain
 bool InputParser::cmdOptionExists(const string &option) const{
     return find(this->tokens.begin(), this->tokens.end(), option)
            != this->tokens.end();

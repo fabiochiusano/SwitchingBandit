@@ -133,10 +133,10 @@ CDT_Result Two_Sided_CUSUM::run(double reward) {
     }
 
     if (this->g_plus > this->threshold) {
-      return CDT_Result(true, this->t_estimate_plus);
+      return CDT_Result(true, this->t_estimate_plus+1);
     }
     else if (this->g_minus > this->threshold) {
-      return CDT_Result(true, this->t_estimate_minus);
+      return CDT_Result(true, this->t_estimate_minus+1);
     }
 
     return CDT_Result(false, 0);

@@ -16,8 +16,9 @@
 #include <map>
 #include "cdt.h"
 
-static int WRITE_EVERY = 5; // write to file every 5 timestep (value used by statistic_manager and in plot_results.py)
-static int NEG_INF = -100000;
+static int WRITE_EVERY = 50; // write to file every tot timestep (value used by statistic_manager and in plot_results.py)
+static int NEG_INF = -10000000;
+static int POS_INF = 10000000;
 
 class CDT;
 
@@ -34,7 +35,7 @@ double random_unit();
  * @param  rng         boost::mt19937*, random number generator used by the algorithm
  * @return             an instance of the algorithm devised in the specification
  */
-MABAlgorithm* get_algorithm(string line, int num_of_arms, boost::mt19937* rng);
+MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab);
 
 /**
  * @brief Create a CDT from its specification

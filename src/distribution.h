@@ -71,6 +71,132 @@ public:
 	virtual double get_mean(int timestep) = 0;
 };
 
+class StationaryDistribution: public Distribution {
+public:
+	/**
+	 * @brief Constructor of StationaryDistribution.
+	 *
+	 * @param name string, id of the distribution
+	 */
+	StationaryDistribution(string name);
+
+	/**
+	 * @brief Constructor of StationaryDistribution.
+	 *
+	 * @param name string, id of the distribution
+	 * @param rng boost::mt19937&, rng used to generate data
+	 */
+	StationaryDistribution(string name, boost::mt19937& rng);
+};
+
+class NonStationaryDistribution: public Distribution {
+public:
+	/**
+	 * @brief Constructor of NonStationaryDistribution.
+	 *
+	 * @param name string, id of the distribution
+	 */
+	NonStationaryDistribution(string name);
+
+	/**
+	 * @brief Constructor of NonStationaryDistribution.
+	 *
+	 * @param name string, id of the distribution
+	 * @param rng boost::mt19937&, rng used to generate data
+	 */
+	NonStationaryDistribution(string name, boost::mt19937& rng);
+};
+
+class AdversarialDistribution: public Distribution {
+public:
+	/**
+	 * @brief Constructor of AdversarialDistribution.
+	 *
+	 * @param name string, id of the distribution
+	 */
+	AdversarialDistribution(string name);
+
+	/**
+	 * @brief Constructor of AdversarialDistribution.
+	 *
+	 * @param name string, id of the distribution
+	 * @param rng boost::mt19937&, rng used to generate data
+	 */
+	AdversarialDistribution(string name, boost::mt19937& rng);
+};
+
+class NonStationaryAbruptDistribution: public NonStationaryDistribution {
+protected:
+	vector<int> ends;
+	vector<double> means;
+public:
+	/**
+	 * @brief Constructor of NonStationaryAbruptDistribution.
+	 *
+	 * @param name string, id of the distribution
+	 */
+	NonStationaryAbruptDistribution(string name);
+
+	/**
+	 * @brief Constructor of NonStationaryAbruptDistribution.
+	 *
+	 * @param name string, id of the distribution
+	 * @param rng boost::mt19937&, rng used to generate data
+	 */
+	NonStationaryAbruptDistribution(string name, boost::mt19937& rng);
+
+	/**
+	 * @brief draw the reward for a certain timestep
+	 *
+	 * @param  timestep int, timestep at which the reward is drawn
+	 * @return a double which is the drawn reward
+	 */
+	virtual double draw(int timestep) = 0;
+
+	/**
+	 * @brief build a representation of this Distribution so that it can be printed to a file and be
+	 * 	later analysed by another script
+	 *
+	 * @return a string that represents this Distribution
+	 */
+	virtual string toFile() = 0;
+
+	/**
+	 * @param  timestep integer, the timestep at which the mean is asked
+	 * @return the mean (double) at the specified timestep
+	 */
+	virtual double get_mean(int timestep) = 0;
+
+	/**
+	 * @return a vector of integers, i.e. the changepoints
+	 */
+	vector<int> get_changepoints();
+
+	/**
+	 * @return a vector of doubles, i.e. the means after the changepoints
+	 */
+	vector<double> get_means();
+};
+
+
+class NonStationarySmoothDistribution: public NonStationaryDistribution {
+public:
+	/**
+	 * @brief Constructor of NonStationaryAbruptDistribution.
+	 *
+	 * @param name string, id of the distribution
+	 */
+	NonStationarySmoothDistribution(string name);
+
+	/**
+	 * @brief Constructor of NonStationaryAbruptDistribution.
+	 *
+	 * @param name string, id of the distribution
+	 * @param rng boost::mt19937&, rng used to generate data
+	 */
+	NonStationarySmoothDistribution(string name, boost::mt19937& rng);
+};
+
 
 /**
  * @brief Distribution of a normal distribution
@@ -79,7 +205,7 @@ public:
  * @param variance double, variances
  * @param rng      boost::mt19937&, rng used to generate data
  */
-class NormalDistribution: public Distribution {
+class NormalDistribution: public StationaryDistribution {
 private:
 	boost::normal_distribution<>* nd;
 	boost::variate_generator<boost::mt19937&, boost::normal_distribution<> > *vg;
@@ -123,10 +249,9 @@ public:
  * @param ends 		 vector<double>&, the last timestep of each time slot
  * @param rng      boost::mt19937&, rng used to generate data
  */
-class NormalNonStationaryDistribution: public Distribution {
+class NormalNonStationaryDistribution: public NonStationaryAbruptDistribution {
 private:
-	vector<double> means, stddevs;
-	vector<int> ends;
+	vector<double> stddevs;
 public:
 	/**
 	 * @param name     string, id of the distribution
@@ -165,7 +290,7 @@ public:
  * @param v 			 double, the value always returned by the distribution
  * @param rng      boost::mt19937&, rng used to generate data
  */
-class FixedDistribution: public Distribution {
+class FixedDistribution: public StationaryDistribution {
 private:
 	double v;
 public:
@@ -206,18 +331,15 @@ public:
  * @param ends 		 vector<double>&, the last timestep of each time slot
  * @param rng      boost::mt19937&, rng used to generate data
  */
-class FixedNonStationaryDistribution: public Distribution {
-private:
-	vector<double> vs;
-	vector<int> ends;
+class FixedNonStationaryDistribution: public NonStationaryAbruptDistribution {
 public:
 	/**
 	 * @param name     string, id of the distribution
-	 * @param vs 			 vector<double>&, the values always returned by the distribution in the time slots
+	 * @param means 			 vector<double>&, the values always returned by the distribution in the time slots
 	 * @param ends 		 vector<double>&, the last timestep of each time slot
 	 * @param rng      boost::mt19937&, rng used to generate data
 	 */
-	FixedNonStationaryDistribution(string name, vector<double>& vs, vector<int> ends, boost::mt19937& rng);
+	FixedNonStationaryDistribution(string name, vector<double>& means, vector<int> ends, boost::mt19937& rng);
 
 	/**
 	 * @param  timestep int, timestep at which the reward is drawn
@@ -247,7 +369,7 @@ public:
  * @param p        double, probability of obtaining 1 from the bernoulli distribution
  * @param rng      boost::mt19937&, rng used to generate data
  */
-class BernoulliDistribution: public Distribution {
+class BernoulliDistribution: public StationaryDistribution {
 private:
 	double p;
 public:
@@ -287,18 +409,15 @@ public:
  * @param ends 		 vector<double>&, the last timestep of each time slot
  * @param rng      boost::mt19937&, rng used to generate data
  */
-class BernoulliNonStationaryDistribution: public Distribution {
-private:
-	vector<double> ps;
-	vector<int> ends;
+class BernoulliNonStationaryDistribution: public NonStationaryAbruptDistribution {
 public:
 	/**
  	 * @param name     string, id of the distribution
-	 * @param ps 			 vector<double>&, the probabilities of obtaining 1 from the bernoulli distributions in the time slots
+	 * @param means 			 vector<double>&, the probabilities of obtaining 1 from the bernoulli distributions in the time slots
 	 * @param ends 		 vector<double>&, the last timestep of each time slot
 	 * @param rng      boost::mt19937&, rng used to generate data
 	 */
-	BernoulliNonStationaryDistribution(string name, vector<double>& ps, vector<int>& ends, boost::mt19937& rng);
+	BernoulliNonStationaryDistribution(string name, vector<double>& means, vector<int>& ends, boost::mt19937& rng);
 
 	/**
 	 * @param  timestep int, timestep at which the reward is drawn
@@ -331,7 +450,7 @@ public:
  * @param cur_v double, first value that the distribution will returns
  * @param rng   boost::mt19937&, rng used to generate data
  */
-class SquareWaveDistribution: public Distribution {
+class SquareWaveDistribution: public AdversarialDistribution {
 private:
 	double v, cur_v;
 public:
@@ -364,10 +483,39 @@ public:
 	double get_mean(int timestep) override;
 };
 
-// TODO: SineDistribution
+class SineBernoulliDistribution: public NonStationarySmoothDistribution {
+private:
+	double A, omega, phi, mean;
+public:
+	/**
+	 * @param name  string, id of the distribution
+	 * @param A     double, amplitude of the sine function that gives the mean of the bernoulli
+	 * @param omega double, angular velocity of the sine function that gives the mean of the bernoulli
+	 * @param phi   double in [0, PI], phase of the sine function that gives the mean of the bernoulli
+	 * @param mean  double in [0+A, 1-A], mean of the sine function that gives the mean of the bernoulli
+	 * @param rng   boost::mt19937&, rng used to generate data
+	 */
+	SineBernoulliDistribution(string name, double A, double omega, double phi, double mean, boost::mt19937& rng);
 
-// TODO: manage in a beautiful way stationary distributions and nonstationary distributions: maybe some non-stationary distributions
-//       contains a vector of stationary distributions?
+	/**
+	 * @param  timestep int, timestep at which the reward is drawn
+	 * @return a double which is the drawn reward
+	 */
+	double draw(int timestep) override;
 
+	/**
+	 * @brief build a representation of this Distribution so that it can be printed to a file and be
+	 * 	later analysed by another script
+	 *
+	 * @return a string that represents this Distribution
+	 */
+	string toFile() override;
+
+	/**
+	 * @param  timestep integer, the timestep at which the mean is asked
+	 * @return the mean (double) at the specified timestep
+	 */
+	double get_mean(int timestep) override;
+};
 
 #endif

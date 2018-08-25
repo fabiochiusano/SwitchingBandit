@@ -41,8 +41,9 @@ public:
    * @param num_of_arms  integer, number of arms the algorithm will work with
    * @param sub_alg_line string, specification of the sub-algorithm
    * @param rng          boost::mt19937&, random number generator
+   * @param mab 				 MAB*, required for setting optimal parameters
    */
-  Round_Algorithm(string name, int num_of_arms, string sub_alg_line, boost::mt19937& rng);
+  Round_Algorithm(string name, int num_of_arms, string sub_alg_line, boost::mt19937& rng, MAB* mab);
 
 	/**
  	 * @return an integer representing the chosen arm
@@ -81,7 +82,7 @@ public:
    * @param alpha        double in (0,1), exploration parameter
    * @param rng          boost::mt19937&, random number generator
    */
-	Algorithm_With_Uniform_Exploration(string name, int num_of_arms, string sub_alg_line, double alpha, boost::mt19937& rng);
+	Algorithm_With_Uniform_Exploration(string name, int num_of_arms, string sub_alg_line, double alpha, boost::mt19937& rng, MAB* mab);
 
   /**
  	 * @return an integer representing the chosen arm
@@ -132,7 +133,7 @@ public:
    * @param max_history  integer, maximum amount of sample history that the algorithm can use
    * @param rng          boost::mt19937&, random number generator
    */
-  CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, int max_history, boost::mt19937& rng);
+  CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, int max_history, boost::mt19937& rng, MAB* mab);
 
   /**
  	 * @return an integer representing the chosen arm
@@ -184,7 +185,7 @@ public:
    * @param sub_alg_line  string, specification of the sub-algorithm
    * @param rng           boost::mt19937&, random number generator
    */
-	ADAPT_EVE(string name, int num_of_arms, int meta_duration, string cdt_line, string sub_alg_line, boost::mt19937& rng);
+	ADAPT_EVE(string name, int num_of_arms, int meta_duration, string cdt_line, string sub_alg_line, boost::mt19937& rng, MAB* mab);
 
   /**
  	 * @return an integer representing the chosen arm
@@ -252,7 +253,7 @@ public:
    * @param sub_alg_line string, specification of the sub-algorithm
    * @param rng          boost::mt19937&, random number generator
    */
-  GLR(string name, int num_of_arms, int M, int max_history, string sub_alg_line, boost::mt19937& rng);
+  GLR(string name, int num_of_arms, int M, int max_history, string sub_alg_line, boost::mt19937& rng, MAB* mab);
 
   /**
  	 * @return an integer representing the chosen arm

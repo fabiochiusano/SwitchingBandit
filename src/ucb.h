@@ -65,7 +65,7 @@ public:
 class UCBT: public UCB {
 private:
 	vector<double> means;
-	vector<vector<double>> collected_rewards;
+	vector<double> variances;
 public:
 	/**
 	 * @param name        string, id of the algorithm

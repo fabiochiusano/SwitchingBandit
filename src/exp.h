@@ -30,7 +30,7 @@ public:
  */
 class EXP3: public EXP {
 private:
-	double beta, nu;
+	double beta;
 	vector<double> ws;
 public:
 	/**
@@ -39,9 +39,8 @@ public:
 	 * @param name        string, id of the algorithm
 	 * @param num_of_arms integer, number of arms the algorithm will work on
 	 * @param beta				double, exploration parameter (between 0 and 1)
-	 * @param nu          double, exponential update parameter
 	 */
-	EXP3(string name, int num_of_arms, double beta, double nu);
+	EXP3(string name, int num_of_arms, double beta);
 
 	/**
 	 * @return an integer representing the chosen arm

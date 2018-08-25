@@ -19,9 +19,9 @@ void StatisticManager::analyze_pulls(vector<vector<double>>& pulls) {
   // pulls[timestep][arm]
   int total_timesteps = pulls.size();
 
-  MABExperiment* mabexp = dynamic_cast<MABExperiment*>(this->mab);
+  MAB* mabexp = dynamic_cast<MAB*>(this->mab);
   if (mabexp == NULL) {
-    cout << "Calling StatisticManager::analyze_pulls on a not MABExperiment!" << endl;
+    cout << "Calling StatisticManager::analyze_pulls on a not MAB!" << endl;
     return;
   }
 
@@ -66,7 +66,7 @@ void StatisticManager::analyze_pulls(vector<vector<double>>& pulls) {
 }
 
 void StatisticManager::update(int arm_to_pull, double reward, int alg_index, int timestep) {
-  MABExperiment* mabexp = dynamic_cast<MABExperiment*>(this->mab);
+  MAB* mabexp = dynamic_cast<MAB*>(this->mab);
   // regret
   if (mabexp != NULL) {
     if (this->mabtype == RegretType::Stochastic) {
@@ -103,9 +103,9 @@ void StatisticManager::write_distributions() {
   make_dir("temp/" + this->name);
 	ofstream outputFile("temp/" + this->name + "/distributions.txt");
 
-  MABExperiment* mabexp = dynamic_cast<MABExperiment*>(this->mab);
+  MAB* mabexp = dynamic_cast<MAB*>(this->mab);
   if (mabexp == NULL) {
-    cout << "Calling StatisticManager::write_distributions on a not MABExperiment!" << endl;
+    cout << "Calling StatisticManager::write_distributions on a not MAB!" << endl;
     return;
   }
 

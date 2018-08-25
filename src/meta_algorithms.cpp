@@ -5,8 +5,8 @@
 
 MetaAlgorithm::MetaAlgorithm(string name, int num_of_arms) : MABAlgorithm(name, num_of_arms) {}
 
-Round_Algorithm::Round_Algorithm(string name, int num_of_arms, string sub_alg_line, boost::mt19937& rng) : MetaAlgorithm(name, num_of_arms) {
-  this->sub_alg = get_algorithm(sub_alg_line, num_of_arms, &rng);
+Round_Algorithm::Round_Algorithm(string name, int num_of_arms, string sub_alg_line, boost::mt19937& rng, MAB* mab) : MetaAlgorithm(name, num_of_arms) {
+  this->sub_alg = get_algorithm(sub_alg_line, &rng, mab);
   this->reset(-1);
 }
 
@@ -44,8 +44,8 @@ void Round_Algorithm::receive_reward(double reward, int pulled_arm) {
 
 
 
-Algorithm_With_Uniform_Exploration::Algorithm_With_Uniform_Exploration(string name, int num_of_arms, string sub_alg_line, double alpha, boost::mt19937& rng) : MetaAlgorithm(name, num_of_arms) {
-	this->sub_alg = get_algorithm(sub_alg_line, num_of_arms, &rng);
+Algorithm_With_Uniform_Exploration::Algorithm_With_Uniform_Exploration(string name, int num_of_arms, string sub_alg_line, double alpha, boost::mt19937& rng, MAB* mab) : MetaAlgorithm(name, num_of_arms) {
+	this->sub_alg = get_algorithm(sub_alg_line, &rng, mab);
 	this->alpha = alpha;
 }
 
@@ -72,10 +72,10 @@ void Algorithm_With_Uniform_Exploration::receive_reward(double reward, int pulle
 
 
 
-CD_Algorithm::CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, int max_history, boost::mt19937& rng) : MetaAlgorithm(name, num_of_arms) {
+CD_Algorithm::CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, int max_history, boost::mt19937& rng, MAB* mab) : MetaAlgorithm(name, num_of_arms) {
   this->M = M;
   this->max_history = max_history;
-  this->sub_alg = get_algorithm(sub_alg_line, num_of_arms, &rng);
+  this->sub_alg = get_algorithm(sub_alg_line, &rng, mab);
   for (int i = 0; i < num_of_arms; i++) {
     this->cdts.push_back(get_cdt(cdt_line));
   }
@@ -125,13 +125,14 @@ void CD_Algorithm::receive_reward(double reward, int pulled_arm) {
   CDT_Result cdt_result = this->cdts[pulled_arm]->run(reward);
   if (cdt_result.alarm) {
     // Log alarm
-    ofstream cdt_file("temp/cdt.txt", fstream::app);
-    cdt_file << this->name << " ";
+    //ofstream cdt_file("temp/cdt_" + to_string(...) + ".txt", fstream::app);
+    //cdt_file << this->name << " ";
 
     this->sub_alg->reset(pulled_arm);
+    this->MABAlgorithm::reset(pulled_arm);
     if (this->use_history) {
-      int history_amount = this->collected_rewards[pulled_arm].size() - (cdt_result.change_estimate + 1);
-      int t_start = cdt_result.change_estimate + 1;
+      int history_amount = this->collected_rewards[pulled_arm].size() - cdt_result.change_estimate;
+      int t_start = cdt_result.change_estimate;
       if (history_amount > this->max_history) {
         t_start = this->collected_rewards[pulled_arm].size() - this->max_history;
         // cout << "clipped " << history_amount << endl;
@@ -147,20 +148,23 @@ void CD_Algorithm::receive_reward(double reward, int pulled_arm) {
   this->timestep++;
 }
 
-ADAPT_EVE::ADAPT_EVE(string name, int num_of_arms, int meta_duration, string cdt_line, string sub_alg_line, boost::mt19937& rng) : MetaAlgorithm(name, num_of_arms) {
+ADAPT_EVE::ADAPT_EVE(string name, int num_of_arms, int meta_duration, string cdt_line, string sub_alg_line, boost::mt19937& rng, MAB* mab) : MetaAlgorithm(name, num_of_arms) {
 
   this->meta_duration = meta_duration;
-  //this->sub_alg_line = sub_alg_line;
   this->rng = &rng;
 
   for (int i = 0; i < this->num_of_arms; i++) {
     this->cdts.push_back(get_cdt(cdt_line));
   }
 
-  this->core_sub_alg = get_algorithm(sub_alg_line, num_of_arms, this->rng);
-  this->other_sub_alg = get_algorithm(sub_alg_line, num_of_arms, this->rng);
+  this->core_sub_alg = get_algorithm(sub_alg_line, this->rng, mab);
+  this->other_sub_alg = get_algorithm(sub_alg_line, this->rng, mab);
 
-  this->meta_alg = get_algorithm(sub_alg_line, 2, this->rng);
+  vector<Distribution*> fake_distributions;
+  fake_distributions.push_back(new FixedDistribution("", 0, rng));
+  fake_distributions.push_back(new FixedDistribution("", 0, rng));
+  MAB* fake_mab = new MAB(fake_distributions, mab->timesteps);
+  this->meta_alg = get_algorithm(sub_alg_line, this->rng, fake_mab);
 
   this->reset(-1);
 }
@@ -209,7 +213,7 @@ void ADAPT_EVE::receive_reward(double reward, int pulled_arm) {
 
     CDT_Result cdt_result = this->cdts[pulled_arm]->run(reward);
     if (cdt_result.alarm) {
-      cout << this->name << ": alarm raised at timestep " << this->timestep << endl;
+      //cout << this->name << ": alarm raised at timestep " << this->timestep << endl;
 
       this->is_meta = true;
       this->t_meta = 0;
@@ -239,9 +243,9 @@ void ADAPT_EVE::receive_reward(double reward, int pulled_arm) {
         this->core_sub_alg = this->other_sub_alg;
         this->other_sub_alg = temp;
 
-        cout << "core pulls: " << core_pulls << ", other pulls: " << other_pulls << ", keeping new alg" << endl;
+        //cout << "core pulls: " << core_pulls << ", other pulls: " << other_pulls << ", keeping new alg" << endl;
       } else {
-        cout << "core pulls: " << core_pulls << ", other pulls: " << other_pulls << ", keeping old alg" << endl;
+        //cout << "core pulls: " << core_pulls << ", other pulls: " << other_pulls << ", keeping old alg" << endl;
       }
 
       this->is_meta = false;
@@ -254,8 +258,8 @@ void ADAPT_EVE::receive_reward(double reward, int pulled_arm) {
   }
 }
 
-GLR::GLR(string name, int num_of_arms, int M, int max_history, string sub_alg_line, boost::mt19937& rng) : MetaAlgorithm(name, num_of_arms) {
-  this->sub_alg = get_algorithm(sub_alg_line, num_of_arms, &rng);
+GLR::GLR(string name, int num_of_arms, int M, int max_history, string sub_alg_line, boost::mt19937& rng, MAB* mab) : MetaAlgorithm(name, num_of_arms) {
+  this->sub_alg = get_algorithm(sub_alg_line, &rng, mab);
   this->max_history = max_history;
   this->M = M;
   this->reset();

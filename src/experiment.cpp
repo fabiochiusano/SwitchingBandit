@@ -9,7 +9,7 @@ Experiment::Experiment(string name, int num_simulations, int timesteps, int seed
   this->seed = seed;
 }
 
-void Experiment::set_mab(MABExperiment* mab) {
+void Experiment::set_mab(MAB* mab) {
   this->mab = mab;
 }
 
@@ -32,7 +32,7 @@ void Experiment::run() {
 
   for (int cur_simulation = 1; cur_simulation <= this->num_simulations; cur_simulation++) {
     // Should generate all the pulls because they are needed in advice in an adversary environment
-    vector<vector<double>> all_pulls = this->mab->generate_pulls(this->timesteps); // all_pulls[timestep][arm]
+    vector<vector<double>> all_pulls = this->mab->generate_pulls(); // all_pulls[timestep][arm]
     stat_manager.set_mab_type(this->mabtype);
     stat_manager.analyze_pulls(all_pulls);
 
@@ -49,8 +49,8 @@ void Experiment::run() {
 		}
 
 		stat_manager.write_regrets(cur_simulation);
-    stat_manager.write_rewards(cur_simulation);
-    stat_manager.write_chosen_arm(cur_simulation);
+    //stat_manager.write_rewards(cur_simulation);
+    //stat_manager.write_chosen_arm(cur_simulation);
 
     for (auto alg : this->algs) {
   		alg->reset();

@@ -18,7 +18,7 @@ public:
   /**
    * @brief plots the results of the experiments inside iìthe images folder
    */
-  static void plot_experiments();
+  static void plot_experiment(int num_exp);
 };
 
 #endif

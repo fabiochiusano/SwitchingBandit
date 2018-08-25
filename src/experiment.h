@@ -18,7 +18,7 @@
   */
 class Experiment {
 private:
-  MABExperiment* mab;
+  MAB* mab;
   RegretType mabtype;
   vector<MABAlgorithm*> algs;
 public:
@@ -45,7 +45,7 @@ public:
    *   @param mab: MAB used by the experiment.
    *   @return nothing
    */
-  void set_mab(MABExperiment* mab);
+  void set_mab(MAB* mab);
 
   /**
    *   @brief Set the RegretType of this experiment according to the builder pattern

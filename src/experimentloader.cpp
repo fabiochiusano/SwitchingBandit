@@ -3,6 +3,7 @@
 #include <sstream>
 #include <fstream>
 #include "allalgorithms.h"
+#include <map>
 
 vector<Experiment*>* ExperimentLoader::load_experiments() {
 	ifstream input_file("exp_config/experiments_config.txt", ifstream::in);
@@ -42,12 +43,12 @@ vector<Experiment*>* ExperimentLoader::load_experiments() {
 			distributions.push_back(get_distribution(line, rng));
 		}
 
-		MABExperiment* mab = new MABExperiment(distributions);
+		MAB* mab = new MAB(distributions, timesteps);
 		experiment->set_mab(mab);
 
 		for (int alg_i = 0; alg_i < num_algs; alg_i++) {
 			getline(input_file, line);
-			experiment->add_alg(get_algorithm(line, num_arms, rng));
+			experiment->add_alg(get_algorithm(line, rng, mab));
 		}
 
 		experiments->push_back(experiment);

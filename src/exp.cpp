@@ -2,10 +2,9 @@
 
 EXP::EXP(string name, int num_of_arms) : MABAlgorithm(name, num_of_arms) {}
 
-EXP3::EXP3(string name, int num_of_arms, double beta, double nu): EXP(name, num_of_arms) {
+EXP3::EXP3(string name, int num_of_arms, double beta): EXP(name, num_of_arms) {
 	this->reset(-1);
 	this->beta = beta;
-	this->nu = nu;
 }
 
 EXP3_S::EXP3_S(string name, int num_of_arms, double beta, double alpha): EXP(name, num_of_arms) {
@@ -89,7 +88,7 @@ void EXP3::receive_reward(double reward, int pulled_arm) {
 		arm_probabilities.push_back(arm_prob);
 	}
 
-	this->ws[pulled_arm] *= exp(this->nu * (reward / arm_probabilities[pulled_arm]));
+	this->ws[pulled_arm] *= exp(this->beta * (reward / arm_probabilities[pulled_arm]));
 }
 
 
