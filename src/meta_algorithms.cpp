@@ -133,6 +133,7 @@ void CD_Algorithm::receive_reward(double reward, int pulled_arm) {
     if (this->use_history) {
       int history_amount = this->collected_rewards[pulled_arm].size() - cdt_result.change_estimate;
       int t_start = cdt_result.change_estimate;
+      //cout << this->timestep << " " << this->collected_rewards[pulled_arm].size() << " " << history_amount << endl;
       if (history_amount > this->max_history) {
         t_start = this->collected_rewards[pulled_arm].size() - this->max_history;
         // cout << "clipped " << history_amount << endl;

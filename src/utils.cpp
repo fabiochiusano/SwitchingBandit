@@ -72,7 +72,7 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 		if (use_best_parameter) {
 				B = 1.0;
 				gamma = 1 - 1.0/(4*B) * sqrt(num_global_changepoints * 1.0 / timesteps);
-				epsilon = 0.75; // TODO: is it ok?
+				epsilon = 2; // TODO: is it ok?
 		} else {
 				ss >> B >> gamma >> epsilon;
 		}
@@ -82,8 +82,11 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 		double B, epsilon;
 		if (use_best_parameter) {
 				B = 1.0;
-				tau = int(2*B * sqrt(timesteps * 1.0 * log(timesteps) / num_global_changepoints));
-				epsilon = 0.75; // TODO: is it ok?
+				if (num_global_changepoints > 0)
+					  tau = int(2*B * sqrt(timesteps * 1.0 * log(timesteps) / num_global_changepoints));
+				else
+						tau = timesteps;
+				epsilon = 2; // TODO: is it ok?
 		} else {
 				ss >> B >> tau >> epsilon;
 		}
@@ -120,11 +123,11 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 
 			/*
 			meta_duration = min(int(mab->get_shortest_interval_between_changepoints(-1) * 1.0 / num_of_arms), 100);
-			double epsilon = mab->get_min_change(-1) / 3.0;
+			double epsilon = mab->get_min_change(-1) / 2.0;
 			double lambda = mab->get_minimal_grid_gap_bernoulli(-1, epsilon, meta_duration);
 			double alpha = sqrt(num_global_changepoints/timesteps * log(timesteps/num_global_changepoints));
 			double h = log(timesteps/num_global_changepoints);
-			cdt_line = "cusum " + to_string(meta_duration) + " " + to_string(epsilon) + " " + to_string(h) + " 0";
+			cdt_line = "2cusum " + to_string(meta_duration) + " " + to_string(epsilon) + " " + to_string(h) + " 0";
 			*/
 
 			// Sub-algorithm
@@ -182,12 +185,19 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 
 		if (use_best_parameter) {
 			M = min(int(mab->get_shortest_interval_between_changepoints(-1) * 1.0 / num_of_arms), 30);
-			double epsilon = mab->get_min_change(-1) / 3.0;
+			double epsilon = mab->get_min_change(-1) / 2.0;
 			double lambda = mab->get_minimal_grid_gap_bernoulli(-1, epsilon, M);
-			double alpha = sqrt(num_global_changepoints * 1.0 / timesteps * log(timesteps * 1.0 /num_global_changepoints));
-			double h = log(timesteps * 1.0 / num_global_changepoints);
-			cdt_line = "cusum " + to_string(M) + " " + to_string(epsilon) + " " + to_string(h) + " " + to_string(use_gaussian_cdt);
-			sub_alg_line = "round round 6 alg_with_exploration alg_with_exploration " + to_string(alpha) + " 2 ts_b ts_b";
+			double alpha;
+			if (num_global_changepoints > 0)
+					alpha = sqrt(num_global_changepoints * 1.0 / timesteps * log(timesteps * 1.0 /num_global_changepoints));
+			else
+					alpha = 0;
+			//double alpha = 0;
+			double h;
+			if (num_global_changepoints > 0)
+			 		h = log(timesteps * 1.0 / num_global_changepoints);
+			else
+					h = POS_INF;
 			if (use_history == 0) {
 					max_history = 0;
 
@@ -223,8 +233,14 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 					double h = log(timesteps * 1.0 / num_global_changepoints) / C1;
 					*/
 			} else {
-				max_history = POS_INF;
+				if (num_global_changepoints > 0)
+						max_history = log(timesteps * 1.0 / num_global_changepoints);
+				else
+						max_history = POS_INF;
+				cout << "max history: " << max_history << endl;
 			}
+			cdt_line = "2cusum " + to_string(M) + " " + to_string(epsilon) + " " + to_string(h) + " " + to_string(use_gaussian_cdt);
+			sub_alg_line = "round round 6 alg_with_exploration alg_with_exploration " + to_string(alpha) + " 2 ucb1 ucb1";
 			cout << cdt_line << endl;
 			cout << sub_alg_line << endl;
 		} else {
@@ -285,12 +301,18 @@ CDT* get_cdt(string line) {
 		double gamma, lambda, rho;
 		ss >> gamma >> lambda >> rho;
 		return new CDT_PH_RHO(gamma, lambda, rho);
-	} else if (cdt_name == "cusum") {
+	} else if (cdt_name == "2cusum") {
 		int M;
 		double epsilon, threshold;
 		int gaussian;
 		ss >> M >> epsilon >> threshold >> gaussian;
 		return new Two_Sided_CUSUM(M, epsilon, threshold, gaussian!=0);
+	} else if (cdt_name == "cusum") {
+		int M;
+		double epsilon, threshold;
+		int gaussian, increase;
+		ss >> M >> epsilon >> threshold >> gaussian >> increase;
+		return new CUSUM(M, epsilon, threshold, gaussian!=0, increase!=0);
 	} else if (cdt_name == "ici") {
 		int S0, nu;
 		double gamma;

@@ -1,561 +1,561 @@
-48 100 1
+48 100 1041
 0 0 2 6 100000
-BernoulliNonStationary 2 0.80 50000 0.38 100000
-BernoulliNonStationary 2 0.47 50000 0.71 100000
+BernoulliNonStationary 2 0.107 50000 0.266 100000
+BernoulliNonStationary 2 0.718 50000 0.162 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 1 0 2 6 100000
-BernoulliNonStationary 2 0.42 50000 0.84 100000
-BernoulliNonStationary 1 0.73 100000
+BernoulliNonStationary 1 0.410 100000
+BernoulliNonStationary 2 0.835 50000 0.274 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 2 0 4 6 100000
-BernoulliNonStationary 2 0.41 50000 0.68 100000
-BernoulliNonStationary 2 0.86 50000 0.29 100000
-BernoulliNonStationary 2 0.38 50000 0.15 100000
-BernoulliNonStationary 2 0.50 50000 0.84 100000
+BernoulliNonStationary 2 0.480 50000 0.882 100000
+BernoulliNonStationary 2 0.760 50000 0.661 100000
+BernoulliNonStationary 2 0.636 50000 0.423 100000
+BernoulliNonStationary 2 0.421 50000 0.760 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 3 0 4 6 100000
-BernoulliNonStationary 1 0.88 100000
-BernoulliNonStationary 1 0.71 100000
-BernoulliNonStationary 2 0.28 50000 0.88 100000
-BernoulliNonStationary 1 0.54 100000
+BernoulliNonStationary 1 0.240 100000
+BernoulliNonStationary 1 0.652 100000
+BernoulliNonStationary 2 0.802 50000 0.405 100000
+BernoulliNonStationary 1 0.202 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 4 0 8 6 100000
-BernoulliNonStationary 2 0.64 50000 0.89 100000
-BernoulliNonStationary 2 0.55 50000 0.34 100000
-BernoulliNonStationary 2 0.66 50000 0.45 100000
-BernoulliNonStationary 2 0.16 50000 0.28 100000
-BernoulliNonStationary 2 0.64 50000 0.51 100000
-BernoulliNonStationary 2 0.42 50000 0.56 100000
-BernoulliNonStationary 2 0.59 50000 0.23 100000
-BernoulliNonStationary 2 0.77 50000 0.52 100000
+BernoulliNonStationary 2 0.606 50000 0.392 100000
+BernoulliNonStationary 2 0.733 50000 0.316 100000
+BernoulliNonStationary 2 0.424 50000 0.170 100000
+BernoulliNonStationary 2 0.842 50000 0.760 100000
+BernoulliNonStationary 2 0.291 50000 0.794 100000
+BernoulliNonStationary 2 0.402 50000 0.798 100000
+BernoulliNonStationary 2 0.263 50000 0.899 100000
+BernoulliNonStationary 2 0.604 50000 0.704 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 5 0 8 6 100000
-BernoulliNonStationary 1 0.41 100000
-BernoulliNonStationary 1 0.30 100000
-BernoulliNonStationary 1 0.19 100000
-BernoulliNonStationary 1 0.12 100000
-BernoulliNonStationary 2 0.50 50000 0.88 100000
-BernoulliNonStationary 1 0.25 100000
-BernoulliNonStationary 1 0.20 100000
-BernoulliNonStationary 1 0.70 100000
+BernoulliNonStationary 2 0.846 50000 0.247 100000
+BernoulliNonStationary 1 0.458 100000
+BernoulliNonStationary 1 0.444 100000
+BernoulliNonStationary 1 0.504 100000
+BernoulliNonStationary 1 0.197 100000
+BernoulliNonStationary 1 0.235 100000
+BernoulliNonStationary 1 0.667 100000
+BernoulliNonStationary 1 0.102 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 6 0 2 6 100000
-BernoulliNonStationary 3 0.41 33333 0.65 66666 0.31 100000
-BernoulliNonStationary 3 0.58 33333 0.24 66666 0.75 100000
+BernoulliNonStationary 3 0.127 33333 0.632 66666 0.489 100000
+BernoulliNonStationary 3 0.882 33333 0.517 66666 0.722 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 7 0 2 6 100000
-BernoulliNonStationary 2 0.23 33333 0.89 100000
-BernoulliNonStationary 2 0.85 66666 0.44 100000
+BernoulliNonStationary 3 0.128 33333 0.808 66666 0.226 100000
+BernoulliNonStationary 1 0.491 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 8 0 4 6 100000
-BernoulliNonStationary 3 0.56 33333 0.11 66666 0.75 100000
-BernoulliNonStationary 3 0.44 33333 0.15 66666 0.39 100000
-BernoulliNonStationary 3 0.26 33333 0.80 66666 0.45 100000
-BernoulliNonStationary 3 0.26 33333 0.59 66666 0.24 100000
+BernoulliNonStationary 3 0.467 33333 0.870 66666 0.467 100000
+BernoulliNonStationary 3 0.616 33333 0.324 66666 0.129 100000
+BernoulliNonStationary 3 0.707 33333 0.643 66666 0.439 100000
+BernoulliNonStationary 3 0.412 33333 0.738 66666 0.830 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 9 0 4 6 100000
-BernoulliNonStationary 1 0.88 100000
-BernoulliNonStationary 2 0.12 33333 0.89 100000
-BernoulliNonStationary 1 0.45 100000
-BernoulliNonStationary 2 0.20 66666 0.89 100000
+BernoulliNonStationary 2 0.267 66666 0.695 100000
+BernoulliNonStationary 2 0.864 33333 0.458 100000
+BernoulliNonStationary 1 0.562 100000
+BernoulliNonStationary 1 0.368 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 10 0 8 6 100000
-BernoulliNonStationary 3 0.75 33333 0.46 66666 0.34 100000
-BernoulliNonStationary 3 0.64 33333 0.46 66666 0.22 100000
-BernoulliNonStationary 3 0.18 33333 0.83 66666 0.69 100000
-BernoulliNonStationary 3 0.37 33333 0.20 66666 0.44 100000
-BernoulliNonStationary 3 0.65 33333 0.18 66666 0.28 100000
-BernoulliNonStationary 3 0.43 33333 0.61 66666 0.48 100000
-BernoulliNonStationary 3 0.39 33333 0.68 66666 0.55 100000
-BernoulliNonStationary 3 0.46 33333 0.15 66666 0.65 100000
+BernoulliNonStationary 3 0.689 33333 0.517 66666 0.579 100000
+BernoulliNonStationary 3 0.211 33333 0.414 66666 0.153 100000
+BernoulliNonStationary 3 0.894 33333 0.524 66666 0.463 100000
+BernoulliNonStationary 3 0.562 33333 0.306 66666 0.679 100000
+BernoulliNonStationary 3 0.391 33333 0.861 66666 0.714 100000
+BernoulliNonStationary 3 0.424 33333 0.156 66666 0.823 100000
+BernoulliNonStationary 3 0.463 33333 0.105 66666 0.182 100000
+BernoulliNonStationary 3 0.446 33333 0.528 66666 0.437 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 11 0 8 6 100000
-BernoulliNonStationary 2 0.51 33333 0.88 100000
-BernoulliNonStationary 1 0.57 100000
-BernoulliNonStationary 1 0.87 100000
-BernoulliNonStationary 2 0.57 66666 0.89 100000
-BernoulliNonStationary 1 0.14 100000
-BernoulliNonStationary 1 0.62 100000
-BernoulliNonStationary 1 0.38 100000
-BernoulliNonStationary 1 0.32 100000
+BernoulliNonStationary 3 0.238 33333 0.879 66666 0.150 100000
+BernoulliNonStationary 1 0.263 100000
+BernoulliNonStationary 1 0.759 100000
+BernoulliNonStationary 1 0.718 100000
+BernoulliNonStationary 1 0.826 100000
+BernoulliNonStationary 1 0.472 100000
+BernoulliNonStationary 1 0.366 100000
+BernoulliNonStationary 1 0.547 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 12 0 2 6 100000
-BernoulliNonStationary 5 0.90 20000 0.49 40000 0.81 60000 0.68 80000 0.80 100000
-BernoulliNonStationary 5 0.27 20000 0.72 40000 0.20 60000 0.80 80000 0.42 100000
+BernoulliNonStationary 5 0.253 20000 0.539 40000 0.752 60000 0.161 80000 0.879 100000
+BernoulliNonStationary 5 0.164 20000 0.873 40000 0.532 60000 0.333 80000 0.148 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 13 0 2 6 100000
-BernoulliNonStationary 3 0.31 20000 0.74 60000 0.88 100000
-BernoulliNonStationary 3 0.69 40000 0.82 80000 0.35 100000
+BernoulliNonStationary 3 0.550 20000 0.309 80000 0.594 100000
+BernoulliNonStationary 3 0.477 40000 0.160 60000 0.489 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 14 0 4 6 100000
-BernoulliNonStationary 5 0.53 20000 0.18 40000 0.38 60000 0.79 80000 0.67 100000
-BernoulliNonStationary 5 0.41 20000 0.14 40000 0.34 60000 0.12 80000 0.43 100000
-BernoulliNonStationary 5 0.68 20000 0.15 40000 0.50 60000 0.67 80000 0.82 100000
-BernoulliNonStationary 5 0.54 20000 0.15 40000 0.90 60000 0.60 80000 0.72 100000
+BernoulliNonStationary 5 0.613 20000 0.361 40000 0.806 60000 0.202 80000 0.716 100000
+BernoulliNonStationary 5 0.702 20000 0.442 40000 0.558 60000 0.151 80000 0.281 100000
+BernoulliNonStationary 5 0.147 20000 0.270 40000 0.586 60000 0.127 80000 0.638 100000
+BernoulliNonStationary 5 0.886 20000 0.160 40000 0.526 60000 0.829 80000 0.661 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 15 0 4 6 100000
-BernoulliNonStationary 2 0.34 40000 0.86 100000
-BernoulliNonStationary 1 0.67 100000
-BernoulliNonStationary 1 0.84 100000
-BernoulliNonStationary 4 0.70 20000 0.84 60000 0.21 80000 0.82 100000
+BernoulliNonStationary 2 0.886 20000 0.459 100000
+BernoulliNonStationary 1 0.756 100000
+BernoulliNonStationary 1 0.292 100000
+BernoulliNonStationary 4 0.828 40000 0.192 60000 0.857 80000 0.286 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 16 0 8 6 100000
-BernoulliNonStationary 5 0.23 20000 0.87 40000 0.13 60000 0.31 80000 0.78 100000
-BernoulliNonStationary 5 0.88 20000 0.39 40000 0.75 60000 0.11 80000 0.24 100000
-BernoulliNonStationary 5 0.17 20000 0.31 40000 0.63 60000 0.23 80000 0.51 100000
-BernoulliNonStationary 5 0.74 20000 0.11 40000 0.71 60000 0.26 80000 0.38 100000
-BernoulliNonStationary 5 0.45 20000 0.12 40000 0.43 60000 0.86 80000 0.39 100000
-BernoulliNonStationary 5 0.35 20000 0.56 40000 0.45 60000 0.29 80000 0.41 100000
-BernoulliNonStationary 5 0.72 20000 0.12 40000 0.23 60000 0.62 80000 0.26 100000
-BernoulliNonStationary 5 0.12 20000 0.60 40000 0.90 60000 0.42 80000 0.60 100000
+BernoulliNonStationary 5 0.761 20000 0.532 40000 0.249 60000 0.469 80000 0.717 100000
+BernoulliNonStationary 5 0.516 20000 0.822 40000 0.398 60000 0.822 80000 0.181 100000
+BernoulliNonStationary 5 0.640 20000 0.382 40000 0.893 60000 0.714 80000 0.844 100000
+BernoulliNonStationary 5 0.868 20000 0.707 40000 0.316 60000 0.624 80000 0.771 100000
+BernoulliNonStationary 5 0.227 20000 0.117 40000 0.194 60000 0.593 80000 0.392 100000
+BernoulliNonStationary 5 0.741 20000 0.405 40000 0.811 60000 0.321 80000 0.782 100000
+BernoulliNonStationary 5 0.475 20000 0.369 40000 0.217 60000 0.740 80000 0.426 100000
+BernoulliNonStationary 5 0.759 20000 0.518 40000 0.366 60000 0.664 80000 0.775 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 17 0 8 6 100000
-BernoulliNonStationary 2 0.34 40000 0.74 100000
-BernoulliNonStationary 2 0.13 80000 0.89 100000
-BernoulliNonStationary 1 0.18 100000
-BernoulliNonStationary 3 0.11 20000 0.69 60000 0.83 100000
-BernoulliNonStationary 1 0.52 100000
-BernoulliNonStationary 1 0.12 100000
-BernoulliNonStationary 1 0.63 100000
-BernoulliNonStationary 1 0.32 100000
+BernoulliNonStationary 1 0.237 100000
+BernoulliNonStationary 1 0.463 100000
+BernoulliNonStationary 1 0.275 100000
+BernoulliNonStationary 1 0.581 100000
+BernoulliNonStationary 1 0.725 100000
+BernoulliNonStationary 1 0.453 100000
+BernoulliNonStationary 3 0.574 20000 0.890 40000 0.412 100000
+BernoulliNonStationary 3 0.579 60000 0.877 80000 0.177 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 18 0 2 6 100000
-BernoulliNonStationary 9 0.62 11111 0.30 22222 0.82 33333 0.25 44444 0.80 55555 0.41 66666 0.64 77777 0.49 88888 0.82 100000
-BernoulliNonStationary 9 0.13 11111 0.61 22222 0.46 33333 0.80 44444 0.67 55555 0.80 66666 0.19 77777 0.89 88888 0.51 100000
+BernoulliNonStationary 9 0.318 11111 0.526 22222 0.745 33333 0.692 44444 0.763 55555 0.612 66666 0.198 77777 0.629 88888 0.115 100000
+BernoulliNonStationary 9 0.628 11111 0.289 22222 0.845 33333 0.538 44444 0.825 55555 0.348 66666 0.447 77777 0.299 88888 0.442 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 19 0 2 6 100000
-BernoulliNonStationary 5 0.31 11111 0.80 22222 0.51 33333 0.80 77777 0.38 100000
-BernoulliNonStationary 5 0.79 44444 0.90 55555 0.37 66666 0.89 88888 0.68 100000
+BernoulliNonStationary 7 0.791 11111 0.198 44444 0.767 55555 0.462 66666 0.751 77777 0.345 88888 0.895 100000
+BernoulliNonStationary 3 0.355 22222 0.146 33333 0.674 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 20 0 4 6 100000
-BernoulliNonStationary 9 0.50 11111 0.87 22222 0.60 33333 0.45 44444 0.64 55555 0.22 66666 0.41 77777 0.31 88888 0.82 100000
-BernoulliNonStationary 9 0.13 11111 0.29 22222 0.62 33333 0.24 44444 0.64 55555 0.83 66666 0.49 77777 0.84 88888 0.28 100000
-BernoulliNonStationary 9 0.72 11111 0.53 22222 0.75 33333 0.30 44444 0.59 55555 0.24 66666 0.35 77777 0.66 88888 0.48 100000
-BernoulliNonStationary 9 0.83 11111 0.32 22222 0.13 33333 0.63 44444 0.12 55555 0.49 66666 0.14 77777 0.66 88888 0.23 100000
+BernoulliNonStationary 9 0.864 11111 0.172 22222 0.412 33333 0.567 44444 0.877 55555 0.555 66666 0.444 77777 0.540 88888 0.777 100000
+BernoulliNonStationary 9 0.411 11111 0.705 22222 0.270 33333 0.476 44444 0.772 55555 0.590 66666 0.212 77777 0.812 88888 0.459 100000
+BernoulliNonStationary 9 0.360 11111 0.620 22222 0.886 33333 0.325 44444 0.270 55555 0.138 66666 0.701 77777 0.581 88888 0.265 100000
+BernoulliNonStationary 9 0.499 11111 0.318 22222 0.123 33333 0.867 44444 0.341 55555 0.732 66666 0.335 77777 0.171 88888 0.532 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 21 0 4 6 100000
-BernoulliNonStationary 4 0.74 22222 0.86 66666 0.26 77777 0.77 100000
-BernoulliNonStationary 2 0.27 33333 0.88 100000
-BernoulliNonStationary 2 0.58 44444 0.89 100000
-BernoulliNonStationary 4 0.35 11111 0.81 55555 0.27 88888 0.89 100000
+BernoulliNonStationary 3 0.778 33333 0.185 88888 0.792 100000
+BernoulliNonStationary 3 0.411 11111 0.862 22222 0.641 100000
+BernoulliNonStationary 3 0.438 44444 0.799 55555 0.104 100000
+BernoulliNonStationary 3 0.212 66666 0.888 77777 0.262 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 22 0 8 6 100000
-BernoulliNonStationary 9 0.45 11111 0.61 22222 0.46 33333 0.24 44444 0.69 55555 0.42 66666 0.18 77777 0.37 88888 0.73 100000
-BernoulliNonStationary 9 0.22 11111 0.85 22222 0.29 33333 0.39 44444 0.23 55555 0.66 66666 0.20 77777 0.59 88888 0.48 100000
-BernoulliNonStationary 9 0.17 11111 0.45 22222 0.74 33333 0.27 44444 0.42 55555 0.84 66666 0.18 77777 0.86 88888 0.54 100000
-BernoulliNonStationary 9 0.66 11111 0.27 22222 0.54 33333 0.24 44444 0.11 55555 0.73 66666 0.86 77777 0.21 88888 0.40 100000
-BernoulliNonStationary 9 0.34 11111 0.70 22222 0.27 33333 0.63 44444 0.77 55555 0.16 66666 0.54 77777 0.16 88888 0.63 100000
-BernoulliNonStationary 9 0.87 11111 0.33 22222 0.43 33333 0.15 44444 0.67 55555 0.28 66666 0.50 77777 0.20 88888 0.35 100000
-BernoulliNonStationary 9 0.21 11111 0.75 22222 0.39 33333 0.12 44444 0.72 55555 0.33 66666 0.11 77777 0.70 88888 0.88 100000
-BernoulliNonStationary 9 0.69 11111 0.16 22222 0.58 33333 0.30 44444 0.88 55555 0.30 66666 0.63 77777 0.41 88888 0.77 100000
+BernoulliNonStationary 9 0.355 11111 0.303 22222 0.645 33333 0.741 44444 0.419 55555 0.483 66666 0.725 77777 0.889 88888 0.674 100000
+BernoulliNonStationary 9 0.596 11111 0.113 22222 0.857 33333 0.615 44444 0.888 55555 0.511 66666 0.396 77777 0.137 88888 0.567 100000
+BernoulliNonStationary 9 0.478 11111 0.292 22222 0.395 33333 0.718 44444 0.365 55555 0.581 66666 0.140 77777 0.457 88888 0.179 100000
+BernoulliNonStationary 9 0.313 11111 0.613 22222 0.455 33333 0.682 44444 0.487 55555 0.896 66666 0.539 77777 0.458 88888 0.216 100000
+BernoulliNonStationary 9 0.381 11111 0.803 22222 0.172 33333 0.679 44444 0.837 55555 0.260 66666 0.760 77777 0.496 88888 0.877 100000
+BernoulliNonStationary 9 0.168 11111 0.613 22222 0.675 33333 0.303 44444 0.803 55555 0.719 66666 0.831 77777 0.418 88888 0.267 100000
+BernoulliNonStationary 9 0.889 11111 0.558 22222 0.459 33333 0.545 44444 0.809 55555 0.302 66666 0.626 77777 0.687 88888 0.518 100000
+BernoulliNonStationary 9 0.466 11111 0.645 22222 0.167 33333 0.874 44444 0.476 55555 0.294 66666 0.601 77777 0.793 88888 0.387 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 23 0 8 6 100000
-BernoulliNonStationary 1 0.56 100000
-BernoulliNonStationary 4 0.22 44444 0.90 66666 0.60 88888 0.90 100000
-BernoulliNonStationary 2 0.43 33333 0.90 100000
-BernoulliNonStationary 2 0.24 11111 0.90 100000
-BernoulliNonStationary 2 0.60 55555 0.90 100000
-BernoulliNonStationary 1 0.21 100000
-BernoulliNonStationary 2 0.80 77777 0.37 100000
-BernoulliNonStationary 2 0.64 22222 0.90 100000
+BernoulliNonStationary 1 0.235 100000
+BernoulliNonStationary 1 0.321 100000
+BernoulliNonStationary 3 0.414 66666 0.871 77777 0.244 100000
+BernoulliNonStationary 2 0.693 55555 0.531 100000
+BernoulliNonStationary 1 0.591 100000
+BernoulliNonStationary 2 0.758 44444 0.249 100000
+BernoulliNonStationary 4 0.552 22222 0.852 33333 0.171 88888 0.785 100000
+BernoulliNonStationary 2 0.855 11111 0.450 100000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 24 0 2 6 1000000
-BernoulliNonStationary 2 0.62 500000 0.36 1000000
-BernoulliNonStationary 2 0.25 500000 0.88 1000000
+BernoulliNonStationary 2 0.770 500000 0.484 1000000
+BernoulliNonStationary 2 0.872 500000 0.303 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 25 0 2 6 1000000
-BernoulliNonStationary 1 0.87 1000000
-BernoulliNonStationary 2 0.46 500000 0.89 1000000
+BernoulliNonStationary 2 0.210 500000 0.883 1000000
+BernoulliNonStationary 1 0.641 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 26 0 4 6 1000000
-BernoulliNonStationary 2 0.40 500000 0.56 1000000
-BernoulliNonStationary 2 0.63 500000 0.21 1000000
-BernoulliNonStationary 2 0.15 500000 0.28 1000000
-BernoulliNonStationary 2 0.46 500000 0.68 1000000
+BernoulliNonStationary 2 0.385 500000 0.847 1000000
+BernoulliNonStationary 2 0.127 500000 0.370 1000000
+BernoulliNonStationary 2 0.860 500000 0.335 1000000
+BernoulliNonStationary 2 0.732 500000 0.490 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 27 0 4 6 1000000
-BernoulliNonStationary 1 0.88 1000000
-BernoulliNonStationary 1 0.10 1000000
-BernoulliNonStationary 2 0.31 500000 0.89 1000000
-BernoulliNonStationary 1 0.62 1000000
+BernoulliNonStationary 1 0.705 1000000
+BernoulliNonStationary 2 0.899 500000 0.501 1000000
+BernoulliNonStationary 1 0.317 1000000
+BernoulliNonStationary 1 0.119 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 28 0 8 6 1000000
-BernoulliNonStationary 2 0.59 500000 0.36 1000000
-BernoulliNonStationary 2 0.58 500000 0.16 1000000
-BernoulliNonStationary 2 0.49 500000 0.82 1000000
-BernoulliNonStationary 2 0.84 500000 0.59 1000000
-BernoulliNonStationary 2 0.41 500000 0.28 1000000
-BernoulliNonStationary 2 0.22 500000 0.70 1000000
-BernoulliNonStationary 2 0.65 500000 0.46 1000000
-BernoulliNonStationary 2 0.16 500000 0.59 1000000
+BernoulliNonStationary 2 0.256 500000 0.118 1000000
+BernoulliNonStationary 2 0.335 500000 0.529 1000000
+BernoulliNonStationary 2 0.367 500000 0.786 1000000
+BernoulliNonStationary 2 0.437 500000 0.223 1000000
+BernoulliNonStationary 2 0.627 500000 0.689 1000000
+BernoulliNonStationary 2 0.598 500000 0.717 1000000
+BernoulliNonStationary 2 0.897 500000 0.102 1000000
+BernoulliNonStationary 2 0.145 500000 0.296 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 29 0 8 6 1000000
-BernoulliNonStationary 1 0.42 1000000
-BernoulliNonStationary 1 0.72 1000000
-BernoulliNonStationary 1 0.67 1000000
-BernoulliNonStationary 2 0.16 500000 0.88 1000000
-BernoulliNonStationary 1 0.85 1000000
-BernoulliNonStationary 1 0.73 1000000
-BernoulliNonStationary 1 0.18 1000000
-BernoulliNonStationary 1 0.50 1000000
+BernoulliNonStationary 1 0.605 1000000
+BernoulliNonStationary 1 0.107 1000000
+BernoulliNonStationary 1 0.273 1000000
+BernoulliNonStationary 1 0.370 1000000
+BernoulliNonStationary 1 0.393 1000000
+BernoulliNonStationary 2 0.900 500000 0.551 1000000
+BernoulliNonStationary 1 0.698 1000000
+BernoulliNonStationary 1 0.166 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 30 0 2 6 1000000
-BernoulliNonStationary 3 0.60 333333 0.23 666666 0.74 1000000
-BernoulliNonStationary 3 0.33 333333 0.66 666666 0.15 1000000
+BernoulliNonStationary 3 0.813 333333 0.313 666666 0.770 1000000
+BernoulliNonStationary 3 0.370 333333 0.535 666666 0.205 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 31 0 2 6 1000000
-BernoulliNonStationary 2 0.35 666666 0.82 1000000
-BernoulliNonStationary 2 0.13 333333 0.81 1000000
+BernoulliNonStationary 1 0.543 1000000
+BernoulliNonStationary 3 0.801 333333 0.143 666666 0.748 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 32 0 4 6 1000000
-BernoulliNonStationary 3 0.49 333333 0.12 666666 0.26 1000000
-BernoulliNonStationary 3 0.76 333333 0.50 666666 0.27 1000000
-BernoulliNonStationary 3 0.59 333333 0.75 666666 0.45 1000000
-BernoulliNonStationary 3 0.90 333333 0.24 666666 0.40 1000000
+BernoulliNonStationary 3 0.667 333333 0.281 666666 0.395 1000000
+BernoulliNonStationary 3 0.372 333333 0.559 666666 0.876 1000000
+BernoulliNonStationary 3 0.138 333333 0.463 666666 0.122 1000000
+BernoulliNonStationary 3 0.335 333333 0.806 666666 0.371 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 33 0 4 6 1000000
-BernoulliNonStationary 2 0.31 666666 0.74 1000000
-BernoulliNonStationary 2 0.19 333333 0.74 1000000
-BernoulliNonStationary 1 0.46 1000000
-BernoulliNonStationary 1 0.73 1000000
+BernoulliNonStationary 1 0.446 1000000
+BernoulliNonStationary 1 0.192 1000000
+BernoulliNonStationary 3 0.454 333333 0.885 666666 0.649 1000000
+BernoulliNonStationary 1 0.762 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 34 0 8 6 1000000
-BernoulliNonStationary 3 0.34 333333 0.82 666666 0.40 1000000
-BernoulliNonStationary 3 0.54 333333 0.12 666666 0.86 1000000
-BernoulliNonStationary 3 0.34 333333 0.65 666666 0.50 1000000
-BernoulliNonStationary 3 0.16 333333 0.39 666666 0.67 1000000
-BernoulliNonStationary 3 0.32 333333 0.70 666666 0.12 1000000
-BernoulliNonStationary 3 0.20 333333 0.47 666666 0.31 1000000
-BernoulliNonStationary 3 0.20 333333 0.48 666666 0.27 1000000
-BernoulliNonStationary 3 0.90 333333 0.13 666666 0.49 1000000
+BernoulliNonStationary 3 0.655 333333 0.460 666666 0.879 1000000
+BernoulliNonStationary 3 0.571 333333 0.701 666666 0.509 1000000
+BernoulliNonStationary 3 0.606 333333 0.250 666666 0.806 1000000
+BernoulliNonStationary 3 0.274 333333 0.605 666666 0.665 1000000
+BernoulliNonStationary 3 0.559 333333 0.208 666666 0.728 1000000
+BernoulliNonStationary 3 0.819 333333 0.361 666666 0.589 1000000
+BernoulliNonStationary 3 0.287 333333 0.345 666666 0.746 1000000
+BernoulliNonStationary 3 0.105 333333 0.286 666666 0.575 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 35 0 8 6 1000000
-BernoulliNonStationary 1 0.12 1000000
-BernoulliNonStationary 1 0.42 1000000
-BernoulliNonStationary 2 0.36 333333 0.86 1000000
-BernoulliNonStationary 1 0.31 1000000
-BernoulliNonStationary 2 0.45 666666 0.88 1000000
-BernoulliNonStationary 1 0.60 1000000
-BernoulliNonStationary 1 0.83 1000000
-BernoulliNonStationary 1 0.19 1000000
+BernoulliNonStationary 1 0.204 1000000
+BernoulliNonStationary 1 0.838 1000000
+BernoulliNonStationary 1 0.222 1000000
+BernoulliNonStationary 3 0.205 333333 0.896 666666 0.640 1000000
+BernoulliNonStationary 1 0.771 1000000
+BernoulliNonStationary 1 0.109 1000000
+BernoulliNonStationary 1 0.726 1000000
+BernoulliNonStationary 1 0.584 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 36 0 2 6 1000000
-BernoulliNonStationary 5 0.88 200000 0.10 400000 0.82 600000 0.33 800000 0.90 1000000
-BernoulliNonStationary 5 0.36 200000 0.86 400000 0.17 600000 0.75 800000 0.40 1000000
+BernoulliNonStationary 5 0.347 200000 0.499 400000 0.862 600000 0.198 800000 0.787 1000000
+BernoulliNonStationary 5 0.230 200000 0.854 400000 0.315 600000 0.838 800000 0.328 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 37 0 2 6 1000000
-BernoulliNonStationary 4 0.52 400000 0.74 600000 0.49 800000 0.89 1000000
-BernoulliNonStationary 2 0.29 200000 0.72 1000000
+BernoulliNonStationary 5 0.116 200000 0.847 400000 0.333 600000 0.511 800000 0.193 1000000
+BernoulliNonStationary 1 0.455 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 38 0 4 6 1000000
-BernoulliNonStationary 5 0.51 200000 0.21 400000 0.83 600000 0.43 800000 0.64 1000000
-BernoulliNonStationary 5 0.82 200000 0.14 400000 0.60 600000 0.32 800000 0.78 1000000
-BernoulliNonStationary 5 0.50 200000 0.15 400000 0.25 600000 0.78 800000 0.36 1000000
-BernoulliNonStationary 5 0.43 200000 0.61 400000 0.22 600000 0.67 800000 0.29 1000000
+BernoulliNonStationary 5 0.248 200000 0.599 400000 0.281 600000 0.472 800000 0.145 1000000
+BernoulliNonStationary 5 0.858 200000 0.231 400000 0.900 600000 0.519 800000 0.757 1000000
+BernoulliNonStationary 5 0.648 200000 0.513 400000 0.347 600000 0.107 800000 0.275 1000000
+BernoulliNonStationary 5 0.779 200000 0.856 400000 0.586 600000 0.723 800000 0.611 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 39 0 4 6 1000000
-BernoulliNonStationary 2 0.65 200000 0.85 1000000
-BernoulliNonStationary 3 0.13 400000 0.85 600000 0.10 1000000
-BernoulliNonStationary 1 0.79 1000000
-BernoulliNonStationary 2 0.40 800000 0.63 1000000
+BernoulliNonStationary 3 0.427 600000 0.882 800000 0.130 1000000
+BernoulliNonStationary 1 0.213 1000000
+BernoulliNonStationary 1 0.780 1000000
+BernoulliNonStationary 3 0.445 200000 0.870 400000 0.247 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 40 0 8 6 1000000
-BernoulliNonStationary 5 0.84 200000 0.55 400000 0.30 600000 0.15 800000 0.62 1000000
-BernoulliNonStationary 5 0.64 200000 0.30 400000 0.11 600000 0.49 800000 0.85 1000000
-BernoulliNonStationary 5 0.41 200000 0.60 400000 0.87 600000 0.15 800000 0.49 1000000
-BernoulliNonStationary 5 0.52 200000 0.35 400000 0.12 600000 0.76 800000 0.44 1000000
-BernoulliNonStationary 5 0.26 200000 0.39 400000 0.54 600000 0.29 800000 0.61 1000000
-BernoulliNonStationary 5 0.29 200000 0.90 400000 0.26 600000 0.16 800000 0.58 1000000
-BernoulliNonStationary 5 0.61 200000 0.41 400000 0.22 600000 0.37 800000 0.53 1000000
-BernoulliNonStationary 5 0.60 200000 0.47 400000 0.64 600000 0.35 800000 0.14 1000000
+BernoulliNonStationary 5 0.894 200000 0.373 400000 0.461 600000 0.376 800000 0.838 1000000
+BernoulliNonStationary 5 0.514 200000 0.183 400000 0.687 600000 0.174 800000 0.748 1000000
+BernoulliNonStationary 5 0.408 200000 0.853 400000 0.571 600000 0.107 800000 0.307 1000000
+BernoulliNonStationary 5 0.246 200000 0.412 400000 0.575 600000 0.210 800000 0.608 1000000
+BernoulliNonStationary 5 0.136 200000 0.364 400000 0.506 600000 0.345 800000 0.172 1000000
+BernoulliNonStationary 5 0.652 200000 0.409 400000 0.312 600000 0.879 800000 0.752 1000000
+BernoulliNonStationary 5 0.784 200000 0.220 400000 0.612 600000 0.191 800000 0.627 1000000
+BernoulliNonStationary 5 0.305 200000 0.647 400000 0.155 600000 0.734 800000 0.496 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 41 0 8 6 1000000
-BernoulliNonStationary 1 0.63 1000000
-BernoulliNonStationary 1 0.16 1000000
-BernoulliNonStationary 1 0.53 1000000
-BernoulliNonStationary 3 0.29 600000 0.89 800000 0.27 1000000
-BernoulliNonStationary 2 0.41 400000 0.83 1000000
-BernoulliNonStationary 1 0.73 1000000
-BernoulliNonStationary 2 0.18 200000 0.81 1000000
-BernoulliNonStationary 1 0.34 1000000
+BernoulliNonStationary 1 0.134 1000000
+BernoulliNonStationary 1 0.455 1000000
+BernoulliNonStationary 1 0.726 1000000
+BernoulliNonStationary 1 0.523 1000000
+BernoulliNonStationary 1 0.398 1000000
+BernoulliNonStationary 1 0.674 1000000
+BernoulliNonStationary 3 0.294 400000 0.859 600000 0.658 1000000
+BernoulliNonStationary 3 0.825 200000 0.575 800000 0.777 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 42 0 2 6 1000000
-BernoulliNonStationary 9 0.12 111111 0.79 222222 0.67 333333 0.47 444444 0.27 555555 0.71 666666 0.48 777777 0.61 888888 0.50 1000000
-BernoulliNonStationary 9 0.25 111111 0.15 222222 0.82 333333 0.31 444444 0.12 555555 0.41 666666 0.79 777777 0.33 888888 0.64 1000000
+BernoulliNonStationary 9 0.436 111111 0.507 222222 0.267 333333 0.596 444444 0.494 555555 0.679 666666 0.525 777777 0.695 888888 0.198 1000000
+BernoulliNonStationary 9 0.534 111111 0.246 222222 0.786 333333 0.414 444444 0.693 555555 0.503 666666 0.644 777777 0.270 888888 0.344 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 43 0 2 6 1000000
-BernoulliNonStationary 7 0.15 111111 0.69 333333 0.88 444444 0.51 555555 0.87 666666 0.27 777777 0.88 1000000
-BernoulliNonStationary 3 0.57 222222 0.85 888888 0.18 1000000
+BernoulliNonStationary 7 0.627 111111 0.207 222222 0.676 555555 0.343 666666 0.533 777777 0.233 888888 0.760 1000000
+BernoulliNonStationary 3 0.390 333333 0.897 444444 0.443 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 44 0 4 6 1000000
-BernoulliNonStationary 9 0.49 111111 0.69 222222 0.12 333333 0.30 444444 0.18 555555 0.31 666666 0.20 777777 0.62 888888 0.17 1000000
-BernoulliNonStationary 9 0.26 111111 0.50 222222 0.31 333333 0.85 444444 0.38 555555 0.55 666666 0.72 777777 0.32 888888 0.53 1000000
-BernoulliNonStationary 9 0.59 111111 0.32 222222 0.46 333333 0.35 444444 0.10 555555 0.79 666666 0.27 777777 0.63 888888 0.47 1000000
-BernoulliNonStationary 9 0.42 111111 0.20 222222 0.45 333333 0.64 444444 0.82 555555 0.20 666666 0.40 777777 0.88 888888 0.19 1000000
+BernoulliNonStationary 9 0.323 111111 0.160 222222 0.600 333333 0.765 444444 0.534 555555 0.856 666666 0.599 777777 0.157 888888 0.354 1000000
+BernoulliNonStationary 9 0.895 111111 0.598 222222 0.802 333333 0.200 444444 0.418 555555 0.508 666666 0.160 777777 0.736 888888 0.271 1000000
+BernoulliNonStationary 9 0.581 111111 0.694 222222 0.405 333333 0.329 444444 0.748 555555 0.442 666666 0.500 777777 0.257 888888 0.887 1000000
+BernoulliNonStationary 9 0.347 111111 0.507 222222 0.694 333333 0.447 444444 0.834 555555 0.651 666666 0.743 777777 0.621 888888 0.367 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 45 0 4 6 1000000
-BernoulliNonStationary 2 0.49 111111 0.86 1000000
-BernoulliNonStationary 4 0.37 222222 0.88 444444 0.70 666666 0.81 1000000
-BernoulliNonStationary 4 0.79 333333 0.90 555555 0.79 777777 0.59 1000000
-BernoulliNonStationary 2 0.32 888888 0.88 1000000
+BernoulliNonStationary 1 0.112 1000000
+BernoulliNonStationary 4 0.709 666666 0.171 777777 0.882 888888 0.373 1000000
+BernoulliNonStationary 2 0.878 111111 0.606 1000000
+BernoulliNonStationary 5 0.625 222222 0.864 333333 0.490 444444 0.821 555555 0.343 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 46 0 8 6 1000000
-BernoulliNonStationary 9 0.60 111111 0.26 222222 0.48 333333 0.25 444444 0.42 555555 0.26 666666 0.37 777777 0.27 888888 0.61 1000000
-BernoulliNonStationary 9 0.82 111111 0.34 222222 0.59 333333 0.26 444444 0.77 555555 0.10 666666 0.28 777777 0.79 888888 0.22 1000000
-BernoulliNonStationary 9 0.22 111111 0.33 222222 0.78 333333 0.38 444444 0.62 555555 0.41 666666 0.28 777777 0.14 888888 0.36 1000000
-BernoulliNonStationary 9 0.68 111111 0.84 222222 0.50 333333 0.14 444444 0.62 555555 0.31 666666 0.62 777777 0.33 888888 0.21 1000000
-BernoulliNonStationary 9 0.70 111111 0.49 222222 0.29 333333 0.51 444444 0.62 555555 0.85 666666 0.65 777777 0.76 888888 0.39 1000000
-BernoulliNonStationary 9 0.64 111111 0.31 222222 0.41 333333 0.13 444444 0.62 555555 0.29 666666 0.80 777777 0.48 888888 0.88 1000000
-BernoulliNonStationary 9 0.40 111111 0.66 222222 0.40 333333 0.90 444444 0.53 555555 0.41 666666 0.66 777777 0.21 888888 0.45 1000000
-BernoulliNonStationary 9 0.20 111111 0.68 222222 0.13 333333 0.62 444444 0.31 555555 0.20 666666 0.55 777777 0.36 888888 0.61 1000000
+BernoulliNonStationary 9 0.257 111111 0.720 222222 0.635 333333 0.402 444444 0.718 555555 0.218 666666 0.128 777777 0.714 888888 0.344 1000000
+BernoulliNonStationary 9 0.318 111111 0.133 222222 0.593 333333 0.490 444444 0.546 555555 0.427 666666 0.227 777777 0.332 888888 0.481 1000000
+BernoulliNonStationary 9 0.720 111111 0.624 222222 0.523 333333 0.599 444444 0.802 555555 0.596 666666 0.303 777777 0.422 888888 0.188 1000000
+BernoulliNonStationary 9 0.130 111111 0.643 222222 0.323 333333 0.744 444444 0.277 555555 0.571 666666 0.188 777777 0.525 888888 0.772 1000000
+BernoulliNonStationary 9 0.117 111111 0.590 222222 0.827 333333 0.259 444444 0.383 555555 0.539 666666 0.606 777777 0.825 888888 0.337 1000000
+BernoulliNonStationary 9 0.801 111111 0.558 222222 0.355 333333 0.802 444444 0.259 555555 0.867 666666 0.247 777777 0.581 888888 0.639 1000000
+BernoulliNonStationary 9 0.440 111111 0.882 222222 0.612 333333 0.143 444444 0.335 555555 0.234 666666 0.860 777777 0.342 888888 0.481 1000000
+BernoulliNonStationary 9 0.642 111111 0.477 222222 0.583 333333 0.133 444444 0.482 555555 0.393 666666 0.489 777777 0.109 888888 0.299 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1
 47 0 8 6 1000000
-BernoulliNonStationary 2 0.24 222222 0.85 1000000
-BernoulliNonStationary 3 0.11 333333 0.86 666666 0.22 1000000
-BernoulliNonStationary 4 0.45 555555 0.89 777777 0.61 888888 0.90 1000000
-BernoulliNonStationary 2 0.16 444444 0.88 1000000
-BernoulliNonStationary 1 0.48 1000000
-BernoulliNonStationary 2 0.28 111111 0.77 1000000
-BernoulliNonStationary 1 0.77 1000000
-BernoulliNonStationary 1 0.12 1000000
+BernoulliNonStationary 1 0.325 1000000
+BernoulliNonStationary 1 0.674 1000000
+BernoulliNonStationary 7 0.369 111111 0.877 222222 0.714 333333 0.885 444444 0.632 555555 0.875 666666 0.341 1000000
+BernoulliNonStationary 1 0.110 1000000
+BernoulliNonStationary 1 0.817 1000000
+BernoulliNonStationary 1 0.687 1000000
+BernoulliNonStationary 1 0.655 1000000
+BernoulliNonStationary 3 0.320 777777 0.880 888888 0.219 1000000
 ucb1 ucb1
 d_ucb round 2 d_ucb _d_ucb
 sw_ucb round 2 sw_ucb _sw_ucb
 adapt_eve _adapt_eve
-cusum_ucb _cd_algorithm 0
-cusum_ucb_history _cd_algorithm 1
+cusum_ucb _cd_algorithm 0 1
+cusum_ucb_history _cd_algorithm 1 1

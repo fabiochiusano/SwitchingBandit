@@ -31,8 +31,8 @@ def gen_exp_1(output_file, algs, num_simulations, seed):
     num_breakpoints = [1, 2, 4, 8]
     num_arms = [2, 4, 8]
     change_type = [0, 1] # 0 means global switching, 1 means one arm switches
-    min_mean_change = 0.1 # min change on the same arm from t to t+1
-    min_delta_optimal = 0.1 # optimal arm mean is at least (second optimal arm mean + min_delta_optimal)
+    min_mean_change = 0.05 # min change on the same arm from t to t+1
+    min_delta_optimal = 0.05 # optimal arm mean is at least (second optimal arm mean + min_delta_optimal)
 
     num_experiments = len(time_horizons) * len(num_breakpoints) * len(num_arms) * len(change_type)
     write_line(output_file, str(num_experiments) + " " + str(num_simulations) + " " + str(seed))
@@ -47,106 +47,95 @@ def gen_exp_1(output_file, algs, num_simulations, seed):
 
         if ct == 0: # Global switching
             arms_means = [[0 for p in range(num_phases)] for a in range(num_a)] # arms_means[arm][phase]
-            arms_ends = [[0 for p in range(num_phases)] for a in range(num_a)] # arms_ends[arm][phase]
+            arms_ends = [breakpoints_ends for a in range(num_a)] # arms_ends[arm][phase]
 
             # Add random first phase to each arm and save best arm
-            max_mean = -1
-            best_arm = -1
-            new_min_delta_optimal = -1
-
-            while new_min_delta_optimal < min_delta_optimal:
-                max_mean = -1
-                best_arm = -1
-                new_min_delta_optimal = 1
-
-                new_means = []
-                for a in range(num_a):
-                    new_mean = random.uniform(p_min, p_max)
-                    new_means.append(new_mean)
-                    arms_means[a][0] = new_mean
-                    arms_ends[a][0] = breakpoints_ends[0]
-                    if arms_means[a][0] > max_mean:
-                        max_mean = arms_means[a][0]
-                        best_arm = a
-                second_optimal_arm_mean = [x for x in sorted(new_means, reverse=True)][1]
-                new_min_delta_optimal = min(new_min_delta_optimal, max_mean - second_optimal_arm_mean)
+            is_min_delta_ok = False
+            while not is_min_delta_ok:
+                new_means = [random.uniform(p_min, p_max) for a in range(num_a)]
+                max_mean = max(new_means)
+                second_max_mean = [x for x in sorted(new_means, reverse=True)][1]
+                if max_mean - second_max_mean > min_delta_optimal:
+                    is_min_delta_ok = True
+            for i,m in enumerate(new_means):
+                arms_means[i][0] = m
 
             # Add num_phases-1 phases, making sure that each time the optimal arm changes
             for p in range(1, num_phases):
-                new_best_arm = best_arm
-                new_min_mean_change = -1
-                new_min_delta_optimal = -1
+                has_best_arm_changed = False
+                is_mean_min_change_ok = False
+                is_min_delta_ok = False
 
                 # Add a random phase until a good configuration shows up
-                while new_best_arm == best_arm or new_min_mean_change < min_mean_change or new_min_delta_optimal < min_delta_optimal:
-                    new_max_mean = arms_means[best_arm][p] # reinitialize
-                    new_min_mean_change = 1 # reinitialize
-                    new_min_delta_optimal = 1 # reinitialize
+                while not has_best_arm_changed or not is_mean_min_change_ok or not is_min_delta_ok:
+                    has_best_arm_changed = False
+                    is_mean_min_change_ok = False
+                    is_min_delta_ok = False
 
-                    new_means = []
-                    for a in range(num_a):
-                        new_mean = random.uniform(p_min, p_max)
-                        new_means.append(new_mean)
-                        arms_means[a][p] = new_mean
-                        arms_ends[a][p] = breakpoints_ends[p]
-                        if arms_means[a][p] > new_max_mean:
-                            new_max_mean = arms_means[a][p]
-                            new_best_arm = a
-                        new_min_mean_change = min(new_min_mean_change, abs(arms_means[a][p] - arms_means[a][p-1]))
-                    second_optimal_arm_mean = [x for x in sorted(new_means, reverse=True)][1]
-                    new_min_delta_optimal = min(new_min_delta_optimal, new_max_mean - second_optimal_arm_mean)
-
-                best_arm = new_best_arm
+                    new_means = [random.uniform(p_min, p_max) for a in range(num_a)]
+                    max_mean = max(new_means)
+                    best_arm = new_means.index(max_mean)
+                    second_max_mean = [x for x in sorted(new_means, reverse=True)][1]
+                    if max_mean - second_max_mean >= min_delta_optimal:
+                        is_min_delta_ok = True
+                    changes = [abs(new_means[i] - arms_means[i][p-1]) for i in range(num_a)]
+                    if min(changes) >= min_mean_change:
+                        is_mean_min_change_ok = True
+                    prev_means = [arms_means[i][p-1] for i in range(num_a)]
+                    prev_best_arm = prev_means.index(max(prev_means))
+                    if best_arm != prev_best_arm:
+                        has_best_arm_changed = True
+                for i,m in enumerate(new_means):
+                    arms_means[i][p] = m
         else: # one arm switches
-            arms_means = [[0] for a in range(num_a)]
+            arms_means = [[] for a in range(num_a)]
             arms_ends = [[] for a in range(num_a)]
 
-            # Add random first mean to each arm and save best arm
-            max_mean = -1
-            best_arm = -1
-            new_min_delta_optimal = -1
-
-            while new_min_delta_optimal < min_delta_optimal:
+            is_min_delta_ok = False
+            while not is_min_delta_ok:
                 max_mean = -1
                 best_arm = -1
                 new_min_delta_optimal = 1
 
-                new_means = []
-                for a in range(num_a):
-                    new_mean = random.uniform(p_min, p_max)
-                    new_means.append(new_mean)
-                    arms_means[a][0] = new_mean
-                    if arms_means[a][0] > max_mean:
-                        max_mean = arms_means[a][0]
-                        best_arm = a
-                second_optimal_arm_mean = [x for x in sorted(new_means, reverse=True)][1]
-                new_min_delta_optimal = min(new_min_delta_optimal, max_mean - second_optimal_arm_mean)
+                new_means = [random.uniform(p_min, p_max) for a in range(num_a)]
+                max_mean = max(new_means)
+                best_arm = new_means.index(max_mean)
+                second_best_arm_mean = [x for x in sorted(new_means, reverse=True)][1]
+                if max_mean - second_best_arm_mean >= min_delta_optimal:
+                    is_min_delta_ok = True
+            for i,m in enumerate(new_means):
+                arms_means[i].append(m)
 
             # Add num_phases phases-1, making sure that each time the optimal arm changes
             for p in range(num_phases-1):
-                new_best_arm = best_arm
-                new_min_mean_change = -1
-                new_min_delta_optimal = -1
+                has_best_arm_changed = False
+                is_mean_min_change_ok = False
+                is_min_delta_ok = False
 
                 # Add a random phase until a good configuration shows up
-                while new_best_arm == best_arm or new_min_mean_change < min_mean_change or new_min_delta_optimal < min_delta_optimal:
-                    new_max_mean = arms_means[best_arm][-1] # reinitialize
-                    new_min_mean_change = 1 # reinitialize
-                    new_min_delta_optimal = 1 # reinitialize
+                while not has_best_arm_changed or not is_mean_min_change_ok or not is_min_delta_ok:
+                    has_best_arm_changed = False
+                    is_mean_min_change_ok = False
+                    is_min_delta_ok = False
 
                     a = random.randint(0, num_a-1) # inclusive
                     new_mean = random.uniform(p_min, p_max)
-                    if new_mean > new_max_mean:
-                        new_max_mean = new_mean
-                        new_best_arm = a
-                    new_min_mean_change = min(new_min_mean_change, abs(new_mean - arms_means[a][-1]))
-                    #second_optimal_arm_mean = [x for x in sorted(new_means, reverse=True)][1]
-                    #new_min_delta_optimal = min(new_min_delta_optimal, new_max_mean - second_optimal_arm_mean)
-
+                    last_means = [arms_means[arm][-1] for arm in range(num_a)]
+                    prev_max_mean = max(last_means)
+                    prev_best_arm = last_means.index(prev_max_mean)
+                    new_means = [arms_means[arm][-1] if arm != a else new_mean for arm in range(num_a)]
+                    new_max_mean = max(new_means)
+                    new_best_arm = new_means.index(new_max_mean)
+                    new_second_max_mean = [x for x in sorted(new_means, reverse=True)][1]
+                    if new_best_arm != prev_best_arm:
+                        has_best_arm_changed = True
+                    if abs(new_mean - arms_means[a][-1]) >= min_mean_change:
+                        is_mean_min_change_ok = True
+                    if new_max_mean - new_second_max_mean >= min_delta_optimal:
+                        is_min_delta_ok = True
                 arms_means[a].append(new_mean)
                 arms_ends[a].append(breakpoints_ends[p])
 
-                best_arm = new_best_arm
 
             # Add an end to all the arms
             for a in range(num_a):
@@ -158,7 +147,7 @@ def gen_exp_1(output_file, algs, num_simulations, seed):
         for i in range(num_a):
             s = "BernoulliNonStationary " + str(len(arms_ends[i]))
             for p in range(len(arms_means[i])):
-                s += " " + "{0:.2f}".format(arms_means[i][p]) + " " + str(arms_ends[i][p])
+                s += " " + "{0:.3f}".format(arms_means[i][p]) + " " + str(arms_ends[i][p])
             write_line(output_file, s)
 
         for alg in algs:
@@ -176,10 +165,11 @@ def gen_exp_2(output_file, algs, num_simulations, seed):
     p_min, p_max = 0.1, 0.9
 
     time_horizons = [10**5, 10**6]
-    num_breakpoints = [1, 2, 4, 8]
-    num_arms = [3, 5, 8]
-    change_type = [0, 1] # 0 means from second best they change, 1 means from third best they change
-    min_delta_optimal = 0.1 # optimal arm mean is at least (second optimal arm mean + min_delta_optimal)
+    num_breakpoints = [1, 8]
+    num_arms = [3, 8]
+    change_type = [0] # 0 means from second best they change, 1 means from third best they change
+    min_delta_optimal = 0.1 # min difference between 1st and 2nd, and between 2nd and third if ct=1
+    min_mean_change = 0.05 # min change on the same arm from t to t+1
 
     num_experiments = len(time_horizons) * len(num_breakpoints) * len(num_arms) * len(change_type)
     write_line(output_file, str(num_experiments) + " " + str(num_simulations) + " " + str(seed))
@@ -192,61 +182,50 @@ def gen_exp_2(output_file, algs, num_simulations, seed):
         breakpoints_ends = [i*breakpoint_step for i in range(1, num_phases+1)]
         breakpoints_ends[-1] = T
 
-        arms_means = [[0] for a in range(num_a)]
+        arms_means = [[] for a in range(num_a)]
         arms_ends = [[] for a in range(num_a)]
 
-        # Add random first mean to each arm and save best arm
-        max_mean = -1
-        best_arm = -1
-        new_min_delta_optimal = -1
-        second_optimal_arm = -1
-
-        while new_min_delta_optimal < min_delta_optimal:
-            max_mean = -1
-            best_arm = -1
-            new_min_delta_optimal = 1
-
-            new_means = []
-            for a in range(num_a):
-                new_mean = random.uniform(p_min, p_max)
-                new_means.append(new_mean)
-                arms_means[a][0] = new_mean
-                if arms_means[a][0] > max_mean:
-                    max_mean = arms_means[a][0]
-                    best_arm = a
-            second_optimal_arm = [new_means.index(x) for x in sorted(new_means, reverse=True)][1]
-            new_min_delta_optimal = min(new_min_delta_optimal, max_mean - new_means[second_optimal_arm])
+        # Add random first mean to each arm
+        is_min_delta_ok = False
+        while not is_min_delta_ok:
+            new_means = [random.uniform(p_min, p_max) for a in range(num_a)]
+            max_mean = max(new_means)
+            second_max_mean = sorted(new_means, reverse=True)[1]
+            if ct == 0 and max_mean - second_max_mean >= min_delta_optimal:
+                is_min_delta_ok = True
+            elif ct == 1:
+                third_max_mean = sorted(new_means, reverse=True)[2]
+                if max_mean - second_max_mean >= min_delta_optimal and second_max_mean - third_max_mean >= min_delta_optimal:
+                    is_min_delta_ok = True
+        for i,m in enumerate(new_means):
+            arms_means[i].append(m)
+        best_arm_mean = max(new_means)
+        best_arm = new_means.index(best_arm_mean)
+        second_best_arm_mean = [x for x in sorted(new_means, reverse=True)][1]
+        second_best_arm = new_means.index(second_best_arm_mean)
 
         # From now on, the best arms must not have changes
         for p in range(num_phases-1):
-             new_best_arm = best_arm
-             new_min_delta_optimal = -1
+             is_mean_min_change_ok = False
 
              # Add a random phase until a good configuration shows up
-             while new_best_arm != best_arm or new_min_delta_optimal < min_delta_optimal:
-                 new_max_mean = arms_means[best_arm][-1] # reinitialize
-                 new_min_delta_optimal = 1 # reinitialize
-
+             while not is_mean_min_change_ok:
                  a = random.randint(0, num_a-1) # inclusive
                  if ct == 0: # from second
                      while a == best_arm:
                          a = random.randint(0, num_a-1)
-                     new_mean = random.uniform(p_min, arms_means[best_arm][-1])
+                     new_mean = random.uniform(p_min, best_arm_mean - min_delta_optimal)
                  elif ct == 1: # from third
-                     while a == best_arm or a == second_optimal_arm:
+                     while a == best_arm or a == second_best_arm:
                          a = random.randint(0, num_a-1)
-                     new_mean = random.uniform(p_min, arms_means[second_optimal_arm][-1])
+                     new_mean = random.uniform(p_min, second_best_arm_mean - min_delta_optimal)
 
-                 if new_mean > new_max_mean:
-                     new_max_mean = new_mean
-                     new_best_arm = a
-                 #second_optimal_arm_mean = [x for x in sorted(new_means, reverse=True)][1]
-                 #new_min_delta_optimal = min(new_min_delta_optimal, new_max_mean - second_optimal_arm_mean)
+                 prev_mean = arms_means[a][-1]
+                 if abs(new_mean - prev_mean) >= min_mean_change:
+                     is_mean_min_change_ok = True
 
              arms_means[a].append(new_mean)
              arms_ends[a].append(breakpoints_ends[p])
-
-             best_arm = new_best_arm
 
         # Add an end to all the arms
         for a in range(num_a):
@@ -306,17 +285,18 @@ def main():
     output_file = open("exp_config/experiments_config.txt", "w")
 
     algs = [
-        "ucb1 ucb1",
+        "ucb1 round 2 ucb1 ucb1",
         "d_ucb round 2 d_ucb _d_ucb",
         "sw_ucb round 2 sw_ucb _sw_ucb",
         "adapt_eve _adapt_eve",
         "cusum_ucb _cd_algorithm 0 1",
         "cusum_ucb_history _cd_algorithm 1 1"
     ]
-    num_simulations = 10
+    num_simulations = 2
 
     experiment = int(sys.argv[1])
     seed = int(sys.argv[2])
+    random.seed(seed)
 
     if experiment == 1:
         gen_exp_1(output_file, algs, num_simulations, seed)

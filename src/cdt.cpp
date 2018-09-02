@@ -21,6 +21,16 @@ Two_Sided_CUSUM::Two_Sided_CUSUM(int M, double epsilon, double threshold, bool g
   this->reset();
 }
 
+
+CUSUM::CUSUM(int M, double epsilon, double threshold, bool gaussian, bool increase) {
+  this->M = M;
+  this->epsilon = epsilon;
+  this->threshold = threshold;
+  this->gaussian = gaussian;
+  this->increase = increase;
+  this->reset();
+}
+
 CDT_PH_RHO::CDT_PH_RHO(double gamma, double lambda, double rho) {
   this->gamma = gamma;
   this->lambda = lambda;
@@ -39,6 +49,8 @@ void CDT_PH::reset() {
   this->PH = 0;
   this->mean_reward = 0;
   this->num_rewards = 0;
+  this->min_PH = POS_INF;
+  this->t_estimated = 0;
 }
 
 void CDT_PH_RHO::reset() {
@@ -60,6 +72,15 @@ void Two_Sided_CUSUM::reset() {
   this->t_estimate_minus = 0;
 }
 
+void CUSUM::reset() {
+  this->mean_over_M = 0;
+  this->g = 0;;
+  this->num_rewards = 0;
+  this->cumul = 0;
+  this->min_cumul = 0;
+  this->t_estimate = 0;
+}
+
 void ICI::reset() {
   this->in_init = true;
   this->period = this->S0;
@@ -72,10 +93,18 @@ CDT_Result CDT_PH::run(double reward) {
   this->mean_reward = (this->mean_reward * (this->num_rewards - 1) + reward) / this->num_rewards;
 
   // Update PH statistic
-  this->PH = max(this->PH - reward + this->mean_reward - this->gamma, 0.);
+  this->PH = this->PH - reward + this->mean_reward - this->gamma;
+  if (this->PH < this->min_PH) {
+    this->min_PH = this->PH;
+    this->t_estimated = this->num_rewards;
+  }
 
   // Return alarm
-  return CDT_Result(this->PH > this->lambda, this->num_rewards); // the estimation of the timestep of the change is not implemented
+  if (this->PH > this->lambda) {
+    return CDT_Result(true, this->t_estimated + 1);
+  } else {
+    return CDT_Result(false, 0);
+  }
 }
 
 CDT_Result CDT_PH_RHO::run(double reward) {
@@ -106,8 +135,8 @@ CDT_Result Two_Sided_CUSUM::run(double reward) {
     double s_plus = 0;
     double s_minus = 0;
     if (this->gaussian) {
-      s_plus = this->epsilon * (reward - this->mean_over_M - this->epsilon/2);
-      s_minus = this->epsilon * (this->mean_over_M - reward  - this->epsilon/2);
+      s_plus = reward - this->mean_over_M - this->epsilon;
+      s_minus = this->mean_over_M - reward  - this->epsilon;
     } else {
       if (reward > 0.5) { // i.e. reward = 1
         s_plus = log(1 + this->epsilon/this->mean_over_M);
@@ -139,6 +168,56 @@ CDT_Result Two_Sided_CUSUM::run(double reward) {
       return CDT_Result(true, this->t_estimate_minus+1);
     }
 
+    return CDT_Result(false, 0);
+  }
+}
+
+CDT_Result CUSUM::run(double reward) {
+  // Update reward mean
+  this->num_rewards++;
+  if (this->num_rewards <= this->M) {
+    this->mean_over_M += reward;
+  }
+  if (this->num_rewards == this->M) {
+    this->mean_over_M /= this->M;
+  }
+
+  if (this->num_rewards <= this->M) {
+    return CDT_Result(false, 0);
+  } else {
+    double s = 0;
+    if (this->gaussian) {
+      if (this->increase) {
+          s = reward - this->mean_over_M - this->epsilon;
+      } else {
+          s = this->mean_over_M - reward - this->epsilon;
+      }
+    } else { // bernoulli
+      if (reward > 0.5) { // i.e. reward = 1
+        if (this->increase) {
+          s = log(1 + this->epsilon/this->mean_over_M);
+        } else {
+          s = log(1 - this->epsilon/this->mean_over_M);
+        }
+      } else { // i.e. reward = 0
+        if (this->increase) {
+          s = log(1 - this->epsilon/(1 - this->mean_over_M));
+        } else {
+          s = log(1 + this->epsilon/(1 - this->mean_over_M));
+        }
+      }
+    }
+
+    this->g = max(0., this->g + s);
+    this->cumul = this->cumul + s;
+    if (this->cumul <= this->min_cumul) {
+      this->min_cumul = this->cumul;
+      this->t_estimate = this->num_rewards;
+    }
+
+    if (this->g > this->threshold) {
+      return CDT_Result(true, this->t_estimate+1);
+    }
     return CDT_Result(false, 0);
   }
 }

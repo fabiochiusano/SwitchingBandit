@@ -49,9 +49,9 @@ public:
  */
 class CDT_PH: public CDT {
 private:
-  double gamma, lambda, PH;
+  double gamma, lambda, PH, min_PH;
   double mean_reward;
-  int num_rewards;
+  int num_rewards, t_estimated;
 public:
 	/**
 	 * @brief Constructor of CDT_PH, i.e. a CDT with the omnibus Page-Hinkley test.
@@ -65,8 +65,7 @@ public:
 	 * @brief run the CDT_PH algorithm
 	 *
 	 * @param  reward double, the new datum that must be analysed by the CDT
-	 * @return a CDT_Result that contains the alarm and the estimated timestep change (this
-	 * 	second part is not implemented!)
+	 * @return a CDT_Result that contains the alarm and the estimated timestep change
 	 */
   CDT_Result run(double reward) override;
 
@@ -107,6 +106,45 @@ public:
 	 * @brief reset the CDT_PH_RHO algorithm
 	 */
   void reset() override;
+};
+
+/**
+ * @brief CDT with the CUSUM algorithm.
+ */
+class CUSUM: public CDT {
+private:
+	int M; // number of samples required to have a reliable mean
+	double epsilon; // something to remove from each received sample: it's the expected mean variation, assuming gaussian samples
+	double threshold; // threshold for the alarm
+	double mean_over_M, g;
+	double cumul, min_cumul;
+	bool gaussian, increase;
+	int t_estimate;
+	int num_rewards;
+public:
+	/**
+	 * @brief Constructor of Two_Sided_CUSUM, i.e. the CUSUM algorithm.
+	 *
+	 * @param M         integer, CUSUM initialization steps used for computing the mean of the current sample distribution
+	 * @param epsilon   double, minimum expected mean variation
+	 * @param threshold double, threshold for the CUSUM walk
+	 * @param gaussian  boolean, whether to use the gaussian update rule or the bernoulli update rule
+	 * @param increse   boolean, whether to monitor increases or decreases in the mean
+	 */
+	CUSUM(int M, double epsilon, double threshold, bool gaussian, bool increase);
+
+	/**
+	 * @brief run the Two_Sided_CUSUM algorithm
+	 *
+	 * @param  reward double, the new datum that must be analysed by the CDT
+	 * @return a CDT_Result that contains the alarm and the estimated timestep change
+	 */
+
+	CDT_Result run(double reward) override;
+	/**
+	 * @brief reset the Two_Sided_CUSUM algorithm
+	 */
+	void reset() override;
 };
 
 /**

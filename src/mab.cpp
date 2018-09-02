@@ -71,7 +71,7 @@ int MAB::get_num_changepoints(int arm) {
 		}
 	}
 
-	return res.size();
+	return res.size()-1;
 }
 
 int MAB::get_num_of_arms() {
