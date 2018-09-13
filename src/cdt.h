@@ -17,31 +17,14 @@
 using namespace std;
 
 /**
- * @brief Class that contains the result of a call to a generic CDT procedure. It contains two things:
- * a boolean alarm that represents whether or not a change has been detected; an integer that is
- * the estimate of the timestep of the change.
- */
-class CDT_Result {
-public:
-	bool alarm;
-	int change_estimate;
-
-	/**
-	 * @brief Constructor of CDT_result.
-	 *
-	 * @param alarm           boolean, represents whether a change has been detected or not
-	 * @param change_estimate integer, represents the estimated timestep of the change
-	 */
-	CDT_Result(bool alarm, int change_estimate);
-};
-
-/**
  * @brief Base class of all the CDT procedures.
  */
 class CDT {
 public:
-	virtual CDT_Result run(double reward) = 0;
-  virtual void reset() = 0;
+	int change_estimate = 0;
+public:
+	virtual bool run(double reward) = 0;
+  virtual void reset(int mode) = 0; // if 0 -> reset completely, if 1 -> reset only the walk
 };
 
 /**
@@ -51,7 +34,7 @@ class CDT_PH: public CDT {
 private:
   double gamma, lambda, PH, min_PH;
   double mean_reward;
-  int num_rewards, t_estimated;
+  int num_rewards;
 public:
 	/**
 	 * @brief Constructor of CDT_PH, i.e. a CDT with the omnibus Page-Hinkley test.
@@ -67,12 +50,12 @@ public:
 	 * @param  reward double, the new datum that must be analysed by the CDT
 	 * @return a CDT_Result that contains the alarm and the estimated timestep change
 	 */
-  CDT_Result run(double reward) override;
+  bool run(double reward) override;
 
 	/**
 	 * @brief reset the CDT_PH algorithm
 	 */
-  void reset() override;
+  void reset(int mode) override;
 };
 
 /**
@@ -100,12 +83,12 @@ public:
 	 * @return a CDT_Result that contains the alarm and the estimated timestep change (this
 	 * 	second part is not implemented!)
 	 */
-  CDT_Result run(double reward) override;
+  bool run(double reward) override;
 
 	/**
 	 * @brief reset the CDT_PH_RHO algorithm
 	 */
-  void reset() override;
+  void reset(int mode) override;
 };
 
 /**
@@ -119,9 +102,10 @@ private:
 	double mean_over_M, g;
 	double cumul, min_cumul;
 	bool gaussian, increase;
-	int t_estimate;
 	int num_rewards;
 public:
+	//static int N_POS;
+	//static int N_NEG;
 	/**
 	 * @brief Constructor of Two_Sided_CUSUM, i.e. the CUSUM algorithm.
 	 *
@@ -140,16 +124,14 @@ public:
 	 * @return a CDT_Result that contains the alarm and the estimated timestep change
 	 */
 
-	CDT_Result run(double reward) override;
+	bool run(double reward) override;
+
 	/**
 	 * @brief reset the Two_Sided_CUSUM algorithm
 	 */
-	void reset() override;
+	void reset(int mode) override;
 };
-
-/**
- * @brief CDT with the two-sided CUSUM algorithm.
- */
+/*
 class Two_Sided_CUSUM: public CDT {
 private:
 	int M; // number of samples required to have a reliable mean
@@ -161,33 +143,18 @@ private:
 	int t_estimate_plus, t_estimate_minus;
 	int num_rewards;
 public:
-	/**
-	 * @brief Constructor of Two_Sided_CUSUM, i.e. the two-sided CUSUM algorithm.
-	 *
-	 * @param M         integer, CUSUM initialization steps used for computing the mean of the current sample distribution
-	 * @param epsilon   double, minimum expected mean variation
-	 * @param threshold double, threshold for the CUSUM walk
-	 * @param gaussian  boolean, whether to use the gaussian update rule or the bernoulli update rule
-	 */
+
 	Two_Sided_CUSUM(int M, double epsilon, double threshold, bool gaussian);
 
-	/**
-	 * @brief run the Two_Sided_CUSUM algorithm
-	 *
-	 * @param  reward double, the new datum that must be analysed by the CDT
-	 * @return a CDT_Result that contains the alarm and the estimated timestep change
-	 */
+
 
 	CDT_Result run(double reward) override;
-	/**
-	 * @brief reset the Two_Sided_CUSUM algorithm
-	 */
-	void reset() override;
-};
 
-/**
- * @brief CDT with the ICI algorithm.
- */
+	void reset(int mode) override;
+};
+*/
+
+/*
 class ICI: public CDT {
 private:
 	int S0; // number of intervals for initialization
@@ -202,28 +169,15 @@ private:
 	double M_sigma_init, V_sigma_init;
 	double M_mu, M_sigma, V_mu, V_sigma;
 public:
-	/**
-	 * @brief Constructor of ICI, i.e. the ICI change detection procedure.
-	 *
-	 * @param S0    integer, number of initialization batches
-	 * @param nu    integer, length of each batch
-	 * @param gamma double, confidence parameters used for the confidence intervals
-	 */
+
 	ICI(int S0, int nu, double gamma);
 
-	/**
-	 * @brief run the ICI algorithm
-	 *
-	 * @param  reward double, the new datum that must be analysed by the CDT
-	 * @return a CDT_Result that contains the alarm and the estimated timestep change (this
-	 * 	second part is not implemented!)
-	 */
+
 	CDT_Result run(double reward) override;
 
-	/**
-	 * @brief reset the ICI algorithm
-	 */
-	void reset() override;
+
+	void reset(int mode) override;
 };
+*/
 
 #endif

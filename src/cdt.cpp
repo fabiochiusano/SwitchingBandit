@@ -2,25 +2,20 @@
 #include <algorithm>
 
 
-CDT_Result::CDT_Result(bool alarm, int change_estimate) {
-  this->alarm = alarm;
-  this->change_estimate = change_estimate;
-}
-
 CDT_PH::CDT_PH(double gamma, double lambda) {
   this->gamma = gamma;
   this->lambda = lambda;
-  this->reset();
+  this->reset(0);
 }
-
+/*
 Two_Sided_CUSUM::Two_Sided_CUSUM(int M, double epsilon, double threshold, bool gaussian) {
   this->M = M;
   this->epsilon = epsilon;
   this->threshold = threshold;
   this->gaussian = gaussian;
-  this->reset();
+  this->reset(0);
 }
-
+*/
 
 CUSUM::CUSUM(int M, double epsilon, double threshold, bool gaussian, bool increase) {
   this->M = M;
@@ -28,38 +23,37 @@ CUSUM::CUSUM(int M, double epsilon, double threshold, bool gaussian, bool increa
   this->threshold = threshold;
   this->gaussian = gaussian;
   this->increase = increase;
-  this->reset();
+  this->reset(0);
 }
 
 CDT_PH_RHO::CDT_PH_RHO(double gamma, double lambda, double rho) {
   this->gamma = gamma;
   this->lambda = lambda;
   this->rho = rho;
-  this->reset();
+  this->reset(0);
 }
-
+/*
 ICI::ICI(int S0, int nu, double gamma) {
   this->S0 = S0;
   this->nu = nu;
   this->gamma = gamma;
-  this->reset();
+  this->reset(0);
 }
-
-void CDT_PH::reset() {
+*/
+void CDT_PH::reset(int mode) {
   this->PH = 0;
   this->mean_reward = 0;
   this->num_rewards = 0;
   this->min_PH = POS_INF;
-  this->t_estimated = 0;
 }
 
-void CDT_PH_RHO::reset() {
+void CDT_PH_RHO::reset(int mode) {
   this->PH = 0;
   this->mean_reward = 0;
   this->num_rewards = 0;
 }
-
-void Two_Sided_CUSUM::reset() {
+/*
+void Two_Sided_CUSUM::reset(int mode) {
   this->mean_over_M = 0;
   this->g_minus = 0;
   this->g_plus = 0;
@@ -71,23 +65,25 @@ void Two_Sided_CUSUM::reset() {
   this->t_estimate_plus = 0;
   this->t_estimate_minus = 0;
 }
-
-void CUSUM::reset() {
-  this->mean_over_M = 0;
-  this->g = 0;;
-  this->num_rewards = 0;
+*/
+void CUSUM::reset(int mode) {
+  if (mode == 0) {
+    this->mean_over_M = 0;
+    this->num_rewards = 0;
+  }
+  this->g = 0;
   this->cumul = 0;
   this->min_cumul = 0;
-  this->t_estimate = 0;
+  this->change_estimate = this->num_rewards + 1;
 }
-
-void ICI::reset() {
+/*
+void ICI::reset(int mode) {
   this->in_init = true;
   this->period = this->S0;
   this->reward_buffer.clear();
-}
+}*/
 
-CDT_Result CDT_PH::run(double reward) {
+bool CDT_PH::run(double reward) {
   // Update reward mean
   this->num_rewards++;
   this->mean_reward = (this->mean_reward * (this->num_rewards - 1) + reward) / this->num_rewards;
@@ -96,29 +92,26 @@ CDT_Result CDT_PH::run(double reward) {
   this->PH = this->PH - reward + this->mean_reward - this->gamma;
   if (this->PH < this->min_PH) {
     this->min_PH = this->PH;
-    this->t_estimated = this->num_rewards;
+    this->change_estimate = this->num_rewards + 1;
   }
 
   // Return alarm
-  if (this->PH > this->lambda) {
-    return CDT_Result(true, this->t_estimated + 1);
-  } else {
-    return CDT_Result(false, 0);
-  }
+  return this->PH > this->lambda;
 }
 
-CDT_Result CDT_PH_RHO::run(double reward) {
+bool CDT_PH_RHO::run(double reward) {
   // Update reward mean
   this->num_rewards++;
   this->mean_reward = (this->mean_reward * (this->num_rewards - 1) + reward) / this->num_rewards;
 
   // Update PH statistic
   this->PH = max((this->rho * this->PH) - reward + this->mean_reward - this->gamma, 0.);
+  this->change_estimate = this->num_rewards + 1;
 
   // Return alarm
-  return CDT_Result(this->PH > this->lambda, this->num_rewards);
+  return this->PH > this->lambda;
 }
-
+/*
 CDT_Result Two_Sided_CUSUM::run(double reward) {
   // Update reward mean
   this->num_rewards++;
@@ -171,8 +164,10 @@ CDT_Result Two_Sided_CUSUM::run(double reward) {
     return CDT_Result(false, 0);
   }
 }
-
-CDT_Result CUSUM::run(double reward) {
+*/
+//int CUSUM::N_POS = 0;
+//int CUSUM::N_NEG = 0;
+bool CUSUM::run(double reward) {
   // Update reward mean
   this->num_rewards++;
   if (this->num_rewards <= this->M) {
@@ -183,7 +178,8 @@ CDT_Result CUSUM::run(double reward) {
   }
 
   if (this->num_rewards <= this->M) {
-    return CDT_Result(false, 0);
+    this->change_estimate = this->num_rewards + 1;
+    return false;
   } else {
     double s = 0;
     if (this->gaussian) {
@@ -212,16 +208,22 @@ CDT_Result CUSUM::run(double reward) {
     this->cumul = this->cumul + s;
     if (this->cumul <= this->min_cumul) {
       this->min_cumul = this->cumul;
-      this->t_estimate = this->num_rewards;
+      this->change_estimate = this->num_rewards + 1;
     }
 
-    if (this->g > this->threshold) {
-      return CDT_Result(true, this->t_estimate+1);
-    }
-    return CDT_Result(false, 0);
+    return this->g > this->threshold;
+    /*
+    if (this->increase) {
+      CUSUM::N_POS++;
+      cout << "P " << CUSUM::N_POS << endl;
+    } else {
+      CUSUM::N_NEG++;
+      cout << "N " << CUSUM::N_NEG << endl;
+    */
   }
 }
 
+/*
 CDT_Result ICI::run(double reward) {
   bool result = false;
 
@@ -334,3 +336,4 @@ CDT_Result ICI::run(double reward) {
 
   return CDT_Result(result, this->reward_buffer.size());
 }
+*/

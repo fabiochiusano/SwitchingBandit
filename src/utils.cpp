@@ -72,10 +72,11 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 		if (use_best_parameter) {
 				B = 1.0;
 				gamma = 1 - 1.0/(4*B) * sqrt(num_global_changepoints * 1.0 / timesteps);
-				epsilon = 2; // TODO: is it ok?
+				epsilon = 2;
 		} else {
 				ss >> B >> gamma >> epsilon;
 		}
+		cout << "D_UCB " << gamma << endl;
 		return new D_UCB(name, num_of_arms, gamma, B, epsilon);
 	} else if (alg_name == "sw_ucb") { // SW_UCB
 		int tau;
@@ -86,10 +87,11 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 					  tau = int(2*B * sqrt(timesteps * 1.0 * log(timesteps) / num_global_changepoints));
 				else
 						tau = timesteps;
-				epsilon = 2; // TODO: is it ok?
+				epsilon = 2;
 		} else {
 				ss >> B >> tau >> epsilon;
 		}
+		cout << "SW_UCB " << tau << endl;
 		return new SW_UCB(name, num_of_arms, tau, B, epsilon);
 	} else if (alg_name == "exp3_s") { // EXP3_S
 		double beta, alpha;
@@ -177,11 +179,12 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 
 		return new PerArmCTS(name, num_of_arms, *rng, gamma);
 	} else if (alg_name == "cd_algorithm") { // CD_Algorithm
-		int M, use_history, max_history, use_gaussian_cdt;
+		int M, use_history, max_history, use_gaussian_cdt, smart_resets;
 		string cdt_line, sub_alg_line;
 
-		ss >> use_history;
+		ss >> use_history; // 0 -> no history, 1 -> log history, 2 -> inf history
 		ss >> use_gaussian_cdt;
+		ss >> smart_resets;
 
 		if (use_best_parameter) {
 			M = min(int(mab->get_shortest_interval_between_changepoints(-1) * 1.0 / num_of_arms), 30);
@@ -233,13 +236,15 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 					double h = log(timesteps * 1.0 / num_global_changepoints) / C1;
 					*/
 			} else {
-				if (num_global_changepoints > 0)
-						max_history = log(timesteps * 1.0 / num_global_changepoints);
+				if (num_global_changepoints > 0){
+						if (use_history == 2) max_history = POS_INF;
+						else max_history = log(timesteps * 1.0 / num_global_changepoints);
+					}
 				else
 						max_history = POS_INF;
 				cout << "max history: " << max_history << endl;
 			}
-			cdt_line = "2cusum " + to_string(M) + " " + to_string(epsilon) + " " + to_string(h) + " " + to_string(use_gaussian_cdt);
+			cdt_line = "cusum " + to_string(M) + " " + to_string(epsilon) + " " + to_string(h) + " " + to_string(use_gaussian_cdt);
 			sub_alg_line = "round round 6 alg_with_exploration alg_with_exploration " + to_string(alpha) + " 2 ucb1 ucb1";
 			cout << cdt_line << endl;
 			cout << sub_alg_line << endl;
@@ -263,8 +268,8 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 			}
 		}
 
-		return new CD_Algorithm(name, num_of_arms, M, cdt_line, sub_alg_line, use_history==1, max_history, *rng, mab);
-	} else if (alg_name == "glr") {
+		return new CD_Algorithm(name, num_of_arms, M, cdt_line, sub_alg_line, use_history!=0, max_history, smart_resets!=0, *rng, mab);
+	} /*else if (alg_name == "glr") {
 		int M;
 		ss >> M;
 
@@ -281,7 +286,7 @@ MABAlgorithm* get_algorithm(string line, boost::mt19937* rng, MAB* mab) {
 		}
 
 		return new GLR(name, num_of_arms, M, max_history, sub_alg_line, *rng, mab);
-	} else {
+	} */else {
 		cout << "Not valid algorithm: " << line << endl;
 		return new UCB1(name, num_of_arms);
 	}
@@ -301,25 +306,25 @@ CDT* get_cdt(string line) {
 		double gamma, lambda, rho;
 		ss >> gamma >> lambda >> rho;
 		return new CDT_PH_RHO(gamma, lambda, rho);
-	} else if (cdt_name == "2cusum") {
+	} /*else if (cdt_name == "2cusum") {
 		int M;
 		double epsilon, threshold;
 		int gaussian;
 		ss >> M >> epsilon >> threshold >> gaussian;
 		return new Two_Sided_CUSUM(M, epsilon, threshold, gaussian!=0);
-	} else if (cdt_name == "cusum") {
+	} */else if (cdt_name == "cusum") {
 		int M;
 		double epsilon, threshold;
 		int gaussian, increase;
 		ss >> M >> epsilon >> threshold >> gaussian >> increase;
 		return new CUSUM(M, epsilon, threshold, gaussian!=0, increase!=0);
-	} else if (cdt_name == "ici") {
+	} /*else if (cdt_name == "ici") {
 		int S0, nu;
 		double gamma;
 
 		ss >> S0 >> nu >> gamma;
 		return new ICI(S0, nu, gamma);
-	} else {
+	}*/ else {
 		cout << "Not valid cdt: " << line << endl;
 		return new CDT_PH(0, 0);
 	}

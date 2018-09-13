@@ -35,37 +35,53 @@ def analyse_1_2():
     d_bound = {} # d[t][ch_type][alg]
 
     time_horizons = [10**5, 10**6]
-    num_breakpoints = [1, 2, 4, 8]
-    num_arms = [2, 4, 8]
+    num_breakpoints = [1, 8]
+    num_arms = [2, 8]
     change_type = [0, 1]
 
     selected_num_arms = 8
     selected_num_bp = 1
     of = open("results/analysis_arms{0}_bp{1}.txt".format(selected_num_arms, selected_num_bp), "w")
 
-    num_experiments = len(time_horizons) * len(num_breakpoints) * len(num_arms) * len(change_type)
+    num_exp_per_config = 5
+    num_experiments = len(time_horizons) * len(num_breakpoints) * len(num_arms) * len(change_type) * num_exp_per_config
 
-    for T, num_bp, num_a, ct in itertools.product(time_horizons, num_breakpoints, num_arms, change_type):
+    for num_bp, num_a, ct, T, e in itertools.product(num_breakpoints, num_arms, change_type, time_horizons, range(num_exp_per_config)):
         if num_bp == selected_num_bp and num_a == selected_num_arms:
             T_index = time_horizons.index(T)
             bp_index = num_breakpoints.index(num_bp)
             na_index = num_arms.index(num_a)
             ct_index = change_type.index(ct)
 
-            exp_id = ct_index + na_index*len(change_type) + bp_index*len(change_type)*len(num_arms) + T_index*len(change_type)*len(num_arms)*len(num_breakpoints)
+            exp_id = (T_index + ct_index*len(change_type) + na_index*len(change_type)*len(num_arms) + bp_index*len(change_type)*len(num_arms)*len(num_breakpoints)) * num_exp_per_config + e
+            print(exp_id)
+            if exp_id == 38:
+                print("----")
+                continue
             f = open("results/" + str(exp_id) + ".txt", "r")
             for line in f:
                 splitted = line.split(" ")
                 add_d(d_mean, T_index, ct_index, splitted[0], float(splitted[1]))
                 add_d(d_bound, T_index, ct_index, splitted[0], float(splitted[2]))
+    """
     for t_index,_ in enumerate(time_horizons):
         for ct_index,_ in enumerate(change_type):
             for k,v in d_mean[t_index][ct_index].items():
-                of.write(k + " " + str(v) + " " + str(d_bound[t_index][ct_index][k]) + "\n")
+                of.write(k + " " + str(int(v / num_exp_per_config)) + " " + str(int(d_bound[t_index][ct_index][k] / num_exp_per_config)) + "\n")
             of.write("\n")
         of.write("\n")
     of.write("\n")
+    """
+    for k in d_mean[0][0]:
+        of.write("$\\text{" + k + "}$")
+        for t_index,_ in enumerate(time_horizons):
+            for ct_index,_ in enumerate(change_type):
+                m = int(d_mean[t_index][ct_index][k] / num_exp_per_config)
+                b = int(d_bound[t_index][ct_index][k] / num_exp_per_config)
+                of.write(" & $" + str(m) + "\\pm" + str(b) + "$")
+        of.write(" \\\\ \n")
 
+"""
 def analyse_3():
     num_experiments = 12
 
@@ -112,7 +128,7 @@ def analyse_3():
         for k,v in d_t_mean.items():
             of.write(k + " " + str(v/tot) + " " + str(d_t_bound[k]/tot) + "\n")
         of.write("\n")
-
+"""
 def main():
     if args.e == 1 or args.e == 2:
         analyse_1_2()

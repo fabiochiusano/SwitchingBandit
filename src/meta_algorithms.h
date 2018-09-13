@@ -15,17 +15,22 @@
 #include "cdt.h"
 #include <string>
 #include <vector>
+#include <set>
 
 /**
  * @brief base class of all the meta-algorithms
  */
 class MetaAlgorithm: public MABAlgorithm {
+protected:
+	MABAlgorithm* sub_alg;
 public:
 	/**
 	 * @param name        string, id of the algorithm
 	 * @param num_of_arms integer, number of arms the algorithm will work on
 	 */
 	MetaAlgorithm(string name, int num_of_arms);
+
+	MABAlgorithm* get_sub_alg();
 };
 
 /**
@@ -33,7 +38,6 @@ public:
  */
 class Round_Algorithm: public MetaAlgorithm {
 private:
-  MABAlgorithm* sub_alg;
   vector<bool> arms_pulled;
 public:
   /**
@@ -73,7 +77,6 @@ public:
 class Algorithm_With_Uniform_Exploration: public MetaAlgorithm {
 private:
 	double alpha; // Exploration parameter
-	MABAlgorithm* sub_alg;
 public:
   /**
    * @param name         string, id of the algorithm
@@ -112,15 +115,21 @@ public:
  */
 class CD_Algorithm: public MetaAlgorithm {
 private:
-  vector<CDT*> cdts;
-  MABAlgorithm* sub_alg;
+  vector<CDT*> cdts_up, cdts_down, sr_cdts_up, sr_cdts_down;
+	vector<int> sr_change_estimates;
   bool use_history;
   int max_history;
   int M;
   int timestep;
+	bool smart_resets;
 
   vector<int> till_M;
-  vector<vector<double>> collected_rewards;
+  vector<vector<double>> collected_rewards, sr_collected_rewards;
+	vector<bool> last_resets_up;
+	set<int> to_be_reset;
+	//int num_alarms_up, num_alarms_down;
+
+	void reset_arm(int pulled_arm);
 public:
   /**
    * @param name         string, id of the algorithm
@@ -133,7 +142,7 @@ public:
    * @param max_history  integer, maximum amount of sample history that the algorithm can use
    * @param rng          boost::mt19937&, random number generator
    */
-  CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, int max_history, boost::mt19937& rng, MAB* mab);
+  CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, int max_history, bool smart_resets, boost::mt19937& rng, MAB* mab);
 
   /**
  	 * @return an integer representing the chosen arm
@@ -166,7 +175,7 @@ public:
 class ADAPT_EVE: public MetaAlgorithm {
 private:
   vector<CDT*> cdts;
-  MABAlgorithm *core_sub_alg, *other_sub_alg, *meta_alg;
+  MABAlgorithm *other_sub_alg, *meta_alg;
   boost::mt19937* rng;
   //string sub_alg_line;
   int saved_meta_action;
@@ -209,72 +218,30 @@ public:
  	virtual void reset(int action = -1) override;
 };
 
-/**
- * @brief Meta-algorithm that selects at each timestep the sample history for its sub-algorithm using the
- * Generalized Likelihood Ratio method.
- */
+/*
 class GLR: public MetaAlgorithm {
 private:
-  MABAlgorithm* sub_alg;
   vector<vector<double>> rewards;
   vector<int> changepoints;
   int M;
   int max_history;
   vector<vector<int>> past_k;
 
-  /**
-   * @brief finds the most probable changepoint for the specified arm
-   *
-   * @param arm_pulled integer, arm id for which finding the most probable changepoint
-   */
   void find_changepoints(int arm_pulled);
 
-  /**
-   * @brief Update the sample history of the specified arm in the internal variables of the sub-algorithm
-   *
-   * @param arm_pulled integer, arm id for which updating the internal variables
-   */
   void update_sub_alg(int arm_pulled);
 
-  /**
-   * @brief Store the new reward and delete the oldest reward if the maximum amount of history has been reached
-   *
-   * @param new_reward double, new reward received
-   * @param arm_pulled integer, arm pulled
-   */
   void cycle_reward(double new_reward, int arm_pulled);
 public:
-  /**
-   * @param name         string, id of the algorithm
-   * @param num_of_arms  integer, number of arms the algorithm will work with
-   * @param M            integer, number of timesteps required by the CDT to initialize itself
-   * @param max_history  integer, maximum amount of the latest samples that the algorithm scans
-   *  for the most probable checkpoint
-   * @param sub_alg_line string, specification of the sub-algorithm
-   * @param rng          boost::mt19937&, random number generator
-   */
+
   GLR(string name, int num_of_arms, int M, int max_history, string sub_alg_line, boost::mt19937& rng, MAB* mab);
 
-  /**
- 	 * @return an integer representing the chosen arm
- 	 */
  	virtual int choose_action() override;
 
- 	/**
- 	 * @brief Update the internal variables of the algorithm according to the new received reward
- 	 *
- 	 * @param reward     double, new received reward
- 	 * @param pulled_arm integer, represents the pulled arm
- 	 */
  	virtual void receive_reward(double reward, int pulled_arm) override;
 
- 	/**
- 	 * @brief resets the internal variables of the algorithm
- 	 *
- 	 * @param action integer, specifies which variables to reset. If in (0, num_of_arms - 1), then it resets
- 	 * 	only the info related to such arm. If == -1, resets all the arms.
- 	 */
  	virtual void reset(int action = -1) override;
 };
+*/
 
 #endif

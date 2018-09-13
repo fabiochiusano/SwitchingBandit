@@ -2,8 +2,18 @@
 #include "ucb.h"
 #include "meta_algorithms.h"
 #include <fstream>
+#include <algorithm>    // std::sort
 
 MetaAlgorithm::MetaAlgorithm(string name, int num_of_arms) : MABAlgorithm(name, num_of_arms) {}
+
+MABAlgorithm* MetaAlgorithm::get_sub_alg() {
+  MetaAlgorithm* b = dynamic_cast<MetaAlgorithm*>(this->sub_alg);
+  if (b == NULL) { // if not meta
+    return this->sub_alg;
+  } else { // if meta
+    return b->get_sub_alg();
+  }
+}
 
 Round_Algorithm::Round_Algorithm(string name, int num_of_arms, string sub_alg_line, boost::mt19937& rng, MAB* mab) : MetaAlgorithm(name, num_of_arms) {
   this->sub_alg = get_algorithm(sub_alg_line, &rng, mab);
@@ -72,14 +82,26 @@ void Algorithm_With_Uniform_Exploration::receive_reward(double reward, int pulle
 
 
 
-CD_Algorithm::CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, int max_history, boost::mt19937& rng, MAB* mab) : MetaAlgorithm(name, num_of_arms) {
+CD_Algorithm::CD_Algorithm(string name, int num_of_arms, int M, string cdt_line, string sub_alg_line, bool use_history, int max_history, bool smart_resets, boost::mt19937& rng, MAB* mab) : MetaAlgorithm(name, num_of_arms) {
   this->M = M;
   this->max_history = max_history;
   this->sub_alg = get_algorithm(sub_alg_line, &rng, mab);
   for (int i = 0; i < num_of_arms; i++) {
-    this->cdts.push_back(get_cdt(cdt_line));
+    this->cdts_up.push_back(get_cdt(cdt_line + " 1"));
+    this->cdts_down.push_back(get_cdt(cdt_line + " 0"));
+    if (smart_resets) {
+      this->sr_cdts_up.push_back(get_cdt(cdt_line + " 1"));
+      this->sr_cdts_down.push_back(get_cdt(cdt_line + " 0"));
+    }
   }
   this->use_history = use_history;
+  this->smart_resets = smart_resets;
+  if (smart_resets) {
+    this->sr_change_estimates.assign(num_of_arms, 0);
+  }
+  this->last_resets_up.assign(num_of_arms, false);
+  //this->num_alarms_up = 0;
+  //this->num_alarms_down = 0;
   this->reset(-1);
 }
 
@@ -88,18 +110,41 @@ void CD_Algorithm::reset(int action) {
   this->sub_alg->reset(action);
   if (action == -1) {
     for (int i = 0; i < this->num_of_arms; i++) {
-      this->cdts[i]->reset();
+      this->cdts_up[i]->reset(0);
+      this->cdts_down[i]->reset(0);
+      if (this->smart_resets) {
+        this->sr_cdts_up[i]->reset(0);
+        this->sr_cdts_down[i]->reset(0);
+      }
     }
     this->till_M.clear();
     this->till_M.assign(this->num_of_arms, this->M);
     this->collected_rewards.clear();
     this->collected_rewards.resize(this->num_of_arms);
+    if (this->smart_resets) {
+      this->sr_change_estimates.assign(num_of_arms, 0);
+      this->sr_collected_rewards.clear();
+      this->sr_collected_rewards.resize(this->num_of_arms);
+    }
+    this->last_resets_up.assign(num_of_arms, false);
     this->timestep = 0;
+    this->to_be_reset.clear();
   } else {
-    this->cdts[action]->reset();
+    this->cdts_up[action]->reset(0);
+    this->cdts_down[action]->reset(0);
     this->till_M[action] = this->M;
     this->collected_rewards[action].clear();
+    if (this->smart_resets) {
+      this->sr_cdts_up[action]->reset(0);
+      this->sr_cdts_down[action]->reset(0);
+      this->sr_change_estimates[action] = 0;
+      this->sr_collected_rewards[action].clear();
+    }
+    this->last_resets_up[action] = false;
+    this->to_be_reset.erase(action);
   }
+  //cout << "Alarms up: " << this->num_alarms_up / 100.0 << endl;
+  //cout << "Alarms down: " << this->num_alarms_down / 100.0 << endl;
 }
 
 int CD_Algorithm::choose_action() {
@@ -117,35 +162,110 @@ int CD_Algorithm::choose_action() {
   return action;
 }
 
+void CD_Algorithm::reset_arm(int pulled_arm) {
+  this->sub_alg->reset(pulled_arm);
+  this->MABAlgorithm::reset(pulled_arm);
+  if (this->use_history) {
+    int change_estimate = 0;
+    bool alarm_up = this->last_resets_up[pulled_arm];
+    //if (this->smart_resets) change_estimate = this->sr_change_estimates[pulled_arm];
+    if (alarm_up) change_estimate = this->cdts_up[pulled_arm]->change_estimate;
+    else change_estimate = this->cdts_down[pulled_arm]->change_estimate;
+
+    /*if (this->smart_resets) {
+      int history_amount = this->sr_collected_rewards[pulled_arm].size() - change_estimate;
+      int t_start = change_estimate;
+      if (history_amount > this->max_history) {
+        t_start = this->sr_collected_rewards[pulled_arm].size() - this->max_history;
+      }
+      for (int i = t_start; i < this->sr_collected_rewards[pulled_arm].size(); i++) {
+        this->sub_alg->receive_reward(this->sr_collected_rewards[pulled_arm][i], pulled_arm);
+      }
+    } else {*/
+    int history_amount = this->collected_rewards[pulled_arm].size() - change_estimate;
+    int t_start = change_estimate;
+    if (history_amount > this->max_history) {
+      t_start = this->collected_rewards[pulled_arm].size() - this->max_history;
+    }
+    for (int i = t_start; i < this->collected_rewards[pulled_arm].size(); i++) {
+      this->sub_alg->receive_reward(this->collected_rewards[pulled_arm][i], pulled_arm);
+    }
+    //}
+  }
+  this->collected_rewards[pulled_arm].clear();
+  //if (this->smart_resets) this->sr_collected_rewards[pulled_arm].clear();
+  this->cdts_up[pulled_arm]->reset(0);
+  this->cdts_down[pulled_arm]->reset(0);
+  this->till_M[pulled_arm] = this->M;
+}
+
 void CD_Algorithm::receive_reward(double reward, int pulled_arm) {
   this->MABAlgorithm::receive_reward(reward, pulled_arm);
   this->sub_alg->receive_reward(reward, pulled_arm);
   this->collected_rewards[pulled_arm].push_back(reward);
 
-  CDT_Result cdt_result = this->cdts[pulled_arm]->run(reward);
-  if (cdt_result.alarm) {
-    // Log alarm
-    //ofstream cdt_file("temp/cdt_" + to_string(...) + ".txt", fstream::app);
-    //cdt_file << this->name << " ";
+  bool alarm_up = this->cdts_up[pulled_arm]->run(reward);
+  bool alarm_down = this->cdts_down[pulled_arm]->run(reward);
+  //if (alarm_up) this->num_alarms_up++;
+  //if (alarm_down) this->num_alarms_down++;
+  bool alarm = alarm_up || alarm_down;
+  if (alarm_up) this->last_resets_up[pulled_arm] = true;
+  else if (alarm_down) this->last_resets_up[pulled_arm] = false;
 
-    this->sub_alg->reset(pulled_arm);
-    this->MABAlgorithm::reset(pulled_arm);
-    if (this->use_history) {
-      int history_amount = this->collected_rewards[pulled_arm].size() - cdt_result.change_estimate;
-      int t_start = cdt_result.change_estimate;
-      //cout << this->timestep << " " << this->collected_rewards[pulled_arm].size() << " " << history_amount << endl;
-      if (history_amount > this->max_history) {
-        t_start = this->collected_rewards[pulled_arm].size() - this->max_history;
-        // cout << "clipped " << history_amount << endl;
+  /*
+  bool sr_alarm_up = false;
+  bool sr_alarm_down = false;
+  if (this->smart_resets) {
+    this->sr_collected_rewards[pulled_arm].push_back(reward);
+    sr_alarm_up = this->sr_cdts_up[pulled_arm]->run(reward);
+    sr_alarm_down = this->sr_cdts_down[pulled_arm]->run(reward);
+    if (sr_alarm_up) this->sr_change_estimates[pulled_arm] = this->sr_cdts_up[pulled_arm]->change_estimate;
+    else if (sr_alarm_down) this->sr_change_estimates[pulled_arm] = this->sr_cdts_down[pulled_arm]->change_estimate;
+  }*/
+
+  if (alarm) {
+    if (!this->smart_resets) {
+      this->reset_arm(pulled_arm);
+    } else {
+      // Directly check UCB1...
+      UCB1* u = dynamic_cast<UCB1*>(this->get_sub_alg());
+      int best_action = -1;
+      if (u != NULL) {
+        best_action = distance(u->means.begin(), max_element(u->means.begin(), u->means.end()));
       }
-      for (int i = t_start; i < this->collected_rewards[pulled_arm].size(); i++) {
-        this->sub_alg->receive_reward(this->collected_rewards[pulled_arm][i], pulled_arm);
+
+      this->to_be_reset.insert(pulled_arm);
+
+      if (pulled_arm == best_action && alarm_down) {
+        for (auto a : this->to_be_reset) {
+          this->reset_arm(a);
+        }
+        this->to_be_reset.clear();
+      } else if (pulled_arm != best_action && alarm_up) {
+        vector<int> arms_to_reset;
+        arms_to_reset.push_back(pulled_arm);
+        if (this->to_be_reset.find(best_action) != this->to_be_reset.end()) {
+          arms_to_reset.push_back(best_action);
+        }
+        for (auto a : arms_to_reset) {
+          this->reset_arm(a);
+          this->to_be_reset.erase(a);
+        }
+      } else {
+        this->cdts_up[pulled_arm]->reset(1);
+        this->cdts_down[pulled_arm]->reset(1);
       }
     }
-    this->collected_rewards[pulled_arm].clear();
-    this->cdts[pulled_arm]->reset();
-    this->till_M[pulled_arm] = this->M;
   }
+
+  // sr cdts
+  /*
+  if (this->smart_resets && (sr_alarm_up || sr_alarm_down)) {
+    this->sr_cdts_up[pulled_arm]->reset(0);
+    this->sr_cdts_down[pulled_arm]->reset(0);
+    this->sr_collected_rewards[pulled_arm].clear();
+  }*/
+
   this->timestep++;
 }
 
@@ -158,7 +278,7 @@ ADAPT_EVE::ADAPT_EVE(string name, int num_of_arms, int meta_duration, string cdt
     this->cdts.push_back(get_cdt(cdt_line));
   }
 
-  this->core_sub_alg = get_algorithm(sub_alg_line, this->rng, mab);
+  this->sub_alg = get_algorithm(sub_alg_line, this->rng, mab);
   this->other_sub_alg = get_algorithm(sub_alg_line, this->rng, mab);
 
   vector<Distribution*> fake_distributions;
@@ -174,13 +294,13 @@ void ADAPT_EVE::reset(int action) {
 	this->MABAlgorithm::reset(action);
   if (action == -1) {
     for (int i = 0; i < this->num_of_arms; i++) {
-      this->cdts[i]->reset();
+      this->cdts[i]->reset(0);
     }
   } else {
-    this->cdts[action]->reset();
+    this->cdts[action]->reset(0);
   }
 
-  this->core_sub_alg->reset(action);
+  this->sub_alg->reset(action);
   this->other_sub_alg->reset(action);
   this->meta_alg->reset(action);
 
@@ -193,11 +313,11 @@ void ADAPT_EVE::reset(int action) {
 int ADAPT_EVE::choose_action() {
   int action = -1;
   if (!this->is_meta) {
-    action = this->core_sub_alg->choose_action();
+    action = this->sub_alg->choose_action();
   } else {
     this->saved_meta_action = this->meta_alg->choose_action();
     if (this->saved_meta_action == 0) {
-      action = this->core_sub_alg->choose_action();
+      action = this->sub_alg->choose_action();
     } else {
       action = this->other_sub_alg->choose_action();
     }
@@ -210,12 +330,10 @@ void ADAPT_EVE::receive_reward(double reward, int pulled_arm) {
   this->timestep++;
 
   if (!this->is_meta) {
-    this->core_sub_alg->receive_reward(reward, pulled_arm);
+    this->sub_alg->receive_reward(reward, pulled_arm);
 
-    CDT_Result cdt_result = this->cdts[pulled_arm]->run(reward);
-    if (cdt_result.alarm) {
-      //cout << this->name << ": alarm raised at timestep " << this->timestep << endl;
-
+    bool alarm = this->cdts[pulled_arm]->run(reward);
+    if (alarm) {
       this->is_meta = true;
       this->t_meta = 0;
 
@@ -227,7 +345,7 @@ void ADAPT_EVE::receive_reward(double reward, int pulled_arm) {
 
     this->meta_alg->receive_reward(reward, this->saved_meta_action);
     if (this->saved_meta_action == 0) {
-      this->core_sub_alg->receive_reward(reward, pulled_arm);
+      this->sub_alg->receive_reward(reward, pulled_arm);
     } else {
       this->other_sub_alg->receive_reward(reward, pulled_arm);
     }
@@ -240,8 +358,8 @@ void ADAPT_EVE::receive_reward(double reward, int pulled_arm) {
 
       if (other_pulls > core_pulls) {
         // Swap core_alg and other_alg
-        MABAlgorithm *temp = this->core_sub_alg;
-        this->core_sub_alg = this->other_sub_alg;
+        MABAlgorithm *temp = this->sub_alg;
+        this->sub_alg = this->other_sub_alg;
         this->other_sub_alg = temp;
 
         //cout << "core pulls: " << core_pulls << ", other pulls: " << other_pulls << ", keeping new alg" << endl;
@@ -253,12 +371,12 @@ void ADAPT_EVE::receive_reward(double reward, int pulled_arm) {
 
       // Restart CDTs
       for (int i = 0; i < this->num_of_arms; i++) {
-        this->cdts[i]->reset();
+        this->cdts[i]->reset(0);
       }
     }
   }
 }
-
+/*
 GLR::GLR(string name, int num_of_arms, int M, int max_history, string sub_alg_line, boost::mt19937& rng, MAB* mab) : MetaAlgorithm(name, num_of_arms) {
   this->sub_alg = get_algorithm(sub_alg_line, &rng, mab);
   this->max_history = max_history;
@@ -341,3 +459,4 @@ void GLR::update_sub_alg(int arm_pulled) {
     this->sub_alg->receive_reward(this->rewards[arm_pulled][i], arm_pulled);
   }
 }
+*/

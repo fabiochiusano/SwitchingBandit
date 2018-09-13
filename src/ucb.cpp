@@ -107,7 +107,7 @@ int UCBT::choose_action() {
 	for (int i = 0; i < this->num_of_arms; i++) {
 		double Q = this->means[i];
 		double variance = this->variances[i];
-		double B = sqrt((2*log(tot_pulls + 1)*min(0.25, variance))/(this->num_of_pulls[i]));
+		double B = sqrt((2*log(tot_pulls + 1)*min(0.25, variance)) / max(this->num_of_pulls[i],1));
 		double QB = Q + B;
 		if (QB > bestQB) {
 			bestQB = QB;
@@ -130,10 +130,10 @@ int D_UCB::choose_action() {
 	// Pull arm that maximizes Q+B
 	double bestQB = NEG_INF;
 	int best_arm = -1;
-	double ns_sum = accumulate(this->ns.begin(), this->ns.end(), 0.);
+	double ns_sum = accumulate(this->ns.begin(), this->ns.end(), 0);
 	for (int i = 0; i < this->num_of_arms; i++) {
 		double Q = this->means[i];
-		double B = (2 * this->B) * sqrt((this->epsilon * log(ns_sum)) / (this->ns[i]));
+		double B = (2 * this->B) * sqrt((this->epsilon * log(max(ns_sum, 1.))) / max(this->ns[i], 0.000001));
 		double QB = Q + B;
 		if (QB > bestQB) {
 			bestQB = QB;
@@ -149,7 +149,7 @@ void D_UCB::receive_reward(double reward, int pulled_arm) {
 
 	// Update this->ns (it's like this->num_of_pulls, but discounted with this->gamma)
 	vector<double> old_ns;
-	old_ns.assign(this->num_of_arms, 0.);;
+	old_ns.assign(this->num_of_arms, 0.);
 	copy(this->ns.begin(), this->ns.end(), old_ns.begin());
 	for (int i = 0; i < this->num_of_arms; i++) {
 		this->ns[i] *= this->gamma;
@@ -165,7 +165,7 @@ void D_UCB::receive_reward(double reward, int pulled_arm) {
 		if (this->ns[i] > 0) { // Because we don't want to divide by zero...
 			this->means[i] *= this->gamma / this->ns[i];
 		} else {
-			this->means[i] = 0;
+			this->means[i] = POS_INF;
 		}
 	}
 }
@@ -179,8 +179,8 @@ int SW_UCB::choose_action() {
 	for (int i = 0; i < this->num_of_arms; i++) {
 		int windowed_N = accumulate(this->windowed_arm_pulls[i].begin(), this->windowed_arm_pulls[i].end(), 0);
 		double windowed_reward = accumulate(this->windowed_arm_pulls_values[i].begin(), this->windowed_arm_pulls_values[i].end(), 0.);
-		double Q = windowed_reward / windowed_N;
-		double B = this->B * sqrt((this->epsilon * log(min(this->tau, tot_pulls + 1))) / windowed_N);
+		double Q = windowed_reward / max(windowed_N, 1);
+		double B = this->B * sqrt((this->epsilon * log(min(this->tau, tot_pulls + 1))) / max(windowed_N, 1));
 		double QB = Q + B;
 
 		if (QB > bestQB) {
